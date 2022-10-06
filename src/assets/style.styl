@@ -1,0 +1,23 @@
+flex(juc=center,ali=center,direction=row)
+	display flex
+	justify-content juc
+	align-items ali
+	flex-direction direction
+	
+pos(l=50%,t=l)
+	position absolute
+	left l
+	top t
+
+size(w=100%,h=w)
+	width w
+	height h
+
+random(min,max)
+	return floor(math(0, 'random')*(max - min + 1) + min)
+
+
+*
+  box-sizing border-box
+	margin 0
+	padding 0  

@@ -1,51 +1,51 @@
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
+// import { RouterLink, RouterView } from "vue-router";
+import { ref } from "@vue/reactivity";
+import { computed } from "@vue/runtime-core";
+import Test from "./components/test.vue";
+
+const counter = ref(0);
+
+const changePage = (num) => {
+  counter.value = num;
+  console.log(num);
+};
+
+const pageStyle = computed(() => {
+  return {
+    left: `${counter.value * -100}%`,
+  };
+});
 </script>
 
 <template lang="pug">
+.wrapper
+  .pages(:style='pageStyle')
+    - const data = ['one','two','three']
+    - for(let i=1;i<=3;i++)
+      .page(class=`page-${i}`)
+        h1=data[i-1]
+Test(@turn='changePage')
 
 </template>
 
-<style lang="stylus" scoped>
-header
-  line-height 1.5
-  max-height 100vh
+<style lang="stylus">
+colors = red green blue
 
-.logo
-  display block
-  margin 0 auto 2rem
-
-nav
-  width 100%
-  font-size 12px
-  text-align center
-  margin-top 2rem
-  a
-    display inline-block
-    padding 0 1rem
-    border-left 1px solid var(--color-border)
-    &.router-link-exact-active
-        color var(--color-text)
-        &:hover
-            background-color transparent
-    &:first-of-type
-        border 0
-
-@media (min-width: 1024px)
-  header
-    display flex
-    place-items center
-    padding-right calc(var(--section-gap) / 2)
-    .wrapper
-      display flex
-      place-items flex-start
-      flex-wrap wrap
-  .logo
-    margin 0 2rem 0 0
-  nav
-    text-align left
-    margin-left -1rem
-    font-size 1rem
-    padding 1rem 0
-    margin-top 1rem
+.wrapper
+  size(,100vh)
+  overflow hidden
+  position relative
+  .pages
+    position relative
+    size()
+    flex()
+    transition 0.5s all ease-in-out
+    white-space nowrap
+    for n in 1..3
+      .page-{n}
+        position absolute
+        size()
+        left (n - 1)*100vw
+        background-color colors[n - 1]
 </style>
