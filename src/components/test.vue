@@ -13,10 +13,12 @@ const count = () => {
 .test
   h1 test
   button(@click='count') +
+
 </template>
 
 <style lang="stylus" scoped>
 .test
+  z-index 2
   pos()
   transform translate(-50%,-50%)
   position fixed
