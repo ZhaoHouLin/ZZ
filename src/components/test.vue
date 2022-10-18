@@ -19,8 +19,7 @@ const count = () => {
 <style lang="stylus" scoped>
 .test
   z-index 2
-  pos()
-  transform translate(-50%,-50%)
+  pos(0)
   position fixed
   flex()
   bottom 0

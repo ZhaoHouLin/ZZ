@@ -1,7 +1,10 @@
-<script setup>
+<!-- <script setup>
 // import { RouterLink, RouterView } from "vue-router";
 import { ref } from "@vue/reactivity";
 import { computed, onMounted } from "@vue/runtime-core";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Mousewheel, Parallax } from "swiper";
+import "swiper/css";
 import Test from "./components/test.vue";
 import Page1Vue from "./views/Page-1.vue";
 import Page2Vue from "./views/Page-2.vue";
@@ -48,21 +51,88 @@ const handleScroll = () => {
 };
 
 onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
+  // window.addEventListener("scroll", handleScroll);
 });
+</script> -->
+
+<script>
+import { RouterLink, RouterView } from "vue-router";
+import { ref } from "@vue/reactivity";
+import { computed, onMounted } from "@vue/runtime-core";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Mousewheel, FreeMode } from "swiper";
+import "swiper/css";
+import Test from "./components/test.vue";
+import Page1Vue from "./views/Page-1.vue";
+import Page2Vue from "./views/Page-2.vue";
+import Page3Vue from "./views/Page-3.vue";
+export default {
+  components: {
+    Test,
+    Swiper,
+    SwiperSlide,
+    Page1Vue,
+    Page2Vue,
+    Page3Vue,
+  },
+  setup() {
+    const swiperWrapper = ref();
+    const title = ["one", "two", "three"];
+    const counter = ref(0);
+
+    const changePage = (num) => {
+      counter.value = num;
+      // console.log(num);
+    };
+    const pageStyle = computed(() => {
+      console.log(swiperWrapper.value);
+      return {
+        transform: `translateX(${counter.value * -100}vw)`,
+      };
+    });
+    return {
+      swiperWrapper,
+      title,
+      modules: [Mousewheel, FreeMode],
+      changePage,
+      pageStyle,
+    };
+  },
+};
 </script>
 
 <template lang="pug">
 
-.wrapper()
-  .pages(:style='pageStyle')
-    //- - const data = ['one','two','three']
-    //- - for(let i=1;i<=3;i++)
-    //-   .page(class=`page-${i}`)
-    //-     h1=data[i-1]
-    Page1Vue(:title='title[0]')
-    Page2Vue(:title='title[1]')
-    Page3Vue(:title='title[2]')
+.wrapper
+  //- .pages(:style='pageStyle')
+  //-   //- - const data = ['one','two','three']
+  //-   //- - for(let i=1;i<=3;i++)
+  //-   //-   .page(class=`page-${i}`)
+  //-   //-     h1=data[i-1]
+  //-   Page1Vue(:title='title[0]')
+  //-   Page2Vue(:title='title[1]')
+  //-   Page3Vue(:title='title[2]')
+  
+  Swiper(
+    :slidesPerView="1"
+    :spaceBetween="0"
+    :loop="true"
+    :mousewheel="true"
+    :pagination=`{
+      clickable: false,
+    }`
+    :speed="1500"
+    :modules="modules"
+    class="mySwiper"
+    
+    )
+    //- .swiper-wrapper( ref='swiperWrapper')
+    SwiperSlide
+      Page1Vue(:title='title[0]')
+    SwiperSlide
+      Page2Vue(:title='title[1]')
+    SwiperSlide
+      Page3Vue(:title='title[2]')
 
 Test(@turn='changePage')
 
@@ -71,14 +141,11 @@ Test(@turn='changePage')
 <style lang="stylus">
 colors = red green blue
 
-body::-webkit-scrollbar
-  display none
+// body::-webkit-scrollbar
+//   display none
 
 .wrapper
-  size(,100vw)
-  overflow hidden
-  // position fixed
-  // position absolute
+  size()
   .pages
     z-index 1
     position fixed
