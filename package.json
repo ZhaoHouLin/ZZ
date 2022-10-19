@@ -8,6 +8,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "gsap": "^3.11.3",
     "pinia": "^2.0.16",
     "swiper": "^8.4.3",
     "vue": "^3.2.37",

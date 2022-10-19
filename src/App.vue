@@ -1,138 +1,57 @@
-<!-- <script setup>
+<script setup>
 // import { RouterLink, RouterView } from "vue-router";
-import { ref } from "@vue/reactivity";
-import { computed, onMounted } from "@vue/runtime-core";
-import { Swiper, SwiperSlide } from "swiper/vue";
-import { Mousewheel, Parallax } from "swiper";
-import "swiper/css";
-import Test from "./components/test.vue";
-import Page1Vue from "./views/Page-1.vue";
-import Page2Vue from "./views/Page-2.vue";
-import Page3Vue from "./views/Page-3.vue";
+import { ref } from "@vue/reactivity"
+import { computed, onMounted } from "@vue/runtime-core"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 
-const title = ["one", "two", "three"];
+import Test from "./components/test.vue"
+import Page1Vue from "./views/Page-1.vue"
+import Page2Vue from "./views/Page-2.vue"
+import Page3Vue from "./views/Page-3.vue"
 
-const counter = ref(0);
+const title = ["one", "two", "three"]
+
+const counter = ref(0)
 
 const changePage = (num) => {
-  counter.value = num;
+  counter.value = num
   // console.log(num);
-};
+}
 
 const pageStyle = computed(() => {
   return {
     transform: `translateX(${counter.value * -100}vw)`,
-  };
-});
-
-// const openScroll = computed(() => {
-//   if (counter.value == 1) return { overflowY: `visible` };
-// });
-
-const handleScroll = () => {
-  console.log(window.scrollY, document.body.scrollHeight);
-  // console.log(window.innerHeight);
-
-  // this.active = window.scrollY > Tab以上的元素高度 ? true : false
-  // window.scrollY + window.screen.height >= document.body.scrollHeight
-  if (
-    window.scrollY > (document.body.scrollHeight - window.innerHeight) / 3 &&
-    window.scrollY < ((document.body.scrollHeight - window.innerHeight) * 2) / 3
-  ) {
-    counter.value = 1;
-  } else if (
-    window.scrollY >
-    ((document.body.scrollHeight - window.innerHeight) * 2) / 3
-  ) {
-    counter.value = 2;
-  } else {
-    counter.value = 0;
   }
-};
+})
 
 onMounted(() => {
   // window.addEventListener("scroll", handleScroll);
-});
-</script> -->
-
-<script>
-import { RouterLink, RouterView } from "vue-router";
-import { ref } from "@vue/reactivity";
-import { computed, onMounted } from "@vue/runtime-core";
-import { Swiper, SwiperSlide } from "swiper/vue";
-import { Mousewheel, FreeMode } from "swiper";
-import "swiper/css";
-import Test from "./components/test.vue";
-import Page1Vue from "./views/Page-1.vue";
-import Page2Vue from "./views/Page-2.vue";
-import Page3Vue from "./views/Page-3.vue";
-export default {
-  components: {
-    Test,
-    Swiper,
-    SwiperSlide,
-    Page1Vue,
-    Page2Vue,
-    Page3Vue,
-  },
-  setup() {
-    const swiperWrapper = ref();
-    const title = ["one", "two", "three"];
-    const counter = ref(0);
-
-    const changePage = (num) => {
-      counter.value = num;
-      // console.log(num);
-    };
-    const pageStyle = computed(() => {
-      console.log(swiperWrapper.value);
-      return {
-        transform: `translateX(${counter.value * -100}vw)`,
-      };
-    });
-    return {
-      swiperWrapper,
-      title,
-      modules: [Mousewheel, FreeMode],
-      changePage,
-      pageStyle,
-    };
-  },
-};
+  gsap.registerPlugin(ScrollTrigger)
+  const tl = gsap.timeline({
+    // yes, we can add it to an entire timeline!
+    scrollTrigger: {
+      trigger: ".wrapper",
+      pin: true, // pin the trigger element while active
+      // start: "top", // when the top of the trigger hits the top of the viewport
+      // end: "bottom", // end after scrolling 500px beyond the start
+      markers: true,
+      scrub: true, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
+    },
+  })
+  tl.to(".pages", { xPercent: "-200" })
+})
 </script>
 
 <template lang="pug">
 
 .wrapper
-  //- .pages(:style='pageStyle')
-  //-   //- - const data = ['one','two','three']
-  //-   //- - for(let i=1;i<=3;i++)
-  //-   //-   .page(class=`page-${i}`)
-  //-   //-     h1=data[i-1]
-  //-   Page1Vue(:title='title[0]')
-  //-   Page2Vue(:title='title[1]')
-  //-   Page3Vue(:title='title[2]')
+  .pages
+    Page1Vue(:title='title[0]')
+    Page2Vue(:title='title[1]')
+    Page3Vue(:title='title[2]')
   
-  Swiper(
-    :slidesPerView="1"
-    :spaceBetween="0"
-    :loop="true"
-    :mousewheel="true"
-    :pagination=`{
-      clickable: false,
-    }`
-    :speed="1500"
-    :modules="modules"
-    class="mySwiper"
-    
-    )
-    //- .swiper-wrapper( ref='swiperWrapper')
-    SwiperSlide
-      Page1Vue(:title='title[0]')
-    SwiperSlide
-      Page2Vue(:title='title[1]')
-    SwiperSlide
-      Page3Vue(:title='title[2]')
+  
 
 Test(@turn='changePage')
 
@@ -141,22 +60,17 @@ Test(@turn='changePage')
 <style lang="stylus">
 colors = red green blue
 
-// body::-webkit-scrollbar
-//   display none
+body::-webkit-scrollbar
+  display none
 
 .wrapper
   size()
   .pages
-    z-index 1
-    position fixed
-    size()
+    position relative
+    size(,100vh)
     flex()
-    transition 0.5s all ease-in-out
-    white-space nowrap
-    // for n in 1..3
-    //   .page-{n}
-    //     position absolute
-    //     size()
-    //     left (n - 1)*100vw
-    //     background-color colors[n - 1]
+    background-color transparent
+    .page
+      size(,100vh)
+      position absolute
 </style>
