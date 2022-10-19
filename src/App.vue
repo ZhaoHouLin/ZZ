@@ -9,8 +9,9 @@ import Test from "./components/test.vue"
 import Page1Vue from "./views/Page-1.vue"
 import Page2Vue from "./views/Page-2.vue"
 import Page3Vue from "./views/Page-3.vue"
+import Page4Vue from "./views/Page-4.vue"
 
-const title = ["one", "two", "three"]
+const title = ["one", "two", "three", "four"]
 
 const counter = ref(0)
 
@@ -31,15 +32,20 @@ onMounted(() => {
   const tl = gsap.timeline({
     // yes, we can add it to an entire timeline!
     scrollTrigger: {
-      trigger: ".wrapper",
+      trigger: ".pages",
       pin: true, // pin the trigger element while active
+      // pinSpacing: false,
       // start: "top", // when the top of the trigger hits the top of the viewport
       // end: "bottom", // end after scrolling 500px beyond the start
       markers: true,
-      scrub: true, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
+      scrub: 3, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
     },
   })
-  tl.to(".pages", { xPercent: "-200" })
+  // tl.to(".pages", { xPercent: "-200" })
+  tl.to(".page-1", { xPercent: "0" })
+  tl.to(".page-2", { xPercent: "-100" })
+  tl.to(".page-3", { xPercent: "-200" })
+  tl.to(".page-4", { yPercent: "-100" })
 })
 </script>
 
@@ -50,6 +56,7 @@ onMounted(() => {
     Page1Vue(:title='title[0]')
     Page2Vue(:title='title[1]')
     Page3Vue(:title='title[2]')
+    Page4Vue(:title='title[3]')
   
   
 
