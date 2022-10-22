@@ -16,5 +16,5 @@ onMounted(() => {})
 .page-2
   flex()
   background-color green
-  transform translateX(100%)
+  transform translateY(100%)
 </style>

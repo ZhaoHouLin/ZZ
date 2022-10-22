@@ -12,5 +12,5 @@ const props = defineProps({
 .page-4
   flex()
   background-color gold
-  transform translateY(100%)
+  transform translate(100%,200%)
 </style>

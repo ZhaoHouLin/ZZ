@@ -37,15 +37,17 @@ onMounted(() => {
       // pinSpacing: false,
       // start: "top", // when the top of the trigger hits the top of the viewport
       // end: "bottom", // end after scrolling 500px beyond the start
-      markers: true,
+      // markers: true,
       scrub: 3, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
     },
   })
-  // tl.to(".pages", { xPercent: "-200" })
-  tl.to(".page-1", { xPercent: "0" })
-  tl.to(".page-2", { xPercent: "-100" })
-  tl.to(".page-3", { xPercent: "-200" })
-  tl.to(".page-4", { yPercent: "-100" })
+  tl.to(".pages", { yPercent: "-100" })
+  tl.to(".pages", { xPercent: "-100" })
+  tl.to(".pages", { yPercent: "-200" })
+  // tl.to(".page-1", { xPercent: "0" })
+  // tl.to(".page-2", { xPercent: "-100" })
+  // tl.to(".page-3", { xPercent: "-200" })
+  // tl.to(".page-4", { yPercent: "-100" })
 })
 </script>
 
@@ -69,6 +71,7 @@ colors = red green blue
 
 body::-webkit-scrollbar
   display none
+
 
 .wrapper
   size()
