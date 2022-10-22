@@ -16,7 +16,7 @@ onMounted(() => {
       trigger: ".lines",
       start: "100% 90%",
       end: "100% 70%",
-      markers: true,
+      // markers: true,
       scrub: 3,
     },
   })
