@@ -10,7 +10,9 @@ const props = defineProps({
 </template>
 <style lang="stylus" scoped>
 .page-1
+  z-index 1
   flex()
-  background-color red
+  color #fff
+  background-color #222
   // transform translateX(0%)
 </style>

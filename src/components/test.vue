@@ -1,12 +1,12 @@
 <script setup>
-import { onMounted, ref } from "@vue/runtime-core";
-const counter = ref(0);
-const emit = defineEmits(["turn"]);
+import { onMounted, ref } from "@vue/runtime-core"
+const counter = ref(0)
+const emit = defineEmits(["turn"])
 const count = () => {
-  counter.value++;
-  if (counter.value > 2) counter.value = 0;
-  emit("turn", counter.value);
-};
+  counter.value++
+  if (counter.value > 2) counter.value = 0
+  emit("turn", counter.value)
+}
 </script>
 
 <template lang="pug">
