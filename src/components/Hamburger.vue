@@ -28,8 +28,8 @@ label.hamburger(@click='handleOpen' for="cb")
 .hamburger
   z-index 3
   position fixed
-  top 1.4rem
-  right 1.4rem
+  top outlineSpace
+  right outlineSpace
   size(2rem,1.4rem)
   cursor pointer
   [class^='bar']

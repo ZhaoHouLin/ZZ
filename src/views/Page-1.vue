@@ -1,4 +1,6 @@
 <script setup>
+import InfoText from "../components/InfoText.vue"
+
 const props = defineProps({
   title: String,
 })
@@ -6,7 +8,8 @@ const props = defineProps({
 
 <template lang="pug">
 .page.page-1
-  h1 {{props.title}}
+  //- h1 {{props.title}}
+  InfoText
 </template>
 <style lang="stylus" scoped>
 .page-1
