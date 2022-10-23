@@ -12,7 +12,8 @@ const props = defineProps({
 .page-1
   z-index 1
   flex()
-  color #fff
-  background-color #222
+  color #000
+  // background linear-gradient(90deg,#222 0%, #444 50%)
+  background-color #fff
   // transform translateX(0%)
 </style>

@@ -6,7 +6,7 @@ const props = defineProps({
   title: String,
 })
 
-const numberOfLines = ref(40)
+const numberOfLines = ref(20)
 const lineCounter = numberOfLines.value / 2
 
 onMounted(() => {
@@ -15,7 +15,7 @@ onMounted(() => {
     scrollTrigger: {
       trigger: ".lines",
       start: "100% 90%",
-      end: "100% 70%",
+      end: "100% 50%",
       // markers: true,
       scrub: 3,
     },
@@ -23,12 +23,28 @@ onMounted(() => {
 
   for (let i = 1; i <= numberOfLines.value; i++) {
     // tl.to(`.line-${2 * i - 1}`, { yPercent: "100" })
-    tl.to(`.line-up-${i}`, { yPercent: "-100", border: "none" })
-    tl.to(`.line-down-${i}`, { yPercent: "100" }, "<")
+    tl.to(`.line-up-${i}`, {
+      yPercent: "-100",
+      border: "none",
+      // backgroundColor: `rgba(68,68,68,${lineCounter / 5 / i})`,
+      // background: `linear-gradient(90deg,#444 0%, #666 ${i * 10}%)`,
+      // opacity: `${lineCounter / 5 / i}`,
+    })
+    tl.to(
+      `.line-down-${i}`,
+      {
+        yPercent: "100",
+        // backgroundColor: `rgba(68,68,68,${lineCounter / 5 / i})`,
+        // opacity: `${lineCounter / 5 / i}`,
+      },
+      "<"
+    )
     // tl.to(`.line-${2 * i}`, { yPercent: "-100" }, "<")
     // tl.to(`.line-up-${i}`, { yPercent: "100" })
     // tl.to(`.line-down-${i}`, { yPercent: "-100" })
   }
+  tl.to(".page-2 h1", { duration: 5, opacity: 1, xPercent: "200" }, "-=5")
+  tl.to(".page-2 h1", { duration: 3, yPercent: "200" })
 })
 </script>
 
@@ -36,7 +52,7 @@ onMounted(() => {
 .page.page-2
   h1 {{props.title}} 
   .lines
-    - for(let i=1;i<=40;i++)
+    - for(let i=1;i<=20;i++)
       .line
         div(class=`line-up-${i}`)
         div(class=`line-down-${i}`)
@@ -45,14 +61,17 @@ onMounted(() => {
 
 <style lang="stylus" scoped>
 
-numberOfLines = 40
+numberOfLines = 20
 lineCounter = numberOfLines / 2
 
 .page-2
   position relative
   flex()
-  background-color #eee
+  background-color #fff
   transform translateX(100%)
+  h1
+    transform translateX(-200%)
+    opacity 0
 .lines
   position absolute
   border 1px solid #000
@@ -62,14 +81,12 @@ lineCounter = numberOfLines / 2
     // position relative
     size()
     flex(,,column)
-    [class^='line-up-']
+    [class^='line-up-'],[class^='line-down-']
       size(,50%)
-      // transform translateY(-100%)
-      background-color #222
-      border 1px solid #222
-    [class^='line-down-']
-      size(,50%)
-      // transform translateY(100%)
-      background-color #222
-      border 1px solid #222
+    for n in 1..numberOfLines
+      rangeMapcolor = 1 - (n - 1)*1/numberOfLines
+      .line-up-{n}
+        background-color rgba(68,68,68,rangeMapcolor )
+      .line-down-{n}
+        background-color rgba(68,68,68,rangeMapcolor)
 </style>

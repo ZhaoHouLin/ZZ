@@ -5,7 +5,7 @@ import { computed, onMounted } from "@vue/runtime-core"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 
-import Test from "./components/test.vue"
+import Menu from "./components/Menu.vue"
 import Page1Vue from "./views/Page-1.vue"
 import Page2Vue from "./views/Page-2.vue"
 import Page3Vue from "./views/Page-3.vue"
@@ -56,9 +56,7 @@ onMounted(() => {
     Page3Vue(:title='title[2]')
     Page4Vue(:title='title[3]')
   
-  
-
-Test(@turn='changePage')
+Menu
 
 </template>
 
