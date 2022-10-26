@@ -44,10 +44,11 @@ Hamburger
   position fixed
   right 0
   top 0
-  opacity 0
-  flex()
+  // flex()
   size(0,100%)
   background-color rgba(0,0,0,0.4)
+  opacity 0
+  display none
   .list
     position absolute
     right 0

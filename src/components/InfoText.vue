@@ -63,7 +63,7 @@ onMounted(() => {
   -webkit-writing-mode vertical-lr
   writing-mode vertical-lr
 .mail
-  bottom outlineSpace + 14rem
+  bottom outlineSpace + 10rem
   right outlineSpace
   -webkit-writing-mode vertical-lr
   writing-mode vertical-lr
@@ -101,4 +101,6 @@ onMounted(() => {
   .line.top,.line.right-bottom
     opacity 0
     transition opacity .5s ease-in-out
+  .left-bottom-slash
+    size(1px,10rem)
 </style>

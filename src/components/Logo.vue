@@ -1,5 +1,6 @@
 <template lang="pug">
 .logo ZZ
+  //- h1 ZZ
 </template>
 
 <style lang="stylus" scoped>
@@ -8,7 +9,9 @@
   bottom outlineSpace
   right outlineSpace
   flex()
-  size(12rem)
-  border 1px solid #000
+  size(10rem,auto)
+  padding 0rem 0.5rem
+  border 2px solid #000
   font-size 8rem
+  line-height 8rem
 </style>
