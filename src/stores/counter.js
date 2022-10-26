@@ -1,16 +1,19 @@
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import { gsap } from "gsap"
 
-export const useCounterStore = defineStore({
-  id: 'counter',
-  state: () => ({
-    counter: 0
-  }),
-  getters: {
-    doubleCount: (state) => state.counter * 2
-  },
-  actions: {
-    increment() {
-      this.counter++
-    }
+export const useCounterStore = defineStore('counter', () => {
+  const menuOpenVal = ref(false)    //Menu開啟值
+
+  const handleMenuOpen = () => {   //處理Menu開啟
+    menuOpenVal.value = !menuOpenVal.value
+    menuOpenVal.value
+      ? gsap.to(".menu", { width: "100%", height: "100%", display: 'block', opacity: 1 })
+      : gsap.to(".menu", { width: "0%", height: "100%", display: 'none', opacity: 0 })
+  }
+
+  return {
+    menuOpenVal,  //Menu開啟值
+    handleMenuOpen    //處理Menu開啟
   }
 })

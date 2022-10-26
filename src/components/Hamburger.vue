@@ -1,21 +1,14 @@
 <script setup>
-import { ref } from "@vue/reactivity"
-import { gsap } from "gsap"
+import { storeToRefs } from "pinia"
+import { useCounterStore } from "../stores/counter"
 
-const emit = defineEmits(["open"])
-
-const openVal = ref(false)
-
-const handleOpen = () => {
-  openVal.value = !openVal.value
-  emit("open", openVal.value)
-  // gsap.to("")
-}
+const counter = useCounterStore()
+const { menuOpenVal } = storeToRefs(counter) //資料解構
+const { handleMenuOpen } = counter //函式可以直接解構
 </script>
 
 <template lang="pug">
-input#cb(type="checkbox")
-label.hamburger(@click='handleOpen' for="cb") 
+.hamburger(@click='handleMenuOpen' :class="{'hamburger-open': menuOpenVal}") 
   .bar
   .bar
   .bar
@@ -23,8 +16,6 @@ label.hamburger(@click='handleOpen' for="cb")
 </template>
 
 <style lang="stylus" scoped>
-#cb
-  display none
 .hamburger
   z-index 3
   position fixed
@@ -50,7 +41,7 @@ label.hamburger(@click='handleOpen' for="cb")
     transform translateY(-50%)
     animation bar-x-rev .7s forwards
 
-input:checked ~ .hamburger
+.hamburger-open
   [class^='bar']
     background-color #fff
   .bar:nth-child(2)
@@ -58,7 +49,7 @@ input:checked ~ .hamburger
     z-index -1
   .bar-x
     animation bar-x .7s forwards
-    background-color #ff5131
+    background-color #f00
 
 @keyframes bar2
   0%

@@ -1,22 +1,34 @@
 <script setup>
 import { onMounted, ref } from "@vue/runtime-core"
+import { useCounterStore } from "../stores/counter"
 import { gsap } from "gsap"
 
 import Hamburger from "./Hamburger.vue"
 
-const handleOpen = (val) => {
-  val
-    ? gsap.to(".menu", { width: "100%", height: "100%", opacity: 1 })
-    : gsap.to(".menu", { width: "0%", height: "100%", opacity: 0 })
-}
+const { handleMenuOpen } = useCounterStore()
 
-onMounted(() => {})
+const list = ref()
+
+onMounted(() => {
+  gsap.defaults({ duration: 0.5 })
+
+  const items = list.value.childNodes
+  items.forEach((item) => {
+    const tl = gsap
+      .timeline({ paused: true })
+      .to(item, { color: "#f00", scale: 1.2 })
+
+    item.addEventListener("mouseenter", () => tl.play())
+    item.addEventListener("mouseleave", () => tl.reverse())
+    item.addEventListener("click", () => handleMenuOpen())
+  })
+})
 </script>
 
 <template lang="pug">
-Hamburger(@open='handleOpen')
+Hamburger
 .menu
-  .list
+  .list(ref='list')
     h1 about 
     h1 portfolio
     h1 favorite
@@ -44,4 +56,8 @@ Hamburger(@open='handleOpen')
     padding 0 1rem
     background-color rgba(0,0,0,0.3)
     color #fff
+    h1
+      cursor pointer
+      text-transform capitalize
+      margin-bottom 1rem
 </style>

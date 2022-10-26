@@ -1,14 +1,10 @@
 <script setup>
 import InfoText from "../components/InfoText.vue"
 import Logo from "../components/Logo.vue"
-const props = defineProps({
-  title: String,
-})
 </script>
 
 <template lang="pug">
 .page.page-1
-  //- h1 {{props.title}}
   InfoText
   Logo
 </template>
