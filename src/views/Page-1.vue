@@ -1,6 +1,6 @@
 <script setup>
 import InfoText from "../components/InfoText.vue"
-
+import Logo from "../components/Logo.vue"
 const props = defineProps({
   title: String,
 })
@@ -10,6 +10,7 @@ const props = defineProps({
 .page.page-1
   //- h1 {{props.title}}
   InfoText
+  Logo
 </template>
 <style lang="stylus" scoped>
 .page-1

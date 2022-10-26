@@ -23,7 +23,7 @@ onMounted(() => {
   })
   gsap.from(".mail", {
     text: "",
-    ease: "power1.in",
+    ease: "slow(0.7, 0.7, false)",
     duration: 2,
     repeat: 2,
     yoyo: true,
@@ -39,7 +39,9 @@ onMounted(() => {
   .mail rodes5292@gmail.com
   .line.left
   .line.top
-  .line.bottom
+  .line.left-bottom-slash
+  //- .line.left-bottom
+  .line.right-bottom
 </template>
 
 <style lang="stylus" scoped>
@@ -61,8 +63,11 @@ onMounted(() => {
   -webkit-writing-mode vertical-lr
   writing-mode vertical-lr
 .mail
-  bottom outlineSpace
+  bottom outlineSpace + 14rem
   right outlineSpace
+  -webkit-writing-mode vertical-lr
+  writing-mode vertical-lr
+  transform rotate(180deg)
 
 .line
   position absolute
@@ -77,15 +82,23 @@ onMounted(() => {
   left outlineSpace + 10rem
   size(15rem,1px)
   transition opacity .5s ease-in-out
-.line.bottom
+.line.left-bottom-slash
   bottom outlineSpace
   left outlineSpace + 2rem
   transform-origin 50% 100%
   transform rotate(45deg)
   opacity 0.3
+.line.left-bottom
+  bottom outlineSpace + 1rem
+  left outlineSpace + 22rem
+  size(15rem,1px)
+.line.right-bottom
+  bottom outlineSpace
+  right outlineSpace + 14rem
+  size(15rem,1px)
 
 @media screen and (max-width: 768px)
-  .line.top
+  .line.top,.line.right-bottom
     opacity 0
     transition opacity .5s ease-in-out
 </style>
