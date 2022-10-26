@@ -1,3 +1,37 @@
+<script setup>
+import { onMounted } from "@vue/runtime-core"
+import { gsap } from "gsap"
+import { TextPlugin } from "gsap/TextPlugin"
+
+onMounted(() => {
+  gsap.registerPlugin(TextPlugin)
+  gsap.to(".name", {
+    text: "Raiden",
+    ease: "power1.in",
+    duration: 2,
+    repeat: 1,
+    yoyo: true,
+    repeatDelay: 1,
+  })
+  gsap.from(".phone-number", {
+    text: "",
+    ease: "power1.in",
+    duration: 2,
+    repeat: 2,
+    yoyo: true,
+    repeatDelay: 1,
+  })
+  gsap.from(".mail", {
+    text: "",
+    ease: "power1.in",
+    duration: 2,
+    repeat: 2,
+    yoyo: true,
+    repeatDelay: 1,
+  })
+})
+</script>
+
 <template lang="pug">
 .info-text
   .name ZhaoHou Lin
