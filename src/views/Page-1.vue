@@ -1,12 +1,14 @@
 <script setup>
 import InfoText from "../components/InfoText.vue"
 import Logo from "../components/Logo.vue"
+import Ring from "../components/Ring.vue"
 </script>
 
 <template lang="pug">
 .page.page-1
   InfoText
   Logo
+  Ring
 </template>
 <style lang="stylus" scoped>
 .page-1
