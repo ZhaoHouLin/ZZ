@@ -44,6 +44,8 @@ onMounted(() => {
     font-size 6rem
     font-family 'Advanced_Pixel-7'
     text-shadow 4px 4px 4px rgba(0,0,0,0.3)
+    letter-spacing 0.5rem
+
 
 #ring
   size(30rem)
