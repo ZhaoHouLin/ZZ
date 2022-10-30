@@ -41,9 +41,11 @@ onMounted(() => {
       scrub: 3, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
     },
   })
-  tl.to(".pages", { xPercent: "-100" })
+  // tl.to(".page-1", { yPercent: "-100" })
+  // tl.to(".page-2", { yPercent: "-100" }, "<")
   tl.to(".pages", { yPercent: "-100" })
-  tl.to(".pages", { xPercent: "-200" })
+  tl.to(".pages", { xPercent: "-100" })
+  // tl.to(".pages", { xPercent: "-200" })
 })
 </script>
 
@@ -70,7 +72,8 @@ body::-webkit-scrollbar
 .wrapper
   size()
   .pages
-    position fixed
+    // position fixed
+    position absolute
     size()
     flex()
     background-color transparent

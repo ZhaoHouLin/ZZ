@@ -13,9 +13,9 @@ onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)
   const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: ".lines",
-      start: "100% 90%",
-      end: "100% 50%",
+      trigger: ".pages",
+      start: "top top",
+      // end: "100% 50%",
       // markers: true,
       scrub: 3,
     },
@@ -24,7 +24,8 @@ onMounted(() => {
   for (let i = 1; i <= numberOfLines.value; i++) {
     // tl.to(`.line-${2 * i - 1}`, { yPercent: "100" })
     tl.to(`.line-up-${i}`, {
-      yPercent: "-100",
+      transformOrigin: "50% 0%",
+      transform: "scaleY(0)",
       border: "none",
       // backgroundColor: `rgba(68,68,68,${lineCounter / 5 / i})`,
       // background: `linear-gradient(90deg,#444 0%, #666 ${i * 10}%)`,
@@ -33,7 +34,8 @@ onMounted(() => {
     tl.to(
       `.line-down-${i}`,
       {
-        yPercent: "100",
+        transformOrigin: "50% 100%",
+        transform: "scaleY(0)",
         // backgroundColor: `rgba(68,68,68,${lineCounter / 5 / i})`,
         // opacity: `${lineCounter / 5 / i}`,
       },
@@ -68,13 +70,13 @@ lineCounter = numberOfLines / 2
   position relative
   flex()
   background-color #fff
-  transform translateX(100%)
+  transform translateY(100%)
   h1
     transform translateX(-200%)
     opacity 0
 .lines
   position absolute
-  border 1px solid #000
+  // border 1px solid #000
   size()
   flex()
   .line
@@ -83,6 +85,7 @@ lineCounter = numberOfLines / 2
     flex(,,column)
     [class^='line-up-'],[class^='line-down-']
       size(,50%)
+
     for n in 1..numberOfLines
       rangeMapcolor = 1 - (n - 1)*1/numberOfLines
       .line-up-{n}
