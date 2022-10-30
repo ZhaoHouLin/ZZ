@@ -45,6 +45,11 @@ onMounted(() => {
 </template>
 
 <style lang="stylus" scoped>
+@font-face
+  font-family 'Advanced_Pixel-7'
+  src url('@/assets/fonts/Advanced_Pixel-7.woff') format("woff")
+
+
 .info-text
   font-size 1.5rem
   position absolute
@@ -57,18 +62,22 @@ onMounted(() => {
   width 160px
   top outlineSpace
   left outlineSpace
+  font-weight bold
 .phone-number
   bottom outlineSpace
   left outlineSpace
   -webkit-writing-mode vertical-lr
   writing-mode vertical-lr
+  font-family 'Advanced_Pixel-7'
+  font-size 2.5rem
 .mail
   bottom outlineSpace + 10rem
   right outlineSpace
   -webkit-writing-mode vertical-lr
   writing-mode vertical-lr
   transform rotate(180deg)
-
+  font-family 'Advanced_Pixel-7'
+  font-size 2.5rem
 .line
   position absolute
   size(1px,15rem)
