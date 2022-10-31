@@ -17,16 +17,39 @@ import Ring from "./components/Ring.vue"
 
 const title = ["one", "two", "three", "four"]
 
+const counter = ref(0)
+
+const changePage = (num) => {
+  counter.value = num
+  // console.log(num);
+}
+
+const pageStyle = computed(() => {
+  return {
+    transform: `translateX(${counter.value * -100}vw)`,
+  }
+})
+
 onMounted(() => {
+  // window.addEventListener("scroll", handleScroll);
   gsap.registerPlugin(ScrollTrigger)
-  gsap.utils.toArray(".page").forEach((page, i) => {
-    ScrollTrigger.create({
-      trigger: page,
-      start: "top top",
-      pin: true,
-      pinSpacing: false,
-    })
+  const tl = gsap.timeline({
+    // yes, we can add it to an entire timeline!
+    scrollTrigger: {
+      trigger: ".pages",
+      pin: true, // pin the trigger element while active
+      // pinSpacing: false,
+      // start: "top", // when the top of the trigger hits the top of the viewport
+      // end: "bottom", // end after scrolling 500px beyond the start
+      // markers: true,
+      scrub: 3, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
+    },
   })
+  // tl.to(".page-1", { yPercent: "-100" })
+  // tl.to(".page-2", { yPercent: "-100" }, "<")
+  tl.to(".pages", { yPercent: "-100" })
+  tl.to(".pages", { xPercent: "-100" })
+  // tl.to(".pages", { xPercent: "-200" })
 })
 </script>
 
