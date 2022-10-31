@@ -48,6 +48,8 @@ onMounted(() => {
 
 
 #ring
+  pos()
+  transform translate(-50%,-50%)
   size(30rem)
   text
     fill #222

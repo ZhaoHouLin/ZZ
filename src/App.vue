@@ -13,6 +13,7 @@ import Page4Vue from "./views/Page-4.vue"
 
 import InfoText from "./components/InfoText.vue"
 import Logo from "./components/Logo.vue"
+import Ring from "./components/Ring.vue"
 
 const title = ["one", "two", "three", "four"]
 
@@ -30,16 +31,15 @@ onMounted(() => {
 </script>
 
 <template lang="pug">
-
-
 .pages
   Page1Vue(:title='title[0]')
   Page2Vue(:title='title[1]')
-  //- Page3Vue(:title='title[2]')
+  Page3Vue(:title='title[2]')
   //- Page4Vue(:title='title[3]')
   
 InfoText
 Logo
+Ring
 Menu
 
 </template>
@@ -54,7 +54,7 @@ body::-webkit-scrollbar
 
 .pages
   position absolute
-  size(,200%)
+  size(,100%)
   flex(,,column)
   background-color transparent
 </style>

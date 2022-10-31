@@ -11,7 +11,7 @@ onMounted(() => {})
 
 <template lang="pug">
 .page.page-1
-  Ring
+  //- Ring
   //- Logo
   //- InfoText
 
