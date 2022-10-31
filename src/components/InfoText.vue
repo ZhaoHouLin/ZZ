@@ -109,6 +109,7 @@ onMounted(() => {
 @media screen and (max-width: 768px)
   .line.top,.line.right-bottom
     opacity 0
+    display none
     transition opacity .5s ease-in-out
   .left-bottom-slash
     size(1px,10rem)

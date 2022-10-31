@@ -11,53 +11,35 @@ import Page2Vue from "./views/Page-2.vue"
 import Page3Vue from "./views/Page-3.vue"
 import Page4Vue from "./views/Page-4.vue"
 
+import InfoText from "./components/InfoText.vue"
+import Logo from "./components/Logo.vue"
+
 const title = ["one", "two", "three", "four"]
 
-const counter = ref(0)
-
-const changePage = (num) => {
-  counter.value = num
-  // console.log(num);
-}
-
-const pageStyle = computed(() => {
-  return {
-    transform: `translateX(${counter.value * -100}vw)`,
-  }
-})
-
 onMounted(() => {
-  // window.addEventListener("scroll", handleScroll);
   gsap.registerPlugin(ScrollTrigger)
-  const tl = gsap.timeline({
-    // yes, we can add it to an entire timeline!
-    scrollTrigger: {
-      trigger: ".pages",
-      pin: true, // pin the trigger element while active
-      // pinSpacing: false,
-      // start: "top", // when the top of the trigger hits the top of the viewport
-      // end: "bottom", // end after scrolling 500px beyond the start
-      // markers: true,
-      scrub: 3, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
-    },
+  gsap.utils.toArray(".page").forEach((page, i) => {
+    ScrollTrigger.create({
+      trigger: page,
+      start: "top top",
+      pin: true,
+      pinSpacing: false,
+    })
   })
-  // tl.to(".page-1", { yPercent: "-100" })
-  // tl.to(".page-2", { yPercent: "-100" }, "<")
-  tl.to(".pages", { yPercent: "-100" })
-  tl.to(".pages", { xPercent: "-100" })
-  // tl.to(".pages", { xPercent: "-200" })
 })
 </script>
 
 <template lang="pug">
 
-.wrapper
-  .pages
-    Page1Vue(:title='title[0]')
-    Page2Vue(:title='title[1]')
-    Page3Vue(:title='title[2]')
-    Page4Vue(:title='title[3]')
+
+.pages
+  Page1Vue(:title='title[0]')
+  Page2Vue(:title='title[1]')
+  //- Page3Vue(:title='title[2]')
+  //- Page4Vue(:title='title[3]')
   
+InfoText
+Logo
 Menu
 
 </template>
@@ -69,15 +51,10 @@ body::-webkit-scrollbar
   display none
 
 
-.wrapper
-  size()
-  .pages
-    // position fixed
-    position absolute
-    size()
-    flex()
-    background-color transparent
-    .page
-      size()
-      position absolute
+
+.pages
+  position absolute
+  size(,200%)
+  flex(,,column)
+  background-color transparent
 </style>

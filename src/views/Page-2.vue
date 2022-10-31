@@ -13,40 +13,31 @@ onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)
   const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: ".pages",
-      start: "top top",
-      // end: "100% 50%",
+      trigger: ".page-2",
+      start: "top bottom",
+      end: "top top",
       // markers: true,
       scrub: 3,
     },
   })
 
   for (let i = 1; i <= numberOfLines.value; i++) {
-    // tl.to(`.line-${2 * i - 1}`, { yPercent: "100" })
     tl.to(`.line-up-${i}`, {
       transformOrigin: "50% 0%",
       transform: "scaleY(0)",
       border: "none",
-      // backgroundColor: `rgba(68,68,68,${lineCounter / 5 / i})`,
-      // background: `linear-gradient(90deg,#444 0%, #666 ${i * 10}%)`,
-      // opacity: `${lineCounter / 5 / i}`,
     })
     tl.to(
       `.line-down-${i}`,
       {
         transformOrigin: "50% 100%",
         transform: "scaleY(0)",
-        // backgroundColor: `rgba(68,68,68,${lineCounter / 5 / i})`,
-        // opacity: `${lineCounter / 5 / i}`,
       },
       "<"
     )
-    // tl.to(`.line-${2 * i}`, { yPercent: "-100" }, "<")
-    // tl.to(`.line-up-${i}`, { yPercent: "100" })
-    // tl.to(`.line-down-${i}`, { yPercent: "-100" })
   }
   tl.to(".page-2 h1", { duration: 5, opacity: 1, xPercent: "200" }, "-=5")
-  tl.to(".page-2 h1", { duration: 3, yPercent: "200" })
+  tl.to(".page-2 h1", { duration: 3, xPercent: "200" })
 })
 </script>
 
@@ -67,20 +58,18 @@ numberOfLines = 20
 lineCounter = numberOfLines / 2
 
 .page-2
-  position relative
+  size(,100vh)
   flex()
   background-color #fff
-  transform translateY(100%)
+  // transform translateY(100%)
   h1
     transform translateX(-200%)
     opacity 0
 .lines
   position absolute
-  // border 1px solid #000
   size()
   flex()
   .line
-    // position relative
     size()
     flex(,,column)
     [class^='line-up-'],[class^='line-down-']

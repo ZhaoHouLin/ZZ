@@ -10,6 +10,7 @@ const props = defineProps({
 </template>
 <style lang="stylus" scoped>
 .page-3
+  size()
   flex()
   background-color blue
   transform translate(100%,100%)
