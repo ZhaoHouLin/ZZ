@@ -13,39 +13,24 @@ import Page4Vue from "./views/Page-4.vue"
 
 const title = ["one", "two", "three", "four"]
 
-const counter = ref(0)
-
-const changePage = (num) => {
-  counter.value = num
-  // console.log(num);
-}
-
-const pageStyle = computed(() => {
-  return {
-    transform: `translateX(${counter.value * -100}vw)`,
-  }
-})
-
 onMounted(() => {
-  // window.addEventListener("scroll", handleScroll);
   gsap.registerPlugin(ScrollTrigger)
   const tl = gsap.timeline({
-    // yes, we can add it to an entire timeline!
     scrollTrigger: {
       trigger: ".pages",
-      pin: true, // pin the trigger element while active
+      pin: true,
       // pinSpacing: false,
-      // start: "top", // when the top of the trigger hits the top of the viewport
-      // end: "bottom", // end after scrolling 500px beyond the start
+      // start: "top",
+      // end: "bottom",
       // markers: true,
-      scrub: 3, // smooth scrubbing, takes 1 second to "catch up" to the scrollbar
+      scrub: 3,
     },
   })
   // tl.to(".page-1", { yPercent: "-100" })
   // tl.to(".page-2", { yPercent: "-100" }, "<")
   tl.to(".pages", { yPercent: "-100" })
   tl.to(".pages", { xPercent: "-100" })
-  // tl.to(".pages", { xPercent: "-200" })
+  tl.to(".pages", { xPercent: "-200" })
 })
 </script>
 
