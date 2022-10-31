@@ -38,6 +38,8 @@ onMounted(() => {
   font-family 'Advanced_Pixel-7'
   src url('@/assets/fonts/Advanced_Pixel-7.woff') format("woff")
 .ring
+  pos()
+  transform translate(-50%,-50%)
   h1
     pos()
     transform translate(-50%,-50%)
@@ -48,8 +50,8 @@ onMounted(() => {
 
 
 #ring
-  pos()
-  transform translate(-50%,-50%)
+  // pos()
+  // transform translate(-50%,-50%)
   size(30rem)
   text
     fill #222
