@@ -5,14 +5,12 @@ const props = defineProps({
 </script>
 
 <template lang="pug">
-.page-3
+.page.page-3
   h1 {{props.title}} 
 </template>
 <style lang="stylus" scoped>
 .page-3
-  position absolute
-  size()
   flex()
   background-color blue
-  transform translate(100%,100%)
+  transform translate(200%,100%)
 </style>

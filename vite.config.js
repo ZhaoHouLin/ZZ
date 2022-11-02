@@ -7,6 +7,9 @@ import path from "path"
 export default defineConfig({
   base: '/ZZ/',
   plugins: [vue()],
+  server: {
+    host: "0.0.0.0", //區網demo
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

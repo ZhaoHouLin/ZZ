@@ -19,7 +19,7 @@ onMounted(() => {})
 </template>
 <style lang="stylus" scoped>
 .page-1
-  size(,100vh)
+  // size()
   flex()
   color #000
   // background-color transparent

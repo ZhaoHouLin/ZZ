@@ -58,11 +58,10 @@ numberOfLines = 20
 lineCounter = numberOfLines / 2
 
 .page-2
-  size(,100vh)
   flex()
+  width 200%
   background-color #fff
   transform translateY(100%)
-  position absolute
   h1
     transform translateX(-200%)
     opacity 0

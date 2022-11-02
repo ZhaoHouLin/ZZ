@@ -52,7 +52,6 @@ onMounted(() => {
 
 .info-text
   font-size 1.5rem
-  position absolute
   size()
 
 .name,.phone-number,.mail

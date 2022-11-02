@@ -23,7 +23,7 @@ onMounted(() => {
     scrollTrigger: {
       trigger: ".pages",
       pin: true,
-      // pinSpacing: false,
+      pinSpacing: true,
       // start: "top",
       // end: "bottom",
       // markers: true,
@@ -31,10 +31,16 @@ onMounted(() => {
     },
   })
   // tl.to(".page-1", { yPercent: "-100" })
-  // tl.to(".page-2", { yPercent: "-100" }, "<")
+  // tl.to(".page-2", { yPercent: "-100" })
+  // tl.to(".page-2", { xPercent: "-100" })
+  // tl.to(".page-3", { xPercent: "-100" }, "<")
+  // tl.to(".page-3", { xPercent: "-100" })
+  // tl.to(".page-3", { xPercent: "-200" })
+  // tl.to(".page-4", { xPercent: "-100" }, "<")
+
   tl.to(".pages", { yPercent: "-100" })
-  tl.to(".pages", { xPercent: "-100" })
   tl.to(".pages", { xPercent: "-200" })
+  tl.to(".pages", { xPercent: "-300" })
 })
 </script>
 
@@ -61,8 +67,15 @@ body::-webkit-scrollbar
 
 
 .pages
-  position absolute
-  size(,100%)
+  // position absolute
+  position fixed
+  size()
   flex(,,column)
   background-color transparent
+  .page
+    position absolute
+    left 0
+    right 0
+    top 0
+    bottom 0
 </style>
