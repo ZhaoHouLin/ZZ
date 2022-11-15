@@ -2,22 +2,19 @@
 import { ref, onMounted } from "@vue/runtime-core"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-const props = defineProps({
-  title: String,
-})
 
-const numberOfLines = ref(20)
+const numberOfLines = ref(50)
 const lineCounter = numberOfLines.value / 2
 
 onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)
   const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: ".page-2",
+      trigger: ".page-3",
       start: "top bottom",
-      end: "top top",
+      end: "top",
       // markers: true,
-      scrub: 3,
+      scrub: true,
     },
   })
 
@@ -36,16 +33,13 @@ onMounted(() => {
       "<"
     )
   }
-  tl.to(".page-2 h1", { duration: 5, opacity: 1, xPercent: "200" }, "-=5")
-  tl.to(".page-2 h1", { duration: 3, xPercent: "200" })
 })
 </script>
 
 <template lang="pug">
-.page.page-2
-  h1 {{props.title}} 
+.line-animation
   .lines
-    - for(let i=1;i<=20;i++)
+    - for(let i=1;i<=50;i++)
       .line
         div(class=`line-up-${i}`)
         div(class=`line-down-${i}`)
@@ -54,17 +48,16 @@ onMounted(() => {
 
 <style lang="stylus" scoped>
 
-numberOfLines = 20
+numberOfLines = 50
 lineCounter = numberOfLines / 2
 
-.page-2
+.line-animation
+  position fixed
+  top 0
   flex()
-  width 200%
-  background-color #fff
-  transform translateY(100%)
-  h1
-    transform translateX(-200%)
-    opacity 0
+  size()
+  // background-color transparent
+  // transform translateY(100%)
 .lines
   position absolute
   size()
@@ -74,7 +67,7 @@ lineCounter = numberOfLines / 2
     flex(,,column)
     [class^='line-up-'],[class^='line-down-']
       size(,50%)
-
+    z-index 4
     for n in 1..numberOfLines
       rangeMapcolor = 1 - (n - 1)*1/numberOfLines
       .line-up-{n}
