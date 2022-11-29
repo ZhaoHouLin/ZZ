@@ -17,7 +17,7 @@ const { handleMenuOpen } = counter //函式可以直接解構
 
 <style lang="stylus" scoped>
 .hamburger
-  z-index 3
+  z-index 100
   position fixed
   top outlineSpace
   right outlineSpace

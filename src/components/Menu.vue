@@ -29,10 +29,14 @@ onMounted(() => {
 Hamburger
 .menu
   .list(ref='list')
-    h1 about 
-    h1 portfolio
-    h1 favorite
-    h1 contact
+    RouterLink(to='/about')
+      h1 about 
+    RouterLink(to='/portfolio')
+      h1 portfolio
+    RouterLink(to='/favorite')
+      h1 favorite
+    RouterLink(to='/contact')
+      h1 contact
 
   
 
@@ -57,8 +61,11 @@ Hamburger
     padding 0 1rem
     background-color rgba(0,0,0,0.3)
     color #fff
-    h1
-      cursor pointer
-      text-transform capitalize
+    a
+      text-decoration none
+      color #fff
       margin-bottom 1rem
+      h1
+        cursor pointer
+        text-transform capitalize
 </style>

@@ -1,34 +1,37 @@
 <script setup>
+import { onMounted } from "@vue/runtime-core"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
 const props = defineProps({
   text: String,
+})
+
+onMounted(() => {
+  gsap.registerPlugin(ScrollTrigger)
+  // gsap.to(
+  //   ".info-crawl h1",
+  //   {
+  //     scrollTrigger: ".info-crawl",
+  //     duration: 10,
+  //     xPercent: "200",
+  //   },
+  //   "<"
+  // )
 })
 </script>
 
 <template lang="pug">
-.info-crawl
-  .title
-    h1 {{props.text}}
+
+h1.info-crawl {{props.text}}
 </template>
 
 <style lang="stylus" scoped>
 .info-crawl
-  // position fixed
+  width 100%
   position absolute
-  transform translate(0%,0%)
   background-color transparent
-  // border 1px solid red
-  flex()
-  size()
-  z-index 1
-  .title
-    background-color transparent
-    position absolute
-    width 100vw
-    // size()
-    flex()
-    transform translate(-200%,0%)
-    // border 1px solid red
-    h1
-      font-size 2rem
-      // transform translate(-300%,0%)
+  z-index 2
+  transform translateX(-100%)
+  font-size 2rem
 </style>
