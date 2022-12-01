@@ -54,7 +54,6 @@ const { handleMenuOpen } = counter //函式可以直接解構
 @keyframes bar2
   0%
     transform translate(0%,-50%) rotate(0deg)
-
   100%
     transform translate(0%,-50%) rotate(-34deg) scaleX(1.1)
 

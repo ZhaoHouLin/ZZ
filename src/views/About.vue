@@ -1,5 +1,6 @@
 <script setup>
-import { onMounted } from "@vue/runtime-core"
+import { onMounted, onUnmounted, ref } from "@vue/runtime-core"
+import { useRoute, useRouter } from "vue-router"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Logo from "../components/Logo.vue"
@@ -15,27 +16,31 @@ onMounted(() => {
       trigger: ".about",
       pin: true,
       pinSpacing: true,
-      // start: "top",
-      // end: "bottom",
-      // markers: true,
       scrub: 5,
     },
   })
 
-  tl.to(".about", { duration: 5, yPercent: "-100" })
-  tl.to(".logo", { duration: 5, yPercent: "-100", opacity: 0 }, "<")
-  tl.to(".info-text", { opacity: 0 }, "<")
+  // tl.to(".about", { duration: 5, yPercent: "-100" })
+  // tl.to(".logo", { duration: 5, yPercent: "-100", opacity: 0 }, "<")
+  // tl.to(".info-text", { opacity: 0 }, "<")
+  // tl.to(".about", { duration: 5, xPercent: "-100" }) //page-2
+  // tl.to(
+  //   ".info-crawl",
+  //   {
+  //     duration: 10,
+  //     xPercent: "300",
+  //   },
+  //   "<"
+  // )
+  // tl.to(".about", { yPercent: "-200" })
 
-  tl.to(".about", { duration: 5, xPercent: "-100" }) //page-2
-  tl.to(
-    ".info-crawl",
-    {
-      duration: 10,
-      xPercent: "300",
-    },
-    "<"
-  )
-  tl.to(".about", { yPercent: "-200" })
+  // tl.to(".logo", { duration: 5, yPercent: "-100" }, "<")
+  // tl.to(".info-text", { duration: 5, yPercent: "-100" }, "<")
+  // tl.to(".ring", { duration: 5, yPercent: "-100" }, "<")
+  // tl.to(".page1", { duration: 5, yPercent: "-100" }, "<")
+  tl.from(".page1", { duration: 5, yPercent: "100" })
+  tl.to(".page1", { duration: 5, xPercent: "-100" })
+  tl.from(".page2", { duration: 5, xPercent: "100" }, "<")
 })
 </script>
 
@@ -45,17 +50,18 @@ onMounted(() => {
   Ring
   InfoText
   .page.page1
-  .page.page2
-    InfoCrawl(text='Hello Hello Hello Hello Hello Hello Hello Hello ')
-    InfoCrawl(text='World World World World World World World World ' style='transform: translateX(-120%)')
+    h1 one
+  .page.page2(id="section-one")
+    //- InfoCrawl(text='Hello Hello Hello Hello Hello Hello Hello Hello ')
+    //- InfoCrawl(text='World World World World World World World World ' style='transform: translateX(-120%)')
   .page.page3
+  .page.page4
 
 </template>
 <style lang="stylus" scoped>
 .about
-  position fixed
-  // pos()
-  // transform translate(-50%,-50%)
+  // position fixed
+  position absolute
   size()
   flex()
   color #000
@@ -68,12 +74,12 @@ onMounted(() => {
 .page1
   height 100%
   background-color #222
-  transform translateY(100%)
-  z-index 2
+  // transform translateY(100%)
+  // z-index 2
 .page2
   height 100%
   background-color red
-  transform translate(100%,100%)
+  // transform translate(100%,100%)
   // position relative
 
   .info-crawl:nth-child(1)

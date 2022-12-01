@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from "@vue/runtime-core"
+import { onMounted, onUnmounted } from "@vue/runtime-core"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import LineAnimation from "../components/LineAnimation.vue"
@@ -13,31 +13,29 @@ onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)
   const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: ".page-3",
+      trigger: ".portfolio",
       pin: true,
-      // markers: true,
-      start: "top bottom",
-      end: "top top",
-      scrub: 15,
+      pinSpacing: true,
+      scrub: 5,
     },
   })
-
-  tl.to(".page-3 .info-crawl .title", { xPercent: "300" })
+  tl.to(".portfolio", { duration: 5, xPercent: "-100" })
 })
+
+onUnmounted(() => {})
 </script>
 
 <template lang="pug">
-.page.page-3
-  h1 {{props.title}} 
-  LineAnimation
-  InfoCrawl(text='test')
+.portfolio
+  h1 portfolio
+  //- LineAnimation
+  //- InfoCrawl(text='test')
 </template>
 <style lang="stylus" scoped>
-.page-3
+.portfolio
+  z-index 1
+  position fixed
   flex()
-  size(300%,100%)
-  background-color #fff
-  transform translate(0%,100%)
-  .info-crawl
-    top 0
+  size(100%,100vh)
+  background-color yellow
 </style>

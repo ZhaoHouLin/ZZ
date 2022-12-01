@@ -30,13 +30,17 @@ Hamburger
 .menu
   .list(ref='list')
     RouterLink(to='/about')
-      h1 about 
+      h1 about
     RouterLink(to='/portfolio')
       h1 portfolio
-    RouterLink(to='/favorite')
+    //- a(href="#section-one")
+      h1 test
+    RouterLink(to='/about#section-one')
+      h1 test
+    RouterLink(:to="{ path: '/favorite' }")
       h1 favorite
-    RouterLink(to='/contact')
-      h1 contact
+    //- RouterLink(:to="{name:'contact',hash:'#test'}")
+    //-   h1 contact
 
   
 

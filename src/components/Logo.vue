@@ -1,6 +1,5 @@
 <template lang="pug">
 .logo ZZ
-  //- h1 ZZ
 </template>
 
 <style lang="stylus" scoped>
