@@ -9,6 +9,26 @@ const { handleMenuOpen } = useCounterStore()
 
 const list = ref()
 
+const pageOne = () => {
+  console.dir(document.body)
+  console.log(document.body.offsetHeight)
+  gsap.to(window, { duration: 2, scrollTo: "#section1" })
+}
+
+const pageTwo = () => {
+  gsap.to(window, {
+    duration: 2,
+    scrollTo: { y: document.body.offsetHeight / 4 },
+  })
+}
+
+const pageThree = () => {
+  gsap.to(window, {
+    duration: 2,
+    scrollTo: { y: document.body.offsetHeight / 2 },
+  })
+}
+
 onMounted(() => {
   gsap.defaults({ duration: 0.5 })
 
@@ -29,18 +49,14 @@ onMounted(() => {
 Hamburger
 .menu
   .list(ref='list')
-    RouterLink(to='/about')
+    a(@click='pageOne')
       h1 about
-    RouterLink(to='/portfolio')
+    a(@click='pageTwo')
       h1 portfolio
-    //- a(href="#section-one")
+    a(@click='pageThree')
       h1 test
-    RouterLink(to='/about#section-one')
-      h1 test
-    RouterLink(:to="{ path: '/favorite' }")
+    a
       h1 favorite
-    //- RouterLink(:to="{name:'contact',hash:'#test'}")
-    //-   h1 contact
 
   
 

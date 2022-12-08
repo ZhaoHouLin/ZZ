@@ -9,15 +9,15 @@ const props = defineProps({
 
 onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)
-  // gsap.to(
-  //   ".info-crawl h1",
-  //   {
-  //     scrollTrigger: ".info-crawl",
-  //     duration: 10,
-  //     xPercent: "200",
-  //   },
-  //   "<"
-  // )
+  gsap.to(
+    ".info-crawl",
+    {
+      scrollTrigger: ".info-crawl",
+      duration: 10,
+      xPercent: "200",
+    },
+    "<"
+  )
 })
 </script>
 

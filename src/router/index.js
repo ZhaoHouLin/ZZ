@@ -42,21 +42,15 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-  scrollBehavior(to, from, savedPosition) {
-    if (to.fullPath == '/about') {
-      console.log(savedPosition)
-      return savedPosition
-    }
-    if (to.hash == '#section-one') {
-      // console.log('to.hash', to.hash)
-      return {
-        el: to.hash,
-        top: -window.innerHeight
-      }
-    } else {
-      return to.path
-    }
-  },
+  // scrollBehavior(to, from, savedPosition) {
+  //   if (to.fullPath == '/about') {
+  //     return { top: 0 }
+  //   }
+  //   // if (to.fullPath == '/portfolio') {
+  //   //   return savedPosition || { top: 0 }
+  //   // }
+
+  // },
 })
 
 export default router

@@ -3,14 +3,26 @@ import { onMounted, onUnmounted, ref } from "@vue/runtime-core"
 import { useRoute, useRouter } from "vue-router"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { ScrollToPlugin } from "gsap/ScrollToPlugin"
 import Logo from "../components/Logo.vue"
 import Ring from "../components/Ring.vue"
 import InfoText from "../components/InfoText.vue"
 import Menu from "../components/Menu.vue"
 import InfoCrawl from "../components/InfoCrawl.vue"
 
+const pageOne = () => {
+  console.log(document.body.scrollHeight, document.body.offsetHeight)
+  console.dir(document.body)
+  // gsap.to(".about", { duration: 2, yPercent: 0, xPercent: 0 })
+  gsap.to(window, {
+    // duration: 2,
+    scrollTo: { x: "#section2", y: "#section2" },
+  })
+}
+
 onMounted(() => {
-  gsap.registerPlugin(ScrollTrigger)
+  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
+
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: ".about",
@@ -20,67 +32,48 @@ onMounted(() => {
     },
   })
 
-  // tl.to(".about", { duration: 5, yPercent: "-100" })
-  // tl.to(".logo", { duration: 5, yPercent: "-100", opacity: 0 }, "<")
-  // tl.to(".info-text", { opacity: 0 }, "<")
-  // tl.to(".about", { duration: 5, xPercent: "-100" }) //page-2
-  // tl.to(
-  //   ".info-crawl",
-  //   {
-  //     duration: 10,
-  //     xPercent: "300",
-  //   },
-  //   "<"
-  // )
-  // tl.to(".about", { yPercent: "-200" })
-
-  // tl.to(".logo", { duration: 5, yPercent: "-100" }, "<")
-  // tl.to(".info-text", { duration: 5, yPercent: "-100" }, "<")
-  // tl.to(".ring", { duration: 5, yPercent: "-100" }, "<")
-  // tl.to(".page1", { duration: 5, yPercent: "-100" }, "<")
-  tl.from(".page1", { duration: 5, yPercent: "100" })
-  tl.to(".page1", { duration: 5, xPercent: "-100" })
-  tl.from(".page2", { duration: 5, xPercent: "100" }, "<")
+  tl.to(".page1", { duration: 5, yPercent: -100 })
+  tl.from(".page2", { duration: 5, yPercent: 100 }, "<")
+  tl.to(".page2", { duration: 5, xPercent: -100 })
+  tl.from(".page3", { duration: 5, xPercent: 100 }, "<")
 })
 </script>
 
 <template lang="pug">
+
 .about
-  Logo
-  Ring
-  InfoText
-  .page.page1
-    h1 one
-  .page.page2(id="section-one")
+  .page.page1#section1
+    //- button(@click="pageOne") test
+    Logo
+    Ring
+    InfoText
+  .page.page2#section2
     //- InfoCrawl(text='Hello Hello Hello Hello Hello Hello Hello Hello ')
     //- InfoCrawl(text='World World World World World World World World ' style='transform: translateX(-120%)')
-  .page.page3
-  .page.page4
+    h1 test
+
+  .page.page3#section3
 
 </template>
 <style lang="stylus" scoped>
 .about
-  // position fixed
-  position absolute
+  position fixed      //手機版底部不會空白的關鍵
   size()
   flex()
   color #000
   background-color transparent
-
+  // scroll-behavior smooth
 .page
   size()
-  position absolute
+  position fixed
   top 0
-.page1
-  height 100%
-  background-color #222
-  // transform translateY(100%)
-  // z-index 2
+  bottom 0
+
+
 .page2
-  height 100%
   background-color red
-  // transform translate(100%,100%)
-  // position relative
+  // transform translate(0,100%)
+  // transform translate(100%,0)
 
   .info-crawl:nth-child(1)
     top 1rem
@@ -88,7 +81,8 @@ onMounted(() => {
     bottom 1rem
 
 .page3
-  height 100%
   background-color orange
-  transform translate(100%,200%)
+  // transform translate(100%,100%)
+  // transform translate(0,200%)
+  // transform translate(200%,0%)
 </style>

@@ -1,32 +1,25 @@
 <script setup>
 import { onMounted, onUnmounted } from "@vue/runtime-core"
+import { useRoute } from "vue-router"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import LineAnimation from "../components/LineAnimation.vue"
 import InfoCrawl from "../components/InfoCrawl.vue"
 
+const route = useRoute()
+
 const props = defineProps({
   title: String,
 })
 
-onMounted(() => {
-  gsap.registerPlugin(ScrollTrigger)
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".portfolio",
-      pin: true,
-      pinSpacing: true,
-      scrub: 5,
-    },
-  })
-  tl.to(".portfolio", { duration: 5, xPercent: "-100" })
-})
+onMounted(() => {})
 
 onUnmounted(() => {})
 </script>
 
 <template lang="pug">
-.portfolio
+
+.portfolio#portfolio
   h1 portfolio
   //- LineAnimation
   //- InfoCrawl(text='test')
