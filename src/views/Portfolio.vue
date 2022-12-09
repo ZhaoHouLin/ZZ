@@ -11,18 +11,12 @@ const route = useRoute()
 const props = defineProps({
   title: String,
 })
-
-onMounted(() => {})
-
-onUnmounted(() => {})
 </script>
 
 <template lang="pug">
-
-.portfolio#portfolio
+.portfolio
   h1 portfolio
-  //- LineAnimation
-  //- InfoCrawl(text='test')
+
 </template>
 <style lang="stylus" scoped>
 .portfolio

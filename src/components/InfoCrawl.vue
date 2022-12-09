@@ -7,31 +7,21 @@ const props = defineProps({
   text: String,
 })
 
-onMounted(() => {
-  gsap.registerPlugin(ScrollTrigger)
-  gsap.to(
-    ".info-crawl",
-    {
-      scrollTrigger: ".info-crawl",
-      duration: 10,
-      xPercent: "200",
-    },
-    "<"
-  )
-})
+onMounted(() => {})
 </script>
 
 <template lang="pug">
-
-h1.info-crawl {{props.text}}
+.info-crawl {{props.text}}
 </template>
 
 <style lang="stylus" scoped>
 .info-crawl
-  width 100%
-  position absolute
+  width auto
   background-color transparent
+  white-space nowrap
   z-index 2
-  transform translateX(-100%)
-  font-size 2rem
+  transform translateX(100%)
+  font-size 8rem
+  font-weight bold
+  margin 2rem
 </style>

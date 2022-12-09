@@ -14,10 +14,9 @@ const title = ["one", "two", "three", "four"]
 <template lang="pug">
 Menu
 RouterView(v-slot="{ Component  }")
-  Transition(name="slide" mode="out-in" )
-  keep-alive
-    component( :is="Component" :key="$route.name" v-if="route.meta.keepAlive") 
-  component( :is="Component" :key="$route.name" v-if="!route.meta.keepAlive" )
+  Transition(name="fade" mode="out-in" )
+    keep-alive
+      component( :is="Component" :key="$route.name" v-if="route.meta.keepAlive") 
 </template>
 
 <style lang="stylus">
@@ -25,4 +24,13 @@ colors = red green blue
 
 body::-webkit-scrollbar
   display none
+
+.fade-enter-from
+  opacity 0
+.fade-enter-active
+  transition opacity 3s ease
+.fade-leave-to
+  opacity 0
+.fade-leave-active
+  transition opacity 3s ease
 </style>

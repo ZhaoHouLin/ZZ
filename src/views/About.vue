@@ -9,6 +9,7 @@ import Ring from "../components/Ring.vue"
 import InfoText from "../components/InfoText.vue"
 import Menu from "../components/Menu.vue"
 import InfoCrawl from "../components/InfoCrawl.vue"
+import LineAnimation from "../components/LineAnimation.vue"
 
 const pageOne = () => {
   console.log(document.body.scrollHeight, document.body.offsetHeight)
@@ -22,37 +23,61 @@ const pageOne = () => {
 
 onMounted(() => {
   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
+  gsap.defaults({ ease: "none" })
 
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".about",
-      pin: true,
-      pinSpacing: true,
-      scrub: 5,
-    },
+  const tl = gsap.timeline()
+
+  tl.to(".page1", { yPercent: -100 })
+  tl.from(".page2", { yPercent: 100 }, "<")
+  tl.to(".crawl1", {
+    xPercent: -200,
+    // duration: 5,
   })
+  tl.to(".crawl2", {
+    xPercent: -200,
+    // duration: 5,
+  })
+  tl.to(".page2", {
+    xPercent: -100,
+    // duration: 5,
+  })
+  tl.from(
+    ".page3",
+    {
+      xPercent: 100,
+      // duration: 5,
+    },
+    "<"
+  )
+  tl.to(".page3 .box", { width: "100%", height: "100%" })
+  tl.to(".page3", { yPercent: -100 })
+  tl.from(".page4", { yPercent: 100 }, "<")
 
-  tl.to(".page1", { duration: 5, yPercent: -100 })
-  tl.from(".page2", { duration: 5, yPercent: 100 }, "<")
-  tl.to(".page2", { duration: 5, xPercent: -100 })
-  tl.from(".page3", { duration: 5, xPercent: 100 }, "<")
+  ScrollTrigger.create({
+    animation: tl,
+    trigger: ".about",
+    pin: true,
+    pinSpacing: true,
+    scrub: 2,
+    anticipatePin: 1,
+  })
 })
 </script>
 
 <template lang="pug">
 
 .about
-  .page.page1#section1
-    //- button(@click="pageOne") test
+  .page.page1
     Logo
     Ring
     InfoText
-  .page.page2#section2
-    //- InfoCrawl(text='Hello Hello Hello Hello Hello Hello Hello Hello ')
-    //- InfoCrawl(text='World World World World World World World World ' style='transform: translateX(-120%)')
-    h1 test
-
-  .page.page3#section3
+  .page.page2
+    InfoCrawl.crawl1(text='Hello Hello Hello Hello Hello Hello Hello Hello ')
+    InfoCrawl.crawl2(text='World World World World World World World World ')
+    LineAnimation
+  .page.page3
+    .box
+  .page.page4
 
 </template>
 <style lang="stylus" scoped>
@@ -71,18 +96,16 @@ onMounted(() => {
 
 
 .page2
-  background-color red
-  // transform translate(0,100%)
-  // transform translate(100%,0)
-
-  .info-crawl:nth-child(1)
-    top 1rem
-  .info-crawl:nth-child(2)
-    bottom 1rem
+  background-color transparent
+  flex(,,column)
+  // border-top 1px solid #000
+  // border-bottom 1px solid #000
 
 .page3
   background-color orange
-  // transform translate(100%,100%)
-  // transform translate(0,200%)
-  // transform translate(200%,0%)
+  .box
+    size(100px)
+    border 1px solid #000
+.page4
+  background-color yellow
 </style>

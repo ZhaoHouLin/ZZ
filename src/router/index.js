@@ -29,13 +29,19 @@ const routes = [
   {
     path: "/favorite",
     name: "favorite",
+    meta: {
+      keepAlive: true,
+    },
     component: () => import("../views/Page-4.vue"),
   },
-  // {
-  //   path: "/contact",
-  //   name: "contact",
-  //   // component: () => import("../views/Page-1.vue")
-  // },
+  {
+    path: "/contact",
+    name: "contact",
+    meta: {
+      keepAlive: true,
+    },
+    component: () => import("../views/Page-4.vue"),
+  },
 ]
 
 

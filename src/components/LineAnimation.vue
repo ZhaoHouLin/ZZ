@@ -10,11 +10,10 @@ onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)
   const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: ".page-3",
+      trigger: ".page2",
       start: "top bottom",
       end: "top",
-      // markers: true,
-      scrub: true,
+      scrub: 1,
     },
   })
 
@@ -56,8 +55,7 @@ lineCounter = numberOfLines / 2
   top 0
   flex()
   size()
-  // background-color transparent
-  // transform translateY(100%)
+
 .lines
   position absolute
   size()

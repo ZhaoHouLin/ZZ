@@ -8,24 +8,13 @@ import Hamburger from "./Hamburger.vue"
 const { handleMenuOpen } = useCounterStore()
 
 const list = ref()
+const numberOfsection = ref(4)
 
-const pageOne = () => {
-  console.dir(document.body)
-  console.log(document.body.offsetHeight)
-  gsap.to(window, { duration: 2, scrollTo: "#section1" })
-}
-
-const pageTwo = () => {
+const toSection = (num) => {
+  let idx = num - 1
   gsap.to(window, {
-    duration: 2,
-    scrollTo: { y: document.body.offsetHeight / 4 },
-  })
-}
-
-const pageThree = () => {
-  gsap.to(window, {
-    duration: 2,
-    scrollTo: { y: document.body.offsetHeight / 2 },
+    duration: 1,
+    scrollTo: { y: (idx * document.body.offsetHeight) / numberOfsection.value },
   })
 }
 
@@ -49,14 +38,14 @@ onMounted(() => {
 Hamburger
 .menu
   .list(ref='list')
-    a(@click='pageOne')
+    RouterLink(to='/' @click='toSection(1)')
       h1 about
-    a(@click='pageTwo')
+    RouterLink(to='/portfolio' )
       h1 portfolio
-    a(@click='pageThree')
-      h1 test
-    a
+    RouterLink(to='/favorite' @click='toSection(2)')
       h1 favorite
+    RouterLink(to='/' @click='toSection(3)')
+      h1 contact
 
   
 
