@@ -20,7 +20,7 @@ onMounted(() => {})
   background-color transparent
   white-space nowrap
   z-index 2
-  transform translateX(100%)
+  transform translateX(200%)
   font-size 8rem
   font-weight bold
   margin 2rem

@@ -11,45 +11,39 @@ import Menu from "../components/Menu.vue"
 import InfoCrawl from "../components/InfoCrawl.vue"
 import LineAnimation from "../components/LineAnimation.vue"
 
-const pageOne = () => {
-  console.log(document.body.scrollHeight, document.body.offsetHeight)
-  console.dir(document.body)
-  // gsap.to(".about", { duration: 2, yPercent: 0, xPercent: 0 })
-  gsap.to(window, {
-    // duration: 2,
-    scrollTo: { x: "#section2", y: "#section2" },
-  })
-}
-
 onMounted(() => {
   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
   gsap.defaults({ ease: "none" })
 
   const tl = gsap.timeline()
 
-  tl.to(".page1", { yPercent: -100 })
-  tl.from(".page2", { yPercent: 100 }, "<")
+  tl.to(".page1", { yPercent: -100, duration: 3 })
+  tl.from(".page2", { yPercent: 100, duration: 3 }, "<")
   tl.to(".crawl1", {
-    xPercent: -200,
-    // duration: 5,
+    xPercent: -400,
+    duration: 3,
   })
   tl.to(".crawl2", {
-    xPercent: -200,
-    // duration: 5,
+    xPercent: -300,
+    duration: 18,
   })
   tl.to(".page2", {
     xPercent: -100,
-    // duration: 5,
+    duration: 5,
   })
   tl.from(
     ".page3",
     {
       xPercent: 100,
-      // duration: 5,
+      duration: 5,
     },
     "<"
   )
-  tl.to(".page3 .box", { width: "100%", height: "100%" })
+  tl.to(".page3 .box", {
+    width: "100%",
+    height: "100%",
+    duration: 5,
+  })
   tl.to(".page3", { yPercent: -100 })
   tl.from(".page4", { yPercent: 100 }, "<")
 
@@ -58,7 +52,7 @@ onMounted(() => {
     trigger: ".about",
     pin: true,
     pinSpacing: true,
-    scrub: 2,
+    scrub: 5,
     anticipatePin: 1,
   })
 })
@@ -72,8 +66,8 @@ onMounted(() => {
     Ring
     InfoText
   .page.page2
-    InfoCrawl.crawl1(text='Hello Hello Hello Hello Hello Hello Hello Hello ')
-    InfoCrawl.crawl2(text='World World World World World World World World ')
+    InfoCrawl.crawl1(text='大家好~ ')
+    InfoCrawl.crawl2(text='歡迎光臨!歡迎光臨!歡迎光臨!歡迎光臨!歡迎光臨!歡迎光臨!')
     LineAnimation
   .page.page3
     .box

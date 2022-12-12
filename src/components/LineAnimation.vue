@@ -13,7 +13,7 @@ onMounted(() => {
       trigger: ".page2",
       start: "top bottom",
       end: "top",
-      scrub: 1,
+      scrub: 4,
     },
   })
 
