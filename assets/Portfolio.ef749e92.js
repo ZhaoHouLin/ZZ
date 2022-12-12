@@ -1,1 +1,0 @@
-import{_ as e,u as t,o as s,c as _,p as a,d as c,b as p}from"./index.3f8a7c10.js";const r=o=>(a("data-v-4e4965a1"),o=o(),c(),o),d={class:"portfolio"},i=r(()=>p("h1",null,"portfolio",-1)),l=[i],n={__name:"Portfolio",props:{title:String},setup(o){return t(),(u,f)=>(s(),_("div",d,l))}},m=e(n,[["__scopeId","data-v-4e4965a1"]]);export{m as default};
