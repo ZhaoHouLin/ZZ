@@ -5,7 +5,7 @@ import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import LineAnimation from "../components/LineAnimation.vue"
 import InfoCrawl from "../components/InfoCrawl.vue"
-
+import css100Data from "../data/css100.json"
 const route = useRoute()
 
 const props = defineProps({
@@ -21,8 +21,8 @@ const formatZero = (val) => {
 <template lang="pug">
 .portfolio
   .cards
-    .card(v-for='n in 100')
-      h2 {{formatZero(n)}}
+    .card(v-for='(item,idx) in css100Data')
+      h2 {{formatZero(idx+1)}}
   //- .frame
     .overlay
       iframe(scrolling="no" title="Begin ( Days CSS 001 )" src="https://codepen.io/rodes/embed/wvmQMjB?default-tab=result" frameborder="no" loading="lazy" allowtransparency="false" allowfullscreen="true")
