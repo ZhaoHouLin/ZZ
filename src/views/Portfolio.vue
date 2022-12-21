@@ -1,47 +1,103 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from "@vue/runtime-core"
+import {
+  computed,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+} from "@vue/runtime-core"
 import { useRoute } from "vue-router"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import css100Data from "../data/css100.json"
+
 import LineAnimation from "../components/LineAnimation.vue"
 import InfoCrawl from "../components/InfoCrawl.vue"
-import SvgIcon from "../components/SvgIcon.vue"
-import css100Data from "../data/css100.json"
+import CardContent from "../components/CardContent.vue"
+import "animate.css"
 
 const route = useRoute()
 
-const props = defineProps({
-  title: String,
-})
-
-const cards = ref()
-
-const dom = (e) => {
-  // console.log(cards)
-  console.log(document.body.clientWidth)
-  console.log(e.clientX, e.clientY)
-}
+const cardOpen = ref(false)
+const cardPosition = ref("right:0")
+const cardContentData = ref(css100Data)
+const animatedClassName = ref("")
 
 const formatZero = (val) => {
   let dTimes = "000" + val
   return `${dTimes.substring(dTimes.length - 3)}`
 }
+
+const detectCard = (e) => {
+  // console.dir(e.target)
+  if (e.target.className == "card") {
+    cardContentData.value.forEach((item, idx) => {
+      if (item.open == true) item.open = false
+    })
+    let id = e.target.dataset.num
+    cardContentData.value[id].open = true
+    handleCardPosition(e)
+  } else {
+    cardContentData.value.forEach((item, idx) => {
+      if (item.open == true) item.open = false
+    })
+  }
+}
+
+const handleCardPosition = (e) => {
+  // console.dir(e)
+  // console.log(e.pageX, e.pageY)
+
+  if (e.pageX < document.body.clientWidth / 2) {
+    // cardPosition.value = `right:0`
+    cardPosition.value = `right`
+    // animatedClassName.value = `animate__animated animate__backInRight right`
+  } else {
+    // cardPosition.value = `left:0`
+    cardPosition.value = `left`
+    // animatedClassName.value = `animate__animated animate__backInLeft left`
+  }
+}
+
+const beforeEnter = (el) => {
+  if (cardPosition.value == `right`) {
+    el.style.right = 0
+  } else {
+    el.style.left = 0
+  }
+}
+const enter = (el) => {
+  gsap.to(el, {
+    duration: 1,
+    x: 0,
+    opacity: 1,
+    ease: "bounce.out",
+  })
+  console.dir(el)
+}
+const afterEnter = (el) => {}
+
+const beforeLeave = (el) => {}
+const leave = (el) => {
+  // gsap.to(el, {
+  //   duration: 1,
+  //   x: 0,
+  //   opacity: 0,
+  //   ease: "bounce.out",
+  // })
+}
+const afterLeave = (el) => {
+  el.style.opacity = 0
+}
 </script>
 
 <template lang="pug">
 .portfolio
-  .cards(ref='cards')
-    .card(v-for='(item,idx) in css100Data' :key='item.title' @click='dom')
-      h2 {{formatZero(idx+1)}}
-  .card-content
-    .wrapper
-      .title
-        h1 Title
-        a(href="https://codepen.io/rodes/embed/wvmQMjB?default-tab=result" target="_blank") 
-          SvgIcon(name="codepen")
-      .window
-        iframe(scrolling="no" title="Begin ( Days CSS 001 )" src="https://codepen.io/rodes/embed/wvmQMjB?default-tab=result" frameborder="no" loading="lazy" allowtransparency="false" allowfullscreen="true")
-      .info
+  .cards( @click='detectCard')
+    .item(v-for='(item,idx) in cardContentData' :key='item.title'  )
+      .card(:data-num='idx') {{formatZero(idx+1)}}
+      Transition(name="in" mode="out-in" )
+        CardContent(:key='item.title' :title='item.title' :src='item.src' :class="[{'left': cardPosition =='left'},{'right': cardPosition =='right'}]" :open='cardContentData[idx].open' )
 
 
 </template>
@@ -59,7 +115,6 @@ const formatZero = (val) => {
     flex-wrap wrap
     overflow-y auto
     padding 1rem
-    // border 1px solid #000
     .card
       size(80px,100px)
       flex()
@@ -73,53 +128,20 @@ const formatZero = (val) => {
         box-shadow 2px 2px 4px rgba(0,0,0,0.3)
         transform translate(-2px,-2px)
 
-  .card-content
-    background-color rgba(0,0,0,0.3)
-    position absolute
-    padding 1rem
-    size(auto,100%)
-    // flex()
-    .wrapper
-      height 90%
-      flex(,,column)
-      border-radius 1rem
-      box-shadow 2px 2px 4px rgba(0,0,0,0.5)
-      background-color rgba(0,0,0,0.4)
-      transform scale(0.8)
-    .wrapper .title
-      size(400px,2rem)
-      position relative
-      flex(space-between)
-      margin 1rem 0
-      padding 0 1rem
-      // border 1px solid #000
-      h1
-        color #fff
-        font-size 2rem
-        margin-left 8px
-      a
-        color #fff
-        z-index 2
-        margin-right 8px
-        .svg-icon
-          size(2rem)
-    .wrapper .window
-      border-radius 8px
-      size(402px,404)
-      overflow hidden
-      transition 0.4s ease-out 0s
-
-    .wrapper .window iframe
-      transform translate(-4px,-54px)
-      size(402px,486px)
-      // display none
-    .wrapper .info
-      size(400px,20%)
-      border-radius 4px
-      background-color #eee
-      margin 1rem
-
-
+.in-enter-from
+  opacity 0
+.in-enter-active
+  transition opacity  .5s ease
+.in-leave-to
+  // transform translateX(200px)
+  opacity 0
+.in-leave-active
+  // transition opacity 1s ease
+  transition 1.5s ease-in-out
+.left
+  left 0
+.right
+  right 0
 
 @media screen and (max-width: 768px)
   .portfolio .card-content
