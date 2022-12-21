@@ -26,17 +26,7 @@ onMounted(() => {
     .window
       iframe(scrolling="no"  :title="props.title" :src="props.src" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true")
     .info  
-  //- p.codepen(data-height='300' data-default-tab='html,result' data-slug-hash='PoeYYdJ' data-user='rodes' style='height: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;')
-    span
-      | See the Pen 
-      a(href='https://codepen.io/rodes/pen/PoeYYdJ')
-        | Motivational Modal ( Days CSS 026 )
-      |  by ZhaoHouLin (
-      a(href='https://codepen.io/rodes') @rodes
-      | )
-      |   on 
-      a(href='https://codepen.io') CodePen
-      | .
+
 
 
 
@@ -44,14 +34,15 @@ onMounted(() => {
 
 <style lang="stylus" scoped>
 .card-content
+  opacity 0
   background-color rgba(0,0,0,0.3)
   position absolute
   top 0
   padding 1rem
   size(auto,100%)
-  // flex()
+  flex()
   .wrapper
-    height 90%
+    // height 90%
     flex(,,column)
     border-radius 1rem
     box-shadow 2px 2px 4px rgba(0,0,0,0.5)
@@ -76,16 +67,16 @@ onMounted(() => {
         size(2rem)
   .wrapper .window
     border-radius 8px
-    size(402px,404)
+    size(402px,400px)
     overflow hidden
     transition 0.4s ease-out 0s
 
   .wrapper .window iframe
-    transform translate(-4px,-54px)
-    size(402px,486px)
+    transform translate(0px,-51px)
+    size(402px,482px)
     // display none
   .wrapper .info
-    size(400px,20%)
+    size(400px,100px)
     border-radius 4px
     background-color #eee
     margin 1rem
