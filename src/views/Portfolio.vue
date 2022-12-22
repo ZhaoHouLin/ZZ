@@ -1,42 +1,31 @@
 <script setup>
-import {
-  computed,
-  onMounted,
-  onUnmounted,
-  reactive,
-  ref,
-} from "@vue/runtime-core"
+import { ref } from "@vue/runtime-core"
 import { useRoute } from "vue-router"
 import { gsap } from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
 import css100Data from "../data/css100.json"
 
-import LineAnimation from "../components/LineAnimation.vue"
-import InfoCrawl from "../components/InfoCrawl.vue"
 import CardContent from "../components/CardContent.vue"
-import "animate.css"
 
 const route = useRoute()
 
-const cardOpen = ref(false)
-const cardPosition = ref("right:0")
-const cardContentData = ref(css100Data)
-const animatedClassName = ref("")
+const cardContentData = ref(css100Data) // Css 100 days 資料
+
+let clientWidth = ref(0) //紀錄畫面寬度
+let elOffsetLeft = ref(0) //紀錄點擊的元素距離左側多少
 
 const formatZero = (val) => {
   let dTimes = "000" + val
   return `${dTimes.substring(dTimes.length - 3)}`
 }
 
+//偵測滑鼠位置來改變卡片開關
 const detectCard = (e) => {
-  // console.dir(e.target)
   if (e.target.className == "card") {
     cardContentData.value.forEach((item, idx) => {
       if (item.open == true) item.open = false
     })
     let id = e.target.dataset.num
     cardContentData.value[id].open = true
-    handleCardPosition(e)
   } else {
     cardContentData.value.forEach((item, idx) => {
       if (item.open == true) item.open = false
@@ -44,24 +33,21 @@ const detectCard = (e) => {
   }
 }
 
-const handleCardPosition = (e) => {
-  if (e.pageX < document.body.clientWidth / 2) {
-    cardPosition.value = `right`
-  } else {
-    cardPosition.value = `left`
-  }
-}
+//動畫進入前
+const onBeforeEnter = (el) => {}
 
-const onBeforeEnter = (el) => {
-  if (cardPosition.value == `right`) {
+//動畫進入
+const onEnter = (el, done) => {
+  clientWidth.value = el.parentNode.parentElement.clientWidth
+  elOffsetLeft.value = el.parentNode.offsetLeft
+
+  if (elOffsetLeft.value < clientWidth.value / 2) {
     el.style.right = 0
     el.style.transform = `translateX(100%)`
   } else {
     el.style.left = 0
     el.style.transform = `translateX(-100%)`
   }
-}
-const onEnter = (el, done) => {
   gsap.to(el, {
     duration: 1,
     x: 0,
@@ -71,8 +57,9 @@ const onEnter = (el, done) => {
   })
 }
 
+//動畫離開
 const onLeave = (el, done) => {
-  if (cardPosition.value == `right`) {
+  if (elOffsetLeft.value < clientWidth.value / 2) {
     gsap.to(el, {
       duration: 1,
       opacity: 0,
@@ -132,12 +119,6 @@ const onLeave = (el, done) => {
       &:hover
         box-shadow 2px 2px 4px rgba(0,0,0,0.3)
         transform translate(-2px,-2px)
-
-
-.left
-  left 0
-.right
-  right 0
 
 @media screen and (max-width: 768px)
   .card-content
