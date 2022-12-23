@@ -44,8 +44,8 @@ onMounted(() => {
     height: "100%",
     duration: 5,
   })
-  tl.to(".page3", { yPercent: -100 })
-  tl.from(".page4", { yPercent: 100 }, "<")
+  tl.to(".page3", { yPercent: -100, duration: 15 })
+  tl.from(".page4", { yPercent: 100, duration: 15 }, "<")
 
   ScrollTrigger.create({
     animation: tl,
@@ -98,8 +98,9 @@ onMounted(() => {
 .page3
   background-color orange
   .box
+    box-sizing border-box
     size(100px)
-    border 1px solid #000
+    border 3px solid #000
 .page4
   background-color yellow
 </style>
