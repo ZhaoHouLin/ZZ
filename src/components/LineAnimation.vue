@@ -17,7 +17,7 @@ onMounted(() => {
     },
   })
 
-  for (let i = 1; i <= numberOfLines.value; i++) {
+  for (let i = 1; i <= lineCounter; i++) {
     tl.to(`.line-up-${i}`, {
       transformOrigin: "50% 0%",
       transform: "scaleY(0)",
@@ -38,7 +38,7 @@ onMounted(() => {
 <template lang="pug">
 .line-animation
   .lines
-    - for(let i=1;i<=50;i++)
+    - for(let i=1;i<=25;i++)
       .line
         div(class=`line-up-${i}`)
         div(class=`line-down-${i}`)
@@ -51,6 +51,7 @@ numberOfLines = 50
 lineCounter = numberOfLines / 2
 
 .line-animation
+  z-index 2
   position fixed
   top 0
   flex()
@@ -66,8 +67,8 @@ lineCounter = numberOfLines / 2
     [class^='line-up-'],[class^='line-down-']
       size(,50%)
     z-index 4
-    for n in 1..numberOfLines
-      rangeMapcolor = 1 - (n - 1)*1/numberOfLines
+    for n in 1..lineCounter
+      rangeMapcolor = 1 - (n - 1)*1/lineCounter
       .line-up-{n}
         background-color rgba(68,68,68,rangeMapcolor )
       .line-down-{n}
