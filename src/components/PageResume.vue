@@ -1,0 +1,64 @@
+<template lang="pug">
+.page-resume
+  .line
+  .resume 
+    .work-experience 
+      h1.title 工作經歷
+      .experience
+        .now
+          span 2019-01 ~ 仍在職
+          h3 藍新資訊股份有限公司
+          h4 專案工程師
+          p 疾病管制署駐點電腦相關維護
+        .past 
+          span 2022-05 ~ 2022-08
+          h3 文境資科股份有限公司
+          h4 前端工程師
+          p 前端頁面切版、與後端API介接
+
+    .education
+      h1.title 學習經歷
+      .experience
+        .now
+          span 2018-08 
+          h3 Alpha Camp 
+        .past
+          span 2008-09 ~ 2012-06 
+          h3 國立臺北科技大學
+          h4 光電工程系 學士
+</template>
+
+<style lang="stylus" scoped>
+.page-resume
+  background-color #fff
+  flex()
+  .line
+    position absolute
+    right outlineSpace + 1rem
+    size(1px,80%)
+    background-color #222
+  .resume
+    flex(,,column)
+    size(80%,auto)
+    .work-experience,.education
+      size()
+      flex(,flex-start,column)
+      margin 1rem 0
+      .experience
+        size()
+        flex(space-around,,)
+        padding 1rem
+        line-height 1.6rem
+      .experience .now,.past
+        size(40%,100%)
+
+@media screen and (max-width: 768px)
+  .page-resume .resume
+    .work-experience,.education
+      .experience
+        flex(,,column)
+        .now,.past
+          size()
+        .now
+          margin-bottom 1rem
+</style>

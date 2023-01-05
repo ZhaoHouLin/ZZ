@@ -1,14 +1,8 @@
 <script setup>
-// import { RouterLink, RouterView } from "vue-router";
-import { ref } from "@vue/reactivity"
-import { computed, onMounted } from "@vue/runtime-core"
-import { useRoute, useRouter } from "vue-router"
-
+import { useRoute } from "vue-router"
 import Menu from "./components/Menu.vue"
-import About from "./views/About.vue"
 
 const route = useRoute()
-const title = ["one", "two", "three", "four"]
 </script>
 
 <template lang="pug">
