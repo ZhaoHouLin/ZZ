@@ -7,7 +7,7 @@ const route = useRoute()
 
 <template lang="pug">
 Menu
-RouterView(v-slot="{ Component  }")
+RouterView(v-slot="{ Component }")
   Transition(name="fade" mode="out-in" )
     keep-alive
       component( :is="Component" :key="$route.name" v-if="route.meta.keepAlive") 

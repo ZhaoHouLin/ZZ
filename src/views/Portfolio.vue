@@ -2,7 +2,8 @@
 import { ref } from "@vue/runtime-core"
 import { useRoute } from "vue-router"
 import { gsap } from "gsap"
-import css100Data from "../data/css100.json"
+import css100Data from "../data/CSS100.json"
+import githubPortfolio from "../data/GithubPortfolio.json"
 
 import CardContent from "../components/CardContent.vue"
 
@@ -83,6 +84,7 @@ const onLeave = (el, done) => {
 <template lang="pug">
 .portfolio
   .cards( @click='detectCard')
+    a.card(v-for='item in githubPortfolio' :key='item.title' :href='item.href' target="_blank") {{ item.title }}
     .item(v-for='(item,idx) in cardContentData' :key='item.title'  )
       .card(:data-num='idx') {{formatZero(idx+1)}}
       Transition(name="in" 
@@ -91,7 +93,8 @@ const onLeave = (el, done) => {
       @leave="onLeave"
       )
         CardContent(:key='item.title' :title='item.title' :src='item.src'  :open='cardContentData[idx].open' )
-
+    
+    
 
 </template>
 <style lang="stylus" scoped>
@@ -101,11 +104,12 @@ const onLeave = (el, done) => {
   flex()
   size(100%,100vh)
   background-color #fff
+  overflow-y auto
+  overflow-x hidden
   .cards
-    size()
+    size(90%,)
     flex()
     flex-wrap wrap
-    overflow-y auto
     padding 1rem
     .card
       size(80px,100px)
@@ -115,7 +119,14 @@ const onLeave = (el, done) => {
       cursor pointer
       transition 0.3s ease-out 0s
       border 1px solid rgba(0,0,0,0.2)
+      color #222
       user-select none
+      text-align center
+      text-decoration none
+      word-wrap break-word
+      word-break keep-all
+      box-sizing border-box
+      padding 0 8px
       &:hover
         box-shadow 2px 2px 4px rgba(0,0,0,0.3)
         transform translate(-2px,-2px)

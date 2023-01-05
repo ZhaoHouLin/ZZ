@@ -28,14 +28,15 @@ onMounted(() => {
     },
     "<"
   )
-
+  tl.to(".page-intro", { opacity: 0, duration: 3 })
   tl.from(
     ".page-resume",
     {
       xPercent: 100,
       duration: 5,
-    }
-    // "<"
+      opacity: 0,
+    },
+    "<"
   )
   // tl.to(".page-resume .box", {
   //   width: "100%",
