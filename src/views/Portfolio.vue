@@ -104,13 +104,22 @@ const onLeave = (el, done) => {
   flex()
   size(100%,100vh)
   background-color #fff
-  overflow-y auto
-  overflow-x hidden
+
   .cards
-    size(90%,)
+    size()
     flex()
     flex-wrap wrap
-    padding 1rem
+    box-sizing border-box
+    padding 1rem 3rem
+    overflow-y auto
+    overflow-x hidden
+    &::-webkit-scrollbar-track    //捲軸底色
+      background-color #eee
+    &::-webkit-scrollbar-thumb    //捲軸本體顏色
+      background-color #222
+    &::-webkit-scrollbar          //捲軸寬度
+      width 0.5rem
+
     .card
       size(80px,100px)
       flex()
@@ -132,6 +141,8 @@ const onLeave = (el, done) => {
         transform translate(-2px,-2px)
 
 @media screen and (max-width: 768px)
+  .portfolio .cards
+    padding 1rem 0
   .card-content
     size()
     padding 0
