@@ -8,7 +8,7 @@ import Hamburger from "./Hamburger.vue"
 const { handleMenuOpen } = useCounterStore()
 
 const list = ref()
-const numberOfsection = ref(4)
+const numberOfsection = ref(6)
 
 const toSection = (num) => {
   let idx = num - 1
@@ -19,14 +19,20 @@ const toSection = (num) => {
 }
 
 onMounted(() => {
-  gsap.defaults({ duration: 0.5 })
+  gsap.defaults({ duration: 1 })
 
   const items = list.value.childNodes
-  items.forEach((item) => {
-    const tl = gsap
-      .timeline({ paused: true })
-      .to(item, { color: "#f00", scale: 1.2 })
 
+  items.forEach((item) => {
+    const tl = gsap.timeline({ paused: true }).to(item.children[0], {
+      // color: "#f00",
+      scale: 1.2,
+      backgroundImage: "linear-gradient(90deg,red 0%,red 100%,white 0%)",
+    })
+    // tl.to(item.children[0], {
+    //   backgroundImage: "linear-gradient(90deg,white 0%,white 100%,red 100%)",
+    // })
+    // console.log(item.children[0])
     item.addEventListener("mouseenter", () => tl.play())
     item.addEventListener("mouseleave", () => tl.reverse())
     item.addEventListener("click", () => handleMenuOpen())
@@ -40,11 +46,11 @@ Hamburger
   .list(ref='list')
     RouterLink(to='/' @click='toSection(1)')
       h1 about
-    RouterLink(to='/' @click='toSection(3)')
+    RouterLink(to='/' @click='toSection(2)')
       h1 resume
     RouterLink(to='/portfolio' )
       h1 portfolio
-    RouterLink(to='/favorite' @click='toSection(2)')
+    RouterLink(to='/' @click='toSection(3)')
       h1 favorite
 
   
@@ -77,4 +83,9 @@ Hamburger
       h1
         cursor pointer
         text-transform capitalize
+        background-image linear-gradient(90deg,red 0%,red 0%,white 0%)
+        -webkit-background-clip text
+        background-clip text
+        -webkit-text-fill-color transparent
+        text-fill-color transparent
 </style>
