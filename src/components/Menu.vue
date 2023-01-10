@@ -19,7 +19,7 @@ const toSection = (num) => {
 }
 
 onMounted(() => {
-  gsap.defaults({ duration: 1 })
+  gsap.defaults({ duration: 0.5 })
 
   const items = list.value.childNodes
 

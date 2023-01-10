@@ -3,6 +3,7 @@ import { onMounted, ref } from "@vue/runtime-core"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"
+import { TextPlugin } from "gsap/TextPlugin"
 
 import InfoCrawl from "../components/InfoCrawl.vue"
 import LineAnimation from "../components/LineAnimation.vue"
@@ -15,12 +16,13 @@ import FacebookAlbum from "../data/FacebookAlbum.json"
 const album = ref(FacebookAlbum)
 
 onMounted(() => {
-  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
+  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, TextPlugin)
   gsap.defaults({ ease: "none" })
 
   const tl = gsap.timeline()
 
   tl.to(".page-home", { yPercent: -100, duration: 3 })
+  // ========== 自介頁面動畫設定 Start ========== //
   tl.from(".page-intro", { yPercent: 100, duration: 3 }, "<")
   tl.from(
     ".page-intro .introduction",
@@ -32,7 +34,14 @@ onMounted(() => {
     },
     "<"
   )
-  tl.to(".page-intro", { opacity: 0, duration: 3 })
+  tl.from(".page-intro .introduction p", {
+    text: "",
+    ease: "power1.in",
+    duration: 10,
+    delay: 2,
+  })
+  tl.to(".page-intro", { opacity: 0, duration: 3, delay: 3 })
+  // ========== 履歷頁面動畫設定 Start ========== //
   tl.from(
     ".page-resume",
     {
@@ -68,6 +77,8 @@ onMounted(() => {
     duration: 5,
     opacity: 0,
   })
+
+  // ========== 興趣頁面動畫設定 Start ========== //
   tl.from(
     ".page.page-favorite",
     {
@@ -88,7 +99,7 @@ onMounted(() => {
     yPercent: 125,
     opacity: 0,
     stagger: 2,
-    duration: 5,
+    duration: 10,
     delay: 2,
     // yoyo: true,
   })
