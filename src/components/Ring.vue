@@ -19,8 +19,6 @@ onMounted(() => {
     },
     duration: 3,
   })
-
-  // gsap.to("h1 span", { innerText: 3030, snap: "innerText", duration: 2 })
 })
 </script>
 
@@ -52,8 +50,8 @@ onMounted(() => {
 #ring
   size(30rem)
   text
-    fill #222
-    filter drop-shadow(4px 4px 4px rgb(0 0 0 / 0.3))
+    fill colorSecondary
+    filter drop-shadow(4px 4px 4px rgb(255 255 255 / 0.3))
     textPath
       font-family 'Advanced_Pixel-7'
       font-size 4rem

@@ -36,17 +36,17 @@ onMounted(() => {
   )
   tl.from(".page-intro .introduction p", {
     text: "",
-    ease: "power1.in",
+    ease: "power4.in",
     duration: 10,
-    delay: 2,
+    delay: 5,
   })
-  tl.to(".page-intro", { opacity: 0, duration: 3, delay: 3 })
+  tl.to(".page-intro", { opacity: 0, duration: 3, delay: 10 })
   // ========== 履歷頁面動畫設定 Start ========== //
   tl.from(
     ".page-resume",
     {
       xPercent: 100,
-      duration: 5,
+      duration: 10,
       opacity: 0,
       delay: 3,
     },
@@ -56,26 +56,64 @@ onMounted(() => {
   //   xPercent: 100,
   //   duration: 5,
   //   opacity: 0,
-  //   stagger: 0.2,
+  //   // stagger: 1,
   // })
-  // tl.from(
-  //   ".page-resume .resume .past",
-  //   {
-  //     xPercent: 100,
-  //     duration: 5,
-  //     opacity: 0,
-  //   },
-  //   "<"
-  // )
+  tl.from(".page-resume .resume .now h3", {
+    xPercent: 100,
+    duration: 10,
+    opacity: 0,
+  })
+  tl.from(
+    ".page-resume .resume .past h3",
+    {
+      xPercent: 100,
+      duration: 10,
+      opacity: 0,
+      delay: 1,
+    },
+    "<"
+  )
+  tl.from(".page-resume .resume .now h4", {
+    xPercent: 100,
+    duration: 10,
+    opacity: 0,
+  })
+  tl.from(
+    ".page-resume .resume .past h4",
+    {
+      xPercent: 100,
+      duration: 10,
+      opacity: 0,
+      delay: 1,
+    },
+    "<"
+  )
+  tl.from(".page-resume .resume .now p", {
+    xPercent: 100,
+    duration: 10,
+    opacity: 0,
+  })
+  tl.from(
+    ".page-resume .resume .past p",
+    {
+      xPercent: 100,
+      duration: 10,
+      opacity: 0,
+      delay: 1,
+    },
+    "<"
+  )
   tl.from(".page-resume .line", {
     yPercent: 100,
     duration: 5,
     opacity: 0,
+    delay: 5,
   })
   tl.to(".page-resume", {
     yPercent: -100,
     duration: 5,
     opacity: 0,
+    delay: 5,
   })
 
   // ========== 興趣頁面動畫設定 Start ========== //
@@ -95,7 +133,7 @@ onMounted(() => {
     delay: 2,
   })
   tl.from(".page.page-favorite .sport .couplet h2", {
-    backgroundImage: "linear-gradient(45deg,#222 200%,#fff 100%,#222 300%)",
+    backgroundImage: "linear-gradient(45deg,#fff 200%,#222 100%,#fff 300%)",
     yPercent: 125,
     opacity: 0,
     stagger: 2,
@@ -142,8 +180,8 @@ onMounted(() => {
   position fixed      //手機版底部不會空白的關鍵
   size()
   flex()
-  color #000
-  background-color transparent
+  color colorSecondary
+  background-color colorPrimary
   // scroll-behavior smooth
 .page
   size()
@@ -165,7 +203,7 @@ onMounted(() => {
     // z-index 2
     -webkit-writing-mode vertical-lr
     writing-mode vertical-lr
-    background-image linear-gradient(45deg,#222 -200%,#fff -100%,#222 0%)
+    background-image linear-gradient(45deg,colorSecondary -200%,colorPrimary -100%,colorSecondary 0%)
     -webkit-background-clip text
     background-clip text
     -webkit-text-fill-color transparent

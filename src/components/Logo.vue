@@ -13,7 +13,7 @@
   flex()
   size(10rem,auto)
   padding 0rem 0.5rem
-  border 2px solid #000
+  border 2px solid colorSecondary
   // font-family 'NewYorkEscapeCondensed-Condensed'
   font-size 8rem
   line-height 8rem

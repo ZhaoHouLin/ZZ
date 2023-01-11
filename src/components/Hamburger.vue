@@ -1,6 +1,6 @@
 <script setup>
-import { storeToRefs } from "pinia"
 import { useCounterStore } from "../stores/counter"
+import { storeToRefs } from "pinia"
 
 const counter = useCounterStore()
 const { menuOpenVal } = storeToRefs(counter) //資料解構
@@ -27,7 +27,7 @@ const { handleMenuOpen } = counter //函式可以直接解構
     size(,0.2rem)
     border-radius 4px
     position absolute
-    background-color #000
+    background-color colorSecondary
     &:nth-child(1)
       top 0
     &:nth-child(2)
@@ -43,7 +43,7 @@ const { handleMenuOpen } = counter //函式可以直接解構
 
 .hamburger-open
   [class^='bar']
-    background-color #fff
+    background-color colorSecondary
   .bar:nth-child(2)
     animation bar2 .7s forwards
     z-index -1

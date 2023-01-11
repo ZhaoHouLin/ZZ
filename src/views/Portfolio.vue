@@ -103,7 +103,7 @@ const onLeave = (el, done) => {
   position fixed
   flex()
   size(100%,100vh)
-  background-color #fff
+  background-color colorPrimary
 
   .cards
     size()
@@ -114,9 +114,9 @@ const onLeave = (el, done) => {
     overflow-y auto
     overflow-x hidden
     &::-webkit-scrollbar-track    //捲軸底色
-      background-color #eee
+      background-color colorPrimary
     &::-webkit-scrollbar-thumb    //捲軸本體顏色
-      background-color #222
+      background-color colorSecondary
     &::-webkit-scrollbar          //捲軸寬度
       width 0.5rem
 
@@ -127,8 +127,9 @@ const onLeave = (el, done) => {
       margin 0.4rem
       cursor pointer
       transition 0.3s ease-out 0s
-      border 1px solid rgba(0,0,0,0.2)
-      color #222
+      border 1px solid rgba(255,255,255,0.5)
+      // background-color colorSecondary
+      color colorSecondary
       user-select none
       text-align center
       text-decoration none
@@ -137,7 +138,9 @@ const onLeave = (el, done) => {
       box-sizing border-box
       padding 0 8px
       &:hover
-        box-shadow 2px 2px 4px rgba(0,0,0,0.3)
+        box-shadow 2px 2px 4px rgba(255,255,255,0.3)
+        background-color colorSecondary
+        color colorPrimary
         transform translate(-2px,-2px)
 
 @media screen and (max-width: 768px)

@@ -1,3 +1,17 @@
+<script setup>
+import { onMounted, ref } from "@vue/runtime-core"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { ScrollToPlugin } from "gsap/ScrollToPlugin"
+
+onMounted(() => {
+  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
+  gsap.defaults({ ease: "none" })
+  let targets = gsap.utils.toArray(".now")
+  // console.log(targets)
+})
+</script>
+
 <template lang="pug">
 .page-resume
   .line
@@ -22,6 +36,7 @@
         .now
           span 2018-08 
           h3 Alpha Camp 
+          h4 學期一、二
         .past
           span 2008-09 ~ 2012-06 
           h3 國立臺北科技大學
@@ -30,20 +45,23 @@
 
 <style lang="stylus" scoped>
 .page-resume
-  background-color #fff
+  background-color colorPrimary
   flex()
   .line
     position absolute
     right outlineSpace + 1rem
     size(1px,80%)
-    background-color #222
+    background-color colorSecondary
   .resume
+    // border 1px solid #fff
     flex(,,column)
-    size(80%,auto)
+    size(60%,auto)
+    .work-experience
+      margin-bottom 1rem
     .work-experience,.education
       size()
       flex(,flex-start,column)
-      margin 1rem 0
+      // margin 1rem 0
       .experience
         size()
         flex(space-around,,)
@@ -51,9 +69,19 @@
         line-height 1.6rem
       .experience .now,.past
         size(40%,100%)
+        // flex(space-between,flex-start,column)
+        // border 1px solid #fff
+        h3
+          font-weight 900
+          margin-top 0.5rem
+        h4
+          font-weight 700
+          opacity 0.7
+          margin-bottom 0.5rem
 
 @media screen and (max-width: 768px)
   .page-resume .resume
+    width 80%
     .work-experience,.education
       .experience
         flex(,,column)

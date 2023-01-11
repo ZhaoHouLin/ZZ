@@ -81,7 +81,7 @@ onMounted(() => {
   position absolute
   size(1px,15rem)
   border-radius 1px
-  background-color #222
+  background-color colorSecondary
 .line.left
   top outlineSpace + 3rem
   left outlineSpace + 0.5rem

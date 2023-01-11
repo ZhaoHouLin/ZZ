@@ -1,10 +1,13 @@
 <script setup>
 import { onMounted, ref } from "@vue/runtime-core"
 import { useCounterStore } from "../stores/counter"
+import { storeToRefs } from "pinia"
 import { gsap } from "gsap"
 
 import Hamburger from "./Hamburger.vue"
 
+const counter = useCounterStore()
+const { menuOpenVal } = storeToRefs(counter) //資料解構
 const { handleMenuOpen } = useCounterStore()
 
 const list = ref()
@@ -26,13 +29,10 @@ onMounted(() => {
   items.forEach((item) => {
     const tl = gsap.timeline({ paused: true }).to(item.children[0], {
       // color: "#f00",
-      scale: 1.2,
+      scale: 1.5,
       backgroundImage: "linear-gradient(90deg,red 0%,red 100%,white 0%)",
     })
-    // tl.to(item.children[0], {
-    //   backgroundImage: "linear-gradient(90deg,white 0%,white 100%,red 100%)",
-    // })
-    // console.log(item.children[0])
+
     item.addEventListener("mouseenter", () => tl.play())
     item.addEventListener("mouseleave", () => tl.reverse())
     item.addEventListener("click", () => handleMenuOpen())
@@ -46,11 +46,11 @@ Hamburger
   .list(ref='list')
     RouterLink(to='/' @click='toSection(1)')
       h1 about
-    RouterLink(to='/' @click='toSection(2)')
+    RouterLink(to='/' @click='toSection(3)')
       h1 resume
     RouterLink(to='/portfolio' )
       h1 portfolio
-    RouterLink(to='/' @click='toSection(3)')
+    RouterLink(to='/' @click='toSection(4)')
       h1 favorite
 
   
@@ -63,7 +63,6 @@ Hamburger
   position fixed
   right 0
   top 0
-  // flex()
   size(0,100%)
   background-color rgba(0,0,0,0.4)
   opacity 0
@@ -88,4 +87,8 @@ Hamburger
         background-clip text
         -webkit-text-fill-color transparent
         text-fill-color transparent
+
+@media screen and (max-width: 768px)
+  .menu .list
+    width 60%
 </style>
