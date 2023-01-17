@@ -8,8 +8,8 @@ export const useCounterStore = defineStore('counter', () => {
   const handleMenuOpen = () => {   //處理Menu開啟
     menuOpenVal.value = !menuOpenVal.value
     menuOpenVal.value
-      ? gsap.to(".menu", { width: "100%", height: "100%", display: 'block', opacity: 1 })
-      : gsap.to(".menu", { width: "0%", height: "100%", display: 'none', opacity: 0 })
+      ? gsap.to(".menu", { width: "100%", height: "100%", display: 'block', opacity: 1, duration: 0.5 })
+      : gsap.to(".menu", { width: "0%", height: "100%", display: 'none', opacity: 0, duration: 0.5 })
   }
 
   return {

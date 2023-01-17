@@ -1,17 +1,3 @@
-<script setup>
-import { onMounted, ref } from "@vue/runtime-core"
-import { gsap } from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { ScrollToPlugin } from "gsap/ScrollToPlugin"
-
-onMounted(() => {
-  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
-  gsap.defaults({ ease: "none" })
-  let targets = gsap.utils.toArray(".now")
-  // console.log(targets)
-})
-</script>
-
 <template lang="pug">
 .page-resume
   .line
@@ -71,6 +57,8 @@ onMounted(() => {
         size(40%,100%)
         // flex(space-between,flex-start,column)
         // border 1px solid #fff
+        span
+          opacity 0.7
         h3
           font-weight 900
           margin-top 0.5rem
