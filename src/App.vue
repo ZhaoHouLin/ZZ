@@ -14,10 +14,12 @@ RouterView(v-slot="{ Component }")
 </template>
 
 <style lang="stylus">
-colors = red green blue
 
 body::-webkit-scrollbar
   display none
+
+body
+  background-color colorPrimary
 
 .fade-enter-from
   opacity 0

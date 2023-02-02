@@ -19,6 +19,14 @@ const routes = [
     component: () => import("../views/About.vue")
   },
   {
+    path: "/resume",
+    name: "resume",
+    meta: {
+      keepAlive: true,
+    },
+    component: () => import("../views/Resume.vue"),
+  },
+  {
     path: "/portfolio",
     name: "portfolio",
     meta: {
@@ -32,15 +40,7 @@ const routes = [
     meta: {
       keepAlive: true,
     },
-    component: () => import("../views/Page-4.vue"),
-  },
-  {
-    path: "/contact",
-    name: "contact",
-    meta: {
-      keepAlive: true,
-    },
-    component: () => import("../views/Page-4.vue"),
+    component: () => import("../views/Favorite.vue"),
   },
 ]
 

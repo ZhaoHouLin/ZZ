@@ -46,11 +46,11 @@ Hamburger
   .list(ref='list')
     RouterLink(to='/' @click='toSection(1)')
       h1 about
-    RouterLink(to='/' @click='toSection(3)')
+    RouterLink(to='/resume' )
       h1 resume
     RouterLink(to='/portfolio' )
       h1 portfolio
-    RouterLink(to='/' @click='toSection(4)')
+    RouterLink(to='/favorite')
       h1 favorite
 
   

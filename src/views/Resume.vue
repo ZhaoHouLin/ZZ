@@ -1,5 +1,13 @@
+<script setup>
+import { onMounted } from "@vue/runtime-core"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+onMounted(() => {})
+</script>
+
 <template lang="pug">
-.page-resume
+.section-resume
   .line
   .resume 
     .work-experience 
@@ -30,13 +38,15 @@
 </template>
 
 <style lang="stylus" scoped>
-.page-resume
+.section-resume
+  size(,100vh)
   background-color colorPrimary
+  color colorSecondary
   flex()
   .line
     position absolute
     right outlineSpace + 1rem
-    size(1px,80%)
+    size(1px,80vh)
     background-color colorSecondary
   .resume
     // border 1px solid #fff
@@ -68,7 +78,7 @@
           margin-bottom 0.5rem
 
 @media screen and (max-width: 768px)
-  .page-resume .resume
+  .section-resume .resume
     width 80%
     .work-experience,.education
       .experience
