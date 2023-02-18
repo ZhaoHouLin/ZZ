@@ -51,7 +51,7 @@ onMounted(() => {
   src url('@/assets/fonts/Advanced_Pixel-7.woff') format("woff")
 .ring
   pos()
-  transform-origin -50% -50%
+  // transform-origin -50% -50%
   transform translate(-50%,-50%)
   .title
     flex()

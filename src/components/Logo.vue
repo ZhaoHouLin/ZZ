@@ -7,6 +7,7 @@
   font-family 'NewYorkEscapeCondensed-Condensed'
   src url('@/assets/fonts/NewYorkEscapeCondensed-Condensed.woff') format("woff")
 .logo
+  z-index 2
   position absolute
   bottom outlineSpace
   right outlineSpace

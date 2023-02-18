@@ -116,26 +116,21 @@ onMounted(() => {
 <style lang="stylus" scoped>
 .about
   // position fixed      //手機版底部不會空白的關鍵
-
   size()
-  // flex()
   color colorSecondary
   background-color colorPrimary
 
 .section
-  size()
+  size(,100vh)
   position absolute
+  // position fixed
   box-sizing border-box
 
 .test1
   size()
   background-color red
-  // .display-none
-  //   size()
-  // position absolute
-  // // z-index 10
+
 .test2
-  // z-index 50
   size()
   background-color yellow
 </style>
