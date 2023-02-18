@@ -39,6 +39,8 @@ onMounted(() => {})
 
 <style lang="stylus" scoped>
 .section-resume
+  // position fixed
+  position absolute
   size(,100vh)
   background-color colorPrimary
   color colorSecondary

@@ -1,10 +1,26 @@
 <script setup>
-import { onMounted } from "@vue/runtime-core"
+import { onMounted, ref } from "@vue/runtime-core"
 import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { TextPlugin } from "gsap/TextPlugin"
 
+const textItems = ref()
+
 onMounted(() => {
-  gsap.registerPlugin(TextPlugin)
+  gsap.registerPlugin(TextPlugin, ScrollTrigger)
+  gsap.defaults({ duration: 1 })
+  const tl = gsap.timeline()
+  tl.to(".name", { xPercent: -100 })
+  tl.to(".phone-number", { yPercent: -100 }, "<")
+  tl.to(".mail", { yPercent: -100 }, "<")
+  tl.to(".line.top", { xPercent: 100 }, "<")
+  tl.to(".line.right-bottom", { xPercent: -100 }, "<")
+  tl.to(".line.left-bottom-slash", { left: "50%", top: "50%" }, "<")
+  ScrollTrigger.create({
+    animation: tl,
+    scrub: 3,
+  })
+
   gsap.to(".name", {
     text: "Raiden",
     ease: "power1.in",
@@ -33,7 +49,7 @@ onMounted(() => {
 </script>
 
 <template lang="pug">
-.info-text
+.info-text(ref='textItems')
   .name ZhaoHou Lin
   .phone-number +886 906-822-708 
   .mail rodes5292@gmail.com

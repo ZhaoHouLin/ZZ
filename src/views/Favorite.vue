@@ -25,16 +25,13 @@ onMounted(() => {
 
 <style lang="stylus" scoped>
 .section-favorite
-  // background-color #eee
-  // position relative
-
+  position fixed
+  size()
   .sport .couplet
     size(auto,100%)
     position absolute
     left 10%
     flex(,,row-reverse)
-    // border 1px solid #000
-    // background-color #fff
 
   .sport .couplet h2
     // z-index 2

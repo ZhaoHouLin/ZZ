@@ -10,7 +10,7 @@ onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)
   const tl = gsap.timeline({
     scrollTrigger: {
-      trigger: ".page2",
+      trigger: ".section-intro",
       start: "top bottom",
       end: "top",
       scrub: 4,
@@ -19,15 +19,15 @@ onMounted(() => {
 
   for (let i = 1; i <= lineCounter; i++) {
     tl.to(`.line-up-${i}`, {
-      transformOrigin: "50% 0%",
-      transform: "scaleY(0)",
+      transformOrigin: "0% 50%",
+      transform: "scaleX(0)",
       border: "none",
     })
     tl.to(
       `.line-down-${i}`,
       {
-        transformOrigin: "50% 100%",
-        transform: "scaleY(0)",
+        transformOrigin: "100% 50%",
+        transform: "scaleX(0)",
       },
       "<"
     )
@@ -60,17 +60,18 @@ lineCounter = numberOfLines / 2
 .lines
   position absolute
   size()
-  flex()
+  flex(,,column)
   .line
     size()
-    flex(,,column)
+    // flex(,,)
     [class^='line-up-'],[class^='line-down-']
-      size(,50%)
+      size()
+      // border-radius 4px
     z-index 4
     for n in 1..lineCounter
-      rangeMapcolor = 1 - (n - 1)*1/lineCounter
+      rangeMapColor = 1 - (n - 1)*1/lineCounter
       .line-up-{n}
-        background-color rgba(68,68,68,rangeMapcolor )
+        background-color rgba(255,255,255,rangeMapColor )
       .line-down-{n}
-        background-color rgba(68,68,68,rangeMapcolor)
+        background-color rgba(255,255,255,rangeMapColor)
 </style>

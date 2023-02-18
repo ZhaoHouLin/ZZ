@@ -15,6 +15,8 @@ RouterView(v-slot="{ Component }")
 
 <style lang="stylus">
 
+
+
 body::-webkit-scrollbar
   display none
 

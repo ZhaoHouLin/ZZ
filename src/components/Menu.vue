@@ -11,7 +11,7 @@ const { menuOpenVal } = storeToRefs(counter) //資料解構
 const { handleMenuOpen } = useCounterStore()
 
 const list = ref()
-const numberOfsection = ref(6)
+const numberOfsection = ref(4)
 
 const toSection = (num) => {
   let idx = num - 1
@@ -44,7 +44,7 @@ onMounted(() => {
 Hamburger
 .menu
   .list(ref='list')
-    RouterLink(to='/' @click='toSection(1)')
+    RouterLink(to='/' @click='toSection(2)')
       h1 about
     RouterLink(to='/resume' )
       h1 resume
