@@ -9,8 +9,10 @@
 .logo
   z-index 2
   position absolute
-  bottom outlineSpace
-  right outlineSpace
+  // bottom outlineSpace
+  // right outlineSpace
+  top outlineSpace
+  left outlineSpace
   flex()
   size(10rem,auto)
   padding 0rem 0.5rem

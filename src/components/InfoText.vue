@@ -10,12 +10,12 @@ onMounted(() => {
   gsap.registerPlugin(TextPlugin, ScrollTrigger)
   gsap.defaults({ duration: 1 })
   const tl = gsap.timeline()
-  tl.to(".name", { xPercent: -100 })
-  tl.to(".phone-number", { yPercent: -100 }, "<")
-  tl.to(".mail", { yPercent: -100 }, "<")
+  tl.to(".name", { xPercent: 100 })
+  tl.to(".phone-number", { yPercent: -200 }, "<")
+  tl.to(".mail", { yPercent: -300 }, "<")
   tl.to(".line.top", { xPercent: 100 }, "<")
-  tl.to(".line.right-bottom", { xPercent: -100 }, "<")
-  tl.to(".line.left-bottom-slash", { left: "50%", top: "50%" }, "<")
+  tl.to(".line.right-bottom", { xPercent: 200 }, "<")
+  tl.to(".line.left-bottom-slash", { left: "50%", top: "-50%" }, "<")
   ScrollTrigger.create({
     animation: tl,
     scrub: 3,
@@ -75,8 +75,10 @@ onMounted(() => {
 
 .name
   width 160px
-  top outlineSpace
-  left outlineSpace
+  // top outlineSpace
+  // left outlineSpace
+  bottom outlineSpace
+  right outlineSpace
   font-weight bold
 .phone-number
   bottom outlineSpace
@@ -99,11 +101,15 @@ onMounted(() => {
   border-radius 1px
   background-color colorSecondary
 .line.left
-  top outlineSpace + 3rem
-  left outlineSpace + 0.5rem
+  // top outlineSpace + 3rem
+  top outlineSpace + 10rem
+  // left outlineSpace + 0.5rem
+  left outlineSpace
 .line.top
-  top outlineSpace + 1rem
-  left outlineSpace + 10rem
+  // top outlineSpace + 1rem
+  top outlineSpace
+  // left outlineSpace + 10rem
+  left outlineSpace + 14rem
   size(15rem,1px)
   transition opacity .5s ease-in-out
 .line.left-bottom-slash
