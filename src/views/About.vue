@@ -1,21 +1,78 @@
 <script setup>
-import { onMounted, ref } from "@vue/runtime-core"
+import { onMounted } from "@vue/runtime-core"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"
 import { TextPlugin } from "gsap/TextPlugin"
+import { useMousePosition } from "../api/index"
 
 import InfoCrawl from "../components/InfoCrawl.vue"
 import LineAnimation from "../components/LineAnimation.vue"
 import SectionHome from "../components/SectionHome.vue"
 import SectionIntro from "../components/SectionIntro.vue"
 import Resume from "./Resume.vue"
+
+import BackgroundLikeSnow from "../components/BackgroundLikeSnow.vue"
+import BackgroundLikeNeon from "../components/BackgroundLikeNeon.vue"
+
 // import SectionFavorite from "../components/SectionFavorite.vue"
+// const { mouseX, mouseY } = useMousePosition()
 
 onMounted(() => {
   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, TextPlugin)
   gsap.defaults({ ease: "none" })
 
+  const moveparticle = (target, e) => {
+    let newPos = {
+      // x: gsap.utils.random(-window.innerWidth, window.innerWidth),
+      // y: gsap.utils.random(-window.innerHeight, window.innerHeight),
+      x: e.clientX,
+      y: e.clientY,
+    }
+
+    let curPos = {
+      x: gsap.getProperty(target, "x"),
+      y: gsap.getProperty(target, "y"),
+    }
+
+    let deltaX = curPos.x - newPos.x
+    let deltaY = curPos.y - newPos.y
+    let distance = Math.hypot(deltaX, deltaY)
+    let angleDeg =
+      (Math.atan2(newPos.y - curPos.y, newPos.x - curPos.x) * 180) / Math.PI
+    console.log(newPos, curPos, distance)
+    gsap.to(target, { rotation: angleDeg + "_short", duration: 0.2 })
+    gsap.to(target, {
+      x: gsap.utils.random(-deltaX, deltaX),
+      y: gsap.utils.random(-deltaY, deltaY),
+      duration: 3,
+      ease: "none",
+      // onComplete: moveparticle,
+      // onCompleteParams: [target],
+    })
+  }
+
+  window.addEventListener("mousemove", (e) => {
+    // const particlesTl = gsap.timeline({ defaults: { duration: 0.5 } })
+    // particlesTl
+    //   .to(".bg .particle", {
+    //     // duration: 0.5,
+    //     overwrite: "auto",
+    //     width: "12px",
+    //     height: "12px",
+    //     x: e.clientX,
+    //     y: e.clientY,
+    //     opacity: 1,
+    //     stagger: 0.15,
+    //     ease: "none",
+    //   })
+    //   .to(".bg .particle", {
+    //     duration: 0.1,
+    //     width: "4px",
+    //     height: "4px",
+    //     opacity: 0,
+    //   })
+  })
   // const t2tl = gsap.timeline().from(".section-intro .introduction p", {
   //   text: "",
   //   duration: 50,
@@ -24,7 +81,7 @@ onMounted(() => {
   // jumpSection.value = ScrollTrigger.create({
   //   // animation: t2tl,
   //   trigger: "#test2",
-  //   start: "top top",
+  //   particlet: "top top",
   //   end: "bottom 70%",
   //   markers: 1,
   //   pin: true,
@@ -39,7 +96,7 @@ onMounted(() => {
   //   scrollTrigger: {
   //     trigger: ".about",
   //     pin: true,
-  //     start: "top top",
+  //     particlet: "top top",
   //     scrub: 3,
   //     snap: {
   //       snapTo: 1 / (sections.length - 1),
@@ -53,7 +110,7 @@ onMounted(() => {
 
   tl.to(".section-home", { yPercent: -100, duration: 15 })
 
-  // // ========== 自介頁面動畫設定 Start ========== //
+  // // ========== 自介頁面動畫設定 particlet ========== //
   tl.from(".section-intro", { yPercent: 100, duration: 5 })
   tl.from(".section-intro .introduction p", {
     text: "",
@@ -95,7 +152,6 @@ onMounted(() => {
     anticipatePin: 1,
     // snap: snapPoints,
     // markers: 1,
-    // start: "center center",
     end: "+=4000",
   })
 })
@@ -104,6 +160,7 @@ onMounted(() => {
 <template lang="pug">
 .about
   SectionHome.section
+    
   SectionIntro.section
     //- Resume.section
   .test1.section
@@ -111,6 +168,8 @@ onMounted(() => {
   //-   .display-none
   .test2.section
   //-   h1 Test2 Title
+  //- BackgroundLikeSnow
+  BackgroundLikeNeon
 
 </template>
 <style lang="stylus" scoped>
@@ -118,7 +177,7 @@ onMounted(() => {
   // position fixed      //手機版底部不會空白的關鍵
   size()
   color colorSecondary
-  background-color colorPrimary
+  background-color transparent
 
 .section
   size(,100vh)
