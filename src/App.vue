@@ -1,11 +1,12 @@
 <script setup>
 import { useRoute } from "vue-router"
 import Menu from "./components/Menu.vue"
-
+import Cursor from "./components/Cursor.vue"
 const route = useRoute()
 </script>
 
 <template lang="pug">
+Cursor  
 Menu
 RouterView(v-slot="{ Component }")
   Transition(name="fade" mode="out-in" )
@@ -14,8 +15,6 @@ RouterView(v-slot="{ Component }")
 </template>
 
 <style lang="stylus">
-
-
 
 body::-webkit-scrollbar
   display none

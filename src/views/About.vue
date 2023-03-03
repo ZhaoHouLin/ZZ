@@ -4,19 +4,16 @@ import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { ScrollToPlugin } from "gsap/ScrollToPlugin"
 import { TextPlugin } from "gsap/TextPlugin"
-import { useMousePosition } from "../api/index"
 
 import InfoCrawl from "../components/InfoCrawl.vue"
 import LineAnimation from "../components/LineAnimation.vue"
 import SectionHome from "../components/SectionHome.vue"
 import SectionIntro from "../components/SectionIntro.vue"
+// import SectionFavorite from "../components/SectionFavorite.vue"
 import Resume from "./Resume.vue"
 
 import BackgroundLikeSnow from "../components/BackgroundLikeSnow.vue"
 import BackgroundLikeNeon from "../components/BackgroundLikeNeon.vue"
-
-// import SectionFavorite from "../components/SectionFavorite.vue"
-// const { mouseX, mouseY } = useMousePosition()
 
 onMounted(() => {
   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, TextPlugin)
@@ -47,32 +44,33 @@ onMounted(() => {
       y: gsap.utils.random(-deltaY, deltaY),
       duration: 3,
       ease: "none",
-      // onComplete: moveparticle,
-      // onCompleteParams: [target],
+      onComplete: moveparticle,
+      onCompleteParams: [target],
     })
   }
 
   window.addEventListener("mousemove", (e) => {
-    // const particlesTl = gsap.timeline({ defaults: { duration: 0.5 } })
-    // particlesTl
-    //   .to(".bg .particle", {
-    //     // duration: 0.5,
-    //     overwrite: "auto",
-    //     width: "12px",
-    //     height: "12px",
-    //     x: e.clientX,
-    //     y: e.clientY,
-    //     opacity: 1,
-    //     stagger: 0.15,
-    //     ease: "none",
-    //   })
-    //   .to(".bg .particle", {
-    //     duration: 0.1,
-    //     width: "4px",
-    //     height: "4px",
-    //     opacity: 0,
-    //   })
+    const particlesTl = gsap.timeline({ defaults: { duration: 0.5 } })
+    particlesTl.to(".bg .particle", {
+      duration: 0.1,
+      overwrite: "auto",
+      width: "28px",
+      height: "28px",
+      x: e.clientX,
+      y: e.clientY,
+      opacity: 1,
+      stagger: 0.15,
+      ease: "none",
+    })
+    // .to(".bg .particle", {
+    //   duration: 0.5,
+    //   // overwrite: "auto",
+    //   width: "72px",
+    //   height: "72px",
+    //   opacity: 0,
+    // })
   })
+
   // const t2tl = gsap.timeline().from(".section-intro .introduction p", {
   //   text: "",
   //   duration: 50,
@@ -170,7 +168,9 @@ onMounted(() => {
   //-   h1 Test2 Title
   //- BackgroundLikeSnow
   BackgroundLikeNeon
-
+  .bg 
+    - for(let i=1;i<=10;i++)
+      .particle
 </template>
 <style lang="stylus" scoped>
 .about
@@ -193,4 +193,14 @@ onMounted(() => {
   size()
   // background-color yellow
   background-color transparent
+
+.bg
+  .particle
+    position absolute
+    transform translate(-50%,-50%)
+    size(28px)
+    border-radius 50%
+    border 1px solid #fff
+    // background-color #fff
+    transform-origin 50% 50%
 </style>

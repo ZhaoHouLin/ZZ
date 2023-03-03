@@ -1,12 +1,13 @@
 import { ref, onMounted, onUnmounted } from "@vue/runtime-core"
 
 export function MousePosition() {
-  const x = ref(0)
-  const y = ref(0)
+  const mouseX = ref(0)
+  const mouseY = ref(0)
 
   const posUpdate = (e) => {
-    x.value = e.pageX
-    y.value = e.pageY
+    mouseX.value = e.clientX
+    mouseY.value = e.clientY
+    // console.log(mouseX.value, mouseY.value)
   }
 
   onMounted(() => {
@@ -17,5 +18,5 @@ export function MousePosition() {
     window.removeEventListener('mousemove', posUpdate)
   })
 
-  return { x, y }
+  return { mouseX, mouseY }
 }
