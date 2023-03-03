@@ -182,14 +182,15 @@ onMounted(() => {
 .section
   size(,100vh)
   position absolute
-  // position fixed
   box-sizing border-box
 
 .test1
   size()
-  background-color red
+  // background-color red
+  background-color transparent
 
 .test2
   size()
-  background-color yellow
+  // background-color yellow
+  background-color transparent
 </style>

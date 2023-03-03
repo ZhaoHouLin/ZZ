@@ -16,7 +16,7 @@ const numberOfsection = ref(4)
 const toSection = (num) => {
   let idx = num - 1
   gsap.to(window, {
-    duration: 1,
+    duration: 0.5,
     scrollTo: { y: (idx * document.body.offsetHeight) / numberOfsection.value },
   })
 }
@@ -44,7 +44,7 @@ onMounted(() => {
 Hamburger
 .menu
   .list(ref='list')
-    RouterLink(to='/' @click='toSection(2)')
+    RouterLink(to='/' @click='toSection(1)')
       h1 about
     RouterLink(to='/resume' )
       h1 resume

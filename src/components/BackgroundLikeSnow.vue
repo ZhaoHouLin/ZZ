@@ -59,7 +59,7 @@ onMounted(() => {
 
 <style lang="stylus" scoped>
 #bg-snow
-  position relative
+  position absolute
   size()
-  z-index -1
+  // z-index -1
 </style>

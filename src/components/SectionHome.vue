@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger"
 import Logo from "./Logo.vue"
 import Ring from "./Ring.vue"
 import InfoText from "./InfoText.vue"
+import BackgroundLikeNeon from "./BackgroundLikeNeon.vue"
 
 onMounted(() => {
   gsap.registerPlugin(ScrollTrigger)
@@ -18,7 +19,7 @@ onMounted(() => {
     {
       yPercent: 100,
       opacity: 0,
-      duration: 15,
+      duration: 7,
     },
     "<"
   )
@@ -29,7 +30,7 @@ onMounted(() => {
       // transformOrigin: "100% 100%",
       transformOrigin: "50% 50%",
       transform: "scale(2)",
-      duration: 15,
+      duration: 7,
     },
     "<"
   )
@@ -51,6 +52,7 @@ onMounted(() => {
   Logo
   Ring
   InfoText
+  //- BackgroundLikeNeon
 </template>
 
 <style lang="stylus" scoped>
