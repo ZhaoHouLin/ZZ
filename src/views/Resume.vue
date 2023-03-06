@@ -44,6 +44,7 @@ onMounted(() => {})
   size(,100vh)
   background-color colorPrimary
   color colorSecondary
+  cursor pointer
   flex()
   .line
     position absolute

@@ -2,6 +2,7 @@
 import { useRoute } from "vue-router"
 import Menu from "./components/Menu.vue"
 import Cursor from "./components/Cursor.vue"
+
 const route = useRoute()
 </script>
 
