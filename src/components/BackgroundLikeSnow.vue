@@ -5,7 +5,7 @@ import { gsap } from "gsap"
 onMounted(() => {
   gsap.defaults({ ease: "none" })
 
-  const count = 100
+  const count = 50
   const particleClass = "particle"
   const particleColors = ["#b4b4b4", "#7f7f7f", "#7a7a7a", "#3d3d3d"]
   const container = document.querySelector("#bg-snow")

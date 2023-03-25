@@ -14,7 +14,7 @@ onMounted(() => {
   const tl1 = gsap.timeline({ repeat: -1 })
   const tl2 = gsap.timeline({ repeat: -1 })
 
-  const count = 100
+  const count = 50
   let html = ""
   const container = document.querySelector("#bg-neon")
   const w = window.innerWidth
