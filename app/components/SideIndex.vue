@@ -39,11 +39,12 @@ const go = (id) => {
 </script>
 
 <template lang="pug">
-nav.side-index(aria-label="sections")
+nav.side-index(aria-label="sections" :class="{ 'is-idle': !active }")
   ul.side-list
     li(v-for="(s, i) in sections" :key="s.id")
       button.side-item(type="button" :class="{ 'is-active': active === s.id }" @click="go(s.id)")
-        span.side-num {{ String(i + 1).padStart(2, "0") }}
+        span.side-num
+          span.side-digit(v-for="d in String(i + 1).padStart(2, '0')" :key="d") {{ d }}
         span.side-label {{ s.label }}
   .side-progress(aria-hidden="true")
     .side-progress-bar(:style="{ transform: `scaleY(${progress})` }")
@@ -56,6 +57,11 @@ nav.side-index(aria-label="sections")
   top 50%
   transform translateY(-50%)
   z-index 9040
+  transition opacity .4s ease
+  // 在 hero 沒有任何一區是作用中，索引沒有意義，也會和 hero 右側的直書聯絡資訊打架
+  &.is-idle
+    opacity 0
+    pointer-events none
 
 .side-list
   list-style none
@@ -88,6 +94,11 @@ nav.side-index(aria-label="sections")
       transform none
   &.is-active
     color colorAccent
+  // Digital-7 的「1」比其他數字窄，靠右對齊會讓 01 的 0 偏左；每個數字固定一格寬
+  .side-digit
+    display inline-block
+    width 1ch
+    text-align center
 
 .side-progress
   display none

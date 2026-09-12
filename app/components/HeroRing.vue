@@ -24,7 +24,8 @@ onUnmounted(() => io?.disconnect())
 .ring
   pos()
   transform translate(-50%,-50%)
-  size(30rem)
+  // 文字圈直徑是這個尺寸的 60%（路徑半徑 150 / viewBox 500）：閃電高 40vh，旋轉時的外接圓約 60vh，圈設 60vh；窄螢幕改依寬度
+  size(unquote("min(100vh, 140vw)"))
   flex()
 
 .ring-svg
@@ -37,13 +38,9 @@ onUnmounted(() => io?.disconnect())
   text
     fill colorSecondary
     font-family fontPixel
-    font-size 3.4rem
+    font-size 2.6rem
 
 @keyframes spin
   to
     transform rotate(-360deg)
-
-@media (max-width: breakMobile)
-  .ring
-    size(20rem)
 </style>

@@ -6,7 +6,8 @@ const groups = [
     title: "工作經歷",
     en: "Work",
     items: [
-      { period: "2019-01 ~ 仍在職", org: "藍新資訊股份有限公司", role: "專案工程師", desc: "疾病管制署駐點電腦相關維護" },
+      { period: "2026-04 ~ 仍在職", org: "藍新資訊股份有限公司", role: "智能應用發展部", desc: "AI 應用研究與落地" },
+      { period: "2019-01 ~ 2026-03", org: "藍新資訊股份有限公司", role: "專案工程師", desc: "疾病管制署駐點電腦相關維護" },
       { period: "2022-05 ~ 2022-08", org: "文境資科股份有限公司", role: "前端工程師", desc: "前端頁面切版、與後端 API 介接" },
     ],
   },
@@ -14,6 +15,7 @@ const groups = [
     title: "學習經歷",
     en: "Education",
     items: [
+      { period: "", org: "CKA", role: "Certified Kubernetes Administrator", desc: "" },
       { period: "2018-08", org: "Alpha Camp", role: "學期一、二", desc: "" },
       { period: "2008-09 ~ 2012-06", org: "國立臺北科技大學", role: "光電工程系 學士", desc: "" },
     ],

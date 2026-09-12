@@ -2,10 +2,10 @@
 const { gsap } = useGsap()
 
 const intro =
-  "林炤后（ZhaoHou Lin）曾任職於文境資科前端工程師，不斷地追求網頁互動特效技術。目前就職於藍新資訊－疾管署專案工程師，擅長使用 Vue 3 前端網頁開發，以及解決電腦硬體相關問題。平時喜歡研究 3C 產品、汲取網頁程式相關新知、玩玩線上遊戲，偶而與朋友爬山⋯"
+  "林炤后（ZhaoHou Lin），綽號 ZZ。2019 年起任職於藍新資訊，前七年駐點疾病管制署，負責系統維運與前端開發；2026 年 4 月轉入智能應用發展部，研究 AI 應用如何落地成企業可部署的系統。持有 CKA，自建 Kubernetes 與 GitLab CI/CD 環境，把 Nuxt 3 系統從開發一路部署到正式環境。平時研究 3C 產品、玩玩線上遊戲，偶而與朋友爬山⋯"
 const chars = Array.from(intro)
 
-const tags = ["FRONTEND ENGINEER", "VUE 3", "NUXT 4", "GSAP", "CSS ANIMATION", "100 DAYS CSS", "P5.JS"]
+const tags = ["AI APPLICATION", "KUBERNETES", "CKA", "DEVOPS", "LLM / RAG", "VUE 3", "NUXT", "GSAP"]
 const marquee = [...tags, ...tags]
 
 const root = ref(null)
@@ -21,12 +21,12 @@ onMounted(() => {
       ease: "none",
       scrollTrigger: { trigger: ".intro-text", start: "top 75%", end: "bottom 40%", scrub: 0.6 },
     })
-    gsap.from(".intro-head", {
+    gsap.from(".sec-head", {
       opacity: 0,
       x: -30,
       duration: 1,
       ease: "expo.out",
-      scrollTrigger: { trigger: ".intro-head", start: "top 85%" },
+      scrollTrigger: { trigger: ".sec-head", start: "top 85%" },
     })
   }, root.value)
 })
@@ -85,24 +85,13 @@ section.intro#about(ref="root")
     transform translateX(-50%)
 
 .intro-body
-  max-width 60rem
+  max-width 70rem
   margin 6rem auto 0
   padding 0 outlineSpace
 
-.intro-head
-  flex(flex-start,baseline)
-  gap 1rem
-  margin-bottom 2rem
-  .intro-idx
-    font-family fontDigital
-    font-size 1.2rem
-    color colorAccent
-  h2
-    font-family fontPixel
-    font-size 3.5rem
-    line-height 1
-    font-weight 400
-    text-transform uppercase
+// 和其他區塊共用同一套標題列，比例才一致
+.sec-head
+  sectionHead()
 
 .intro-text
   font-size clamp(1.3rem, 2.4vw, 2rem)

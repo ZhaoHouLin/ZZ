@@ -9,7 +9,7 @@ onMounted(() => {
     gsap
       .timeline({ defaults: { ease: "expo.out" }, scrollTrigger: { trigger: root.value, start: "top 60%" } })
       .from(".couplet h2", { yPercent: 30, opacity: 0, duration: 1.4, stagger: 0.2 })
-      .from(".mtn-kicker", { opacity: 0, x: -20, duration: 0.8 }, "-=0.8")
+      .from(".mtn-kicker, .mtn-note", { opacity: 0, x: -20, duration: 0.8, stagger: 0.1 }, "-=0.8")
   }, root.value)
 })
 
@@ -26,6 +26,7 @@ section.mountain#mountain(ref="root")
   .couplet
     h2 走路要找難路走
     h2 挑擔要揀重擔挑
+  .mtn-note 2019 · 爬山時的體會
 </template>
 
 <style lang="stylus" scoped>
@@ -48,6 +49,15 @@ section.mountain#mountain(ref="root")
   color colorMuted
   .mtn-idx
     color colorAccent
+
+.mtn-note
+  position absolute
+  bottom outlineSpace + 2rem
+  right outlineSpace
+  font-family fontDigital
+  font-size 1rem
+  letter-spacing .2em
+  color colorMuted
 
 .couplet
   position relative
