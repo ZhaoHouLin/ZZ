@@ -26,6 +26,9 @@ onMounted(() => {
       .from(".line", { scaleX: 0, scaleY: 0, duration: 1 }, "-=1")
       .from(".hero-scroll", { opacity: 0 }, "-=0.5")
 
+    // 預渲染的 HTML 先用 CSS 藏住，等 from() 寫好起始狀態再顯示，避免靜態畫面閃一下又重播進場
+    gsap.set(root.value, { visibility: "visible" })
+
     // 捲動視差：動外層容器，避免和進場動畫搶同一個屬性
     gsap
       .timeline({
@@ -49,6 +52,7 @@ section.hero(ref="root")
   .hero-bg
     ClientOnly
       ParticleField
+  .hero-fade
   .hero-logo
     .hero-logo-box ZZ
     .hero-clock {{ clock }}
@@ -74,11 +78,18 @@ section.hero(ref="root")
   size(100%,100vh)
   min-height 640px
   overflow hidden
+  visibility hidden // onMounted 建好進場動畫後才顯示
 
 .hero-bg
   position absolute
   inset 0
-  mask-image radial-gradient(ellipse at center, #000 40%, transparent 80%)
+
+// 用靜態漸層蓋在畫布上做邊緣淡出，取代 mask-image：mask 會讓每一幀都多一次全螢幕離屏合成
+.hero-fade
+  position absolute
+  inset 0
+  pointer-events none
+  background radial-gradient(ellipse at center, transparent 40%, colorPrimary 80%)
 
 .hero-logo
   position absolute
@@ -103,6 +114,7 @@ section.hero(ref="root")
   position absolute
   inset 0
   z-index 1
+  will-change transform // 捲動時 scale 到 1.6，沒有這行 Chrome 會每幀依新比例重繪圓環文字
 
 .hero-info
   z-index 2

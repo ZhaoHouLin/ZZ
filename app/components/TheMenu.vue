@@ -65,7 +65,6 @@ nav.menu(ref="overlay" :aria-hidden="!open")
   right outlineSpace
   z-index 9100
   size(2.2rem,1.4rem)
-  mix-blend-mode difference
   .bar
     position absolute
     left 0

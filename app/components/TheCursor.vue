@@ -66,7 +66,6 @@ onUnmounted(() => off())
   pointer-events none
   z-index 9999
   border-radius 50%
-  mix-blend-mode difference
 
 .cursor-ring
   size(32px)

@@ -82,8 +82,8 @@ Teleport(to="body")
   z-index 9200
   flex()
   padding 1rem
-  background-color rgba(5,5,5,.85)
-  backdrop-filter blur(6px)
+  // 不用 backdrop-filter：它得每幀重新模糊整個視窗，背後的顆粒層又一直在動，開窗會超頓
+  background-color rgba(5,5,5,.92)
 
 .pen-box
   width min(64rem, 100%)

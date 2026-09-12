@@ -30,6 +30,8 @@ onMounted(() => {
       stagger: { each: 0.012, from: "start" },
       scrollTrigger: { trigger: ".pen-grid", start: "top 85%" },
     })
+    // 預渲染的 HTML 先用 CSS 藏住，等 from() 寫好起始狀態再顯示，避免靜態畫面閃一下又重播進場
+    gsap.set(root.value, { visibility: "visible" })
   }, root.value)
 })
 
@@ -71,6 +73,7 @@ onUnmounted(() => ctx?.revert())
   max-width 80rem
   margin 0 auto
   padding 8rem outlineSpace 6rem
+  visibility hidden // onMounted 建好進場動畫後才顯示
 
 .pf-header
   margin-bottom 5rem

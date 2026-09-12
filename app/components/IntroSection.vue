@@ -14,9 +14,9 @@ let ctx
 onMounted(() => {
   ctx = gsap.context(() => {
     // 逐字隨捲動點亮（取代舊站 TextPlugin 打字機）
+    // 只動 opacity：color 是字串 tween，120 個 span 每個捲動幀都要重組字串
     gsap.to(".intro-char", {
       opacity: 1,
-      color: "#f2f2f2",
       stagger: 0.02,
       ease: "none",
       scrollTrigger: { trigger: ".intro-text", start: "top 75%", end: "bottom 40%", scrub: 0.6 },
@@ -111,8 +111,7 @@ section.intro(ref="root")
   text-indent 2em
   font-weight 500
   .intro-char
-    opacity .18
-    color colorMuted
+    opacity .12
 
 @media (max-width: breakMobile)
   .intro

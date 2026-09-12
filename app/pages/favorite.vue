@@ -36,6 +36,8 @@ onMounted(() => {
       ease: "expo.out",
       scrollTrigger: { trigger: ".album", start: "top 80%" },
     })
+    // 預渲染的 HTML 先用 CSS 藏住，等 from() 寫好起始狀態再顯示，避免靜態畫面閃一下又重播進場
+    gsap.set(root.value, { visibility: "visible" })
   }, root.value)
 })
 
@@ -77,6 +79,7 @@ onUnmounted(() => ctx?.revert())
 <style lang="stylus" scoped>
 .page-favorite
   padding-bottom 6rem
+  visibility hidden // onMounted 建好進場動畫後才顯示
 
 .fav-hero
   position relative

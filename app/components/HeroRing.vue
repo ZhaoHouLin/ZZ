@@ -3,7 +3,14 @@
 const { gsap } = useGsap()
 const num = ref(0)
 
+const root = ref(null)
+let io
+
 onMounted(() => {
+  // hero 捲出畫面就暫停旋轉，不要在看履歷時還一直轉
+  io = new IntersectionObserver(([e]) => root.value.classList.toggle("is-paused", !e.isIntersecting))
+  io.observe(root.value)
+
   const o = { v: 0 }
   gsap.to(o, {
     v: 100,
@@ -13,10 +20,12 @@ onMounted(() => {
     onUpdate: () => (num.value = Math.round(o.v)),
   })
 })
+
+onUnmounted(() => io?.disconnect())
 </script>
 
 <template lang="pug">
-.ring(aria-hidden="true")
+.ring(ref="root" aria-hidden="true")
   svg.ring-svg(viewBox="0 0 500 500")
     defs
       path#ring-path(d="M250,400 a150,150 0 0,1 0,-300 a150,150 0 0,1 0,300 Z" fill="none")
@@ -39,11 +48,14 @@ onMounted(() => {
 .ring-svg
   size()
   animation spin 14s linear infinite
+  // 固定成合成層，旋轉才會交給 GPU；SVG 文字不能掛 filter，否則每幀都在主執行緒重畫
+  will-change transform
+  .is-paused &
+    animation-play-state paused
   text
     fill colorSecondary
     font-family fontPixel
     font-size 3.4rem
-    filter drop-shadow(0 0 6px rgba(255,255,255,.25))
 
 .ring-center
   pos()

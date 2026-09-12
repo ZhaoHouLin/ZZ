@@ -14,16 +14,22 @@ onMounted(() => {
   const el = canvas.value
   const ctx = el.getContext("2d")
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  const dpr = Math.min(window.devicePixelRatio || 1, 2)
+  // 背景特效不需要 Retina 解析度：DPR 2 的全螢幕畫布每幀要清掉、重畫、上傳 4 倍的像素
+  const dpr = 1
   let w = 0
   let h = 0
+  let offX = 0
+  let offY = 0
   let particles = []
   const mouse = { x: -9999, y: -9999 }
+  const BUCKETS = 6 // 連線透明度分 6 階，每階一次 stroke，取代每條線各 stroke 一次
 
   const resize = () => {
     const rect = el.parentElement.getBoundingClientRect()
     w = rect.width
     h = rect.height
+    offX = rect.left + window.scrollX
+    offY = rect.top + window.scrollY
     el.width = w * dpr
     el.height = h * dpr
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
@@ -63,29 +69,37 @@ onMounted(() => {
       ctx.fillStyle = "rgba(255,255,255,.7)"
       ctx.fill()
     }
+    const segs = Array.from({ length: BUCKETS }, () => [])
     for (let i = 0; i < particles.length; i++) {
       for (let j = i + 1; j < particles.length; j++) {
         const a = particles[i]
         const b = particles[j]
         const dx = a.x - b.x
         const dy = a.y - b.y
-        const d = Math.sqrt(dx * dx + dy * dy)
-        if (d < ld) {
-          ctx.strokeStyle = `rgba(255,255,255,${(1 - d / ld) * 0.25})`
-          ctx.lineWidth = 1
-          ctx.beginPath()
-          ctx.moveTo(a.x, a.y)
-          ctx.lineTo(b.x, b.y)
-          ctx.stroke()
+        const d2 = dx * dx + dy * dy
+        if (d2 < ld * ld) {
+          const k = Math.min(BUCKETS - 1, Math.floor((1 - Math.sqrt(d2) / ld) * BUCKETS))
+          segs[k].push(a.x, a.y, b.x, b.y)
         }
       }
     }
+    ctx.lineWidth = 1
+    segs.forEach((s, k) => {
+      if (!s.length) return
+      ctx.strokeStyle = `rgba(255,255,255,${((k + 0.5) / BUCKETS) * 0.25})`
+      ctx.beginPath()
+      for (let n = 0; n < s.length; n += 4) {
+        ctx.moveTo(s[n], s[n + 1])
+        ctx.lineTo(s[n + 2], s[n + 3])
+      }
+      ctx.stroke()
+    })
   }
 
+  // 用 pageX 減去 resize 時算好的位移，不在 mousemove 裡呼叫 getBoundingClientRect 強制排版
   const onMove = (e) => {
-    const rect = el.getBoundingClientRect()
-    mouse.x = e.clientX - rect.left
-    mouse.y = e.clientY - rect.top
+    mouse.x = e.pageX - offX
+    mouse.y = e.pageY - offY
   }
   const onLeave = () => {
     mouse.x = -9999
@@ -97,13 +111,19 @@ onMounted(() => {
   window.addEventListener("mousemove", onMove, { passive: true })
   window.addEventListener("mouseleave", onLeave)
 
+  // 只有畫布在視窗內才跑迴圈：hero 捲出去後不必每幀畫 90 顆粒子 + 4000 對連線
+  let io
   if (reduced) {
     draw()
   } else {
-    gsap.ticker.add(draw)
+    io = new IntersectionObserver(([entry]) => {
+      entry.isIntersecting ? gsap.ticker.add(draw) : gsap.ticker.remove(draw)
+    })
+    io.observe(el)
   }
 
   stop = () => {
+    io?.disconnect()
     gsap.ticker.remove(draw)
     window.removeEventListener("resize", resize)
     window.removeEventListener("mousemove", onMove)
