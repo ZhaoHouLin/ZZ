@@ -92,7 +92,7 @@ Vue 3.2 + Vite 3、vue-router、Pinia（只放選單開關）、GSAP 3.11（Scro
 | `Hamburger.vue` + `Menu.vue` + `stores/counter.js` | `TheMenu.vue` | 全螢幕 `clip-path` 展開、項目 stagger、格線背景、Esc 關閉、換頁自動關 |
 | `BackgroundLikeNeon` / `BackgroundLikeSnow` | `ParticleField.vue` | canvas 星座線，粒子被滑鼠推開，`gsap.ticker` 驅動，`prefers-reduced-motion` 時只畫靜態一幀 |
 | `InfoText.vue`（TextPlugin） | `ScrambleText.vue` | 亂碼解碼輪播 ZhaoHou Lin / Raiden / 林炤后 |
-| `Ring.vue` | `HeroRing.vue` | 修 Welcome 拼字、計數改 0 → 100 呼應 100 Days CSS |
+| `Ring.vue` | `HeroRing.vue` | 修 Welcome 拼字。計數曾誤改為 0 → 100 以為呼應 100 Days CSS，2026-09-12 改回 3030：那是以前工作的分機號碼，有個人意義 |
 | `Logo.vue` + `SectionHome.vue` | `HeroSection.vue` | 加即時時鐘、進場時間軸與捲動視差分開動內外層，避免搶同一屬性 |
 | `InfoCrawl.vue`（未用） | `IntroSection.vue` 跑馬燈 | 兩列反向、一列描邊 |
 | `SectionIntro.vue` | `IntroSection.vue` | 逐字隨捲動點亮（scrub） |

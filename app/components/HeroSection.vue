@@ -3,6 +3,7 @@ const { gsap, ScrollTrigger } = useGsap()
 
 const root = ref(null)
 const clock = ref("--:--:--")
+const num = ref(0) // 0 → 3030：以前工作的分機號碼，不是 100 Days CSS；位置待整體設計重看
 let ctx
 let timer
 
@@ -21,6 +22,7 @@ onMounted(() => {
       .timeline({ defaults: { ease: "expo.out", duration: 1.2 } })
       .from(".hero-logo-box", { clipPath: "inset(0 100% 0 0)", duration: 1 })
       .from(".hero-clock", { opacity: 0, y: 10 }, "-=0.6")
+      .from(".hero-count", { opacity: 0, y: -10 }, "-=0.6")
       .from(".ring", { opacity: 0, scale: 0.85 }, "-=0.9")
       .from(".hero-info > *", { opacity: 0, y: 24, stagger: 0.08 }, "-=0.8")
       .from(".line", { scaleX: 0, scaleY: 0, duration: 1 }, "-=1")
@@ -28,6 +30,9 @@ onMounted(() => {
 
     // 預渲染的 HTML 先用 CSS 藏住，等 from() 寫好起始狀態再顯示，避免靜態畫面閃一下又重播進場
     gsap.set(root.value, { visibility: "visible" })
+
+    const o = { v: 0 }
+    gsap.to(o, { v: 3030, duration: 2.4, delay: 0.8, ease: "power2.inOut", onUpdate: () => (num.value = Math.round(o.v)) })
 
     // 捲動視差：動外層容器，避免和進場動畫搶同一個屬性
     gsap
@@ -37,7 +42,7 @@ onMounted(() => {
       .to(".hero-logo", { yPercent: -120, opacity: 0 }, 0)
       .to(".hero-ring-wrap", { scale: 1.6, opacity: 0 }, 0)
       .to(".hero-info", { yPercent: 40, opacity: 0 }, 0)
-      .to(".hero-bg", { opacity: 0 }, 0)
+      .to(".hero-bg", { scale: 0.8, opacity: 0 }, 0) // 3D 物件往後退並淡出
   }, root.value)
 })
 
@@ -51,11 +56,15 @@ onUnmounted(() => {
 section.hero(ref="root")
   .hero-bg
     ClientOnly
-      ParticleField
+      VoxelZZ
   .hero-fade
   .hero-logo
     .hero-logo-box ZZ
     .hero-clock {{ clock }}
+  .hero-count
+    .hero-count-num
+      span.hero-count-hash #
+      | {{ String(num).padStart(4, "0") }}
   .hero-ring-wrap
     HeroRing
   .hero-info
@@ -114,7 +123,22 @@ section.hero(ref="root")
   position absolute
   inset 0
   z-index 1
+  pointer-events none // 蓋滿整個 hero，不能擋住底下 3D 物件的拖曳
   will-change transform // 捲動時 scale 到 1.6，沒有這行 Chrome 會每幀依新比例重繪圓環文字
+
+.hero-count
+  position absolute
+  top outlineSpace + 3.2rem
+  right outlineSpace
+  z-index 2
+  text-align right
+  .hero-count-num
+    font-family fontPixel
+    font-size 3.6rem
+    line-height 1
+    letter-spacing .2rem
+    .hero-count-hash
+      color colorAccent
 
 .hero-info
   z-index 2
@@ -212,6 +236,8 @@ section.hero(ref="root")
 @media (max-width: breakMobile)
   .hero-logo .hero-logo-box
     font-size 4.5rem
+  .hero-count .hero-count-num
+    font-size 2.6rem
   .hero-info .hero-name
     width 8rem
     font-size 1.1rem
