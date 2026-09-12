@@ -8,15 +8,36 @@ let ctx
 onMounted(() => {
   ctx = gsap.context(() => {
     gsap
-      .timeline({ defaults: { ease: "expo.out" }, scrollTrigger: { trigger: root.value, start: "top 60%" } })
-      .from(".couplet h2", { yPercent: 30, opacity: 0, duration: 1.4, stagger: 0.2 })
-      .from(".mtn-kicker, .mtn-note", { opacity: 0, x: -20, duration: 0.8, stagger: 0.1 }, "-=0.8")
+      .timeline({
+        defaults: { ease: "expo.out" },
+        scrollTrigger: { trigger: root.value, start: "top 60%" },
+      })
+      .from(".couplet h2", {
+        yPercent: 30,
+        opacity: 0,
+        duration: 1.4,
+        stagger: 0.2,
+      })
+      .from(
+        ".mtn-kicker, .mtn-note",
+        { opacity: 0, x: -20, duration: 0.8, stagger: 0.1 },
+        "-=0.8",
+      )
 
     // 背景照片捲動視差：照片放大 1.2 倍，跟著捲動上移，只動 transform
     gsap.fromTo(
       ".mtn-photo",
       { yPercent: -8 },
-      { yPercent: 8, ease: "none", scrollTrigger: { trigger: root.value, start: "top bottom", end: "bottom top", scrub: true } }
+      {
+        yPercent: 8,
+        ease: "none",
+        scrollTrigger: {
+          trigger: root.value,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      },
     )
   }, root.value)
 })
@@ -34,9 +55,10 @@ section.mountain#mountain(ref="root")
     span.mtn-idx 06
     span 山 / Mountain
   .couplet
-    h2 走路要找難路走
-    h2 挑擔要揀重擔挑
-  .mtn-note 2019 · 爬山時的體會
+    h2 我命由我不由天
+    //- h2 走路要找難路走
+    //- h2 挑擔要揀重擔挑
+  .mtn-note 2025 · 考照時的體會
 </template>
 
 <style lang="stylus" scoped>

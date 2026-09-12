@@ -29,6 +29,7 @@ onMounted(() => {
       type: "chars",
       mask: "chars",
     })
+    motto.chars.forEach((c) => c.textContent.trim() === "Z" && c.classList.add("is-z")) // Z 用琥珀色
 
     // 進場：動內層元素
     gsap
@@ -214,6 +215,8 @@ section.hero(ref="root")
     font-weight 900
     line-height 1.1
     letter-spacing .12em
+    :deep(.is-z) // SplitText 產生的字沒有 scoped 屬性，要用 deep
+      color colorAccent
   .hero-sub
     margin-top .6rem
     font-family fontDigital
