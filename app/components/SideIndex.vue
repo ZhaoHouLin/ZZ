@@ -43,7 +43,7 @@ const go = (id) => {
 nav.side-index(aria-label="sections" :class="{ 'is-idle': !active }")
   ul.side-list
     li(v-for="(s, i) in sections" :key="s.id")
-      button.side-item(type="button" :class="{ 'is-active': active === s.id }" @click="go(s.id)")
+      button.side-item(type="button" :class="{ 'is-active': active === s.id }" @click="go(s.id)" data-magnet)
         span.side-num
           span.side-digit(v-for="d in String(i + 1).padStart(2, '0')" :key="d") {{ d }}
         span.side-label {{ s.label }}

@@ -18,10 +18,13 @@ const onKey = (e) => e.key === "Escape" && (open.value = false)
 
 let tl
 onMounted(() => {
-  tl = gsap.timeline({ paused: true, defaults: { ease: "expo.inOut" } })
+  // 起始值先用 GSAP 寫成和目標相同的單位，避免 CSS 的 px 與 % 混用時插值跳動；
+  // 緩動用 power3.inOut 而不是 expo.inOut，後者前 25% 幾乎不動，看起來像停住
+  gsap.set(overlay.value, { clipPath: "inset(50% 0% 50% 0%)" })
+  tl = gsap.timeline({ paused: true, defaults: { ease: "power3.inOut" } })
   tl.set(overlay.value, { pointerEvents: "auto" })
-    .to(overlay.value, { clipPath: "inset(0% 0 0% 0)", duration: 0.8 })
-    .from(items.value, { yPercent: 110, opacity: 0, duration: 0.6, stagger: 0.08, ease: "expo.out" }, "-=0.35")
+    .to(overlay.value, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7 })
+    .from(items.value, { yPercent: 110, opacity: 0, duration: 0.6, stagger: 0.08, ease: "expo.out" }, "-=0.45")
     .from(meta.value, { opacity: 0, y: 10, duration: 0.4 }, "-=0.3")
   window.addEventListener("keydown", onKey)
 })
@@ -39,7 +42,7 @@ watch(open, (v) => {
 </script>
 
 <template lang="pug">
-button.hamburger(type="button" :class="{ 'is-open': open }" @click="toggle" aria-label="menu" :aria-expanded="open")
+button.hamburger(type="button" :class="{ 'is-open': open }" @click="toggle" aria-label="menu" :aria-expanded="open" data-magnet)
   span.bar
   span.bar
   span.bar

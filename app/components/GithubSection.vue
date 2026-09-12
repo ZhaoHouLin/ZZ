@@ -10,14 +10,12 @@ let stopTilt = () => {}
 onMounted(() => {
   stopTilt = useTilt(root.value, ".gh-card", { max: 6 })
   ctx = gsap.context(() => {
-    gsap.from(".gh-card", {
-      opacity: 0,
-      y: 40,
-      duration: 0.8,
-      stagger: 0.08,
-      ease: "expo.out",
-      scrollTrigger: { trigger: ".gh-grid", start: "top 85%" },
-    })
+    // 由左向右擦入
+    gsap.fromTo(
+      ".gh-card",
+      { clipPath: "inset(0 100% 0 0)" },
+      { clipPath: "inset(0 0% 0 0)", duration: 0.9, stagger: 0.08, ease: "expo.out", scrollTrigger: { trigger: ".gh-grid", start: "top 85%" } }
+    )
   }, root.value)
 })
 
@@ -34,7 +32,7 @@ section.github#github(ref="root")
     h2 GitHub
     span.sec-count {{ pad(github.length) }}
   .gh-grid
-    a.gh-card(v-for="(g, i) in github" :key="g.href" :href="g.href" target="_blank" rel="noopener")
+    a.gh-card(v-for="(g, i) in github" :key="g.href" :href="g.href" target="_blank" rel="noopener" data-cursor="open")
       span.gh-idx {{ pad(i + 1) }}
       span.gh-title {{ g.title }}
       span.gh-arrow ↗

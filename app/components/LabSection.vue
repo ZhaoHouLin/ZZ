@@ -39,8 +39,17 @@ const logs = [
 
 const exploring = ["會議系統：語音辨識 + LLM 摘要", "ComfyUI / 本地模型", "AI Coding Assistant", "iPAS AI 應用規劃師（準備中）"]
 
+let io
+
 onMounted(() => {
   ctx = gsap.context(() => {
+    // pipeline 的光點：編號依序亮起再暗下，循環；離開視窗暫停
+    const signal = gsap
+      .timeline({ repeat: -1, repeatDelay: 0.8, paused: true })
+      .to(".lab-pipe-idx", { color: "#f5a623", duration: 0.2, stagger: { each: 0.28, repeat: 1, yoyo: true } })
+    io = new IntersectionObserver(([e]) => (e.isIntersecting ? signal.play() : signal.pause()))
+    io.observe(root.value.querySelector(".lab-pipeline"))
+
     gsap.utils.toArray(".lab-block").forEach((block) => {
       gsap.from(block.children, {
         opacity: 0,
@@ -54,7 +63,10 @@ onMounted(() => {
   }, root.value)
 })
 
-onUnmounted(() => ctx?.revert())
+onUnmounted(() => {
+  io?.disconnect()
+  ctx?.revert()
+})
 </script>
 
 <template lang="pug">

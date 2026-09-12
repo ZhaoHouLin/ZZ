@@ -1,5 +1,5 @@
 <script setup>
-const { gsap } = useGsap()
+const { gsap, ScrollTrigger } = useGsap()
 
 const intro =
   "林炤后（ZhaoHou Lin），綽號 ZZ。2019 年起任職於藍新資訊，前七年駐點疾病管制署，負責系統維運與前端開發；2026 年 4 月轉入智能應用發展部，研究 AI 應用如何落地成企業可部署的系統。持有 CKA，自建 Kubernetes 與 GitLab CI/CD 環境，把 Nuxt 3 系統從開發一路部署到正式環境。平時研究 3C 產品、玩玩線上遊戲，偶而與朋友爬山⋯"
@@ -21,8 +21,48 @@ const marquee = [...tags, ...tags]
 
 const root = ref(null)
 let ctx
+let stopMarquee = () => {}
+
+// 跑馬燈改用 GSAP 推：捲動越快跑越快並傾斜，停下來回正；離開視窗就暫停
+const startMarquee = () => {
+  const tracks = Array.from(root.value.querySelectorAll(".marquee-track"))
+  const loops = tracks.map((t, i) => gsap.fromTo(t, { xPercent: i ? -50 : 0 }, { xPercent: i ? 0 : -50, duration: 40, ease: "none", repeat: -1 }))
+  const skews = tracks.map((t) => gsap.quickTo(t, "skewX", { duration: 0.4, ease: "power3" }))
+  let speed = 1
+  let skew = 0
+  const st = ScrollTrigger.create({
+    onUpdate: (self) => {
+      const v = gsap.utils.clamp(-3000, 3000, self.getVelocity())
+      speed = 1 + Math.abs(v) / 400
+      skew = gsap.utils.clamp(-15, 15, v / 150)
+    },
+  })
+  const tick = () => {
+    speed += (1 - speed) * 0.08
+    skew *= 0.88
+    loops.forEach((l) => l.timeScale(speed))
+    skews.forEach((q) => q(skew))
+  }
+  const io = new IntersectionObserver(([e]) => {
+    if (e.isIntersecting) {
+      loops.forEach((l) => l.play())
+      gsap.ticker.add(tick)
+    } else {
+      loops.forEach((l) => l.pause())
+      gsap.ticker.remove(tick)
+    }
+  })
+  io.observe(root.value.querySelector(".marquee"))
+  return () => {
+    io.disconnect()
+    st.kill()
+    gsap.ticker.remove(tick)
+    loops.forEach((l) => l.kill())
+  }
+}
 
 onMounted(() => {
+  stopMarquee = startMarquee()
   const img = root.value.querySelector(".intro-avatar img")
   if (img?.complete && img.naturalWidth === 0) avatarBroken.value = true
 
@@ -38,7 +78,10 @@ onMounted(() => {
   }, root.value)
 })
 
-onUnmounted(() => ctx?.revert())
+onUnmounted(() => {
+  stopMarquee()
+  ctx?.revert()
+})
 </script>
 
 <template lang="pug">
@@ -83,7 +126,7 @@ section.intro#about(ref="root")
   font-size clamp(3rem, 8vw, 6rem)
   line-height 1
   white-space nowrap
-  animation marquee 40s linear infinite
+  will-change transform
   span::after
     content '·'
     margin-left 3rem
@@ -92,12 +135,7 @@ section.intro#about(ref="root")
     color transparent
     -webkit-text-stroke 1px colorSecondary
   &.is-reverse
-    animation-direction reverse
     margin-top .5rem
-
-@keyframes marquee
-  to
-    transform translateX(-50%)
 
 .intro-body
   max-width 70rem

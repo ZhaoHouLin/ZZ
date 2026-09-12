@@ -21,7 +21,7 @@ const toTop = () => {
 </script>
 
 <template lang="pug">
-button.to-top(type="button" :class="{ 'is-show': show }" @click="toTop" aria-label="回到最上面" :tabindex="show ? 0 : -1")
+button.to-top(type="button" :class="{ 'is-show': show }" @click="toTop" aria-label="回到最上面" :tabindex="show ? 0 : -1" data-magnet)
   span.to-top-arrow ↑
   span.to-top-label top
 </template>
@@ -42,12 +42,11 @@ button.to-top(type="button" :class="{ 'is-show': show }" @click="toTop" aria-lab
   color colorMuted
   background-color colorPrimary
   opacity 0
-  transform translateY(1rem)
   pointer-events none
-  transition opacity .4s ease, transform .4s ease, color .3s, border-color .3s, background-color .3s
+  // 顯示隱藏只用 opacity：transform 留給磁吸用
+  transition opacity .4s ease, color .3s, border-color .3s, background-color .3s
   &.is-show
     opacity 1
-    transform none
     pointer-events auto
   &:hover
     color colorPrimary

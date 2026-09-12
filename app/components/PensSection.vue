@@ -64,9 +64,9 @@ section.pens#css(ref="root")
     span.sec-idx 05
     h2 100 Days CSS
     span.sec-count {{ pad(pens.length) }}
-  .pen-viewport(ref="viewport")
+  .pen-viewport(ref="viewport" data-cursor="drag")
     .pen-track
-      button.pen-tile(v-for="(p, i) in pens" :key="p.src" type="button" :class="{ 'is-active': active === i }" @click="active = i" :title="p.title")
+      button.pen-tile(v-for="(p, i) in pens" :key="p.src" type="button" :class="{ 'is-active': active === i }" @click="active = i" :title="p.title" data-cursor="open")
         span.pen-tile-num {{ pad(i + 1) }}
         span.pen-tile-name {{ shortTitle(p.title) }}
   .pen-foot(aria-hidden="true")

@@ -22,14 +22,12 @@ onMounted(() => {
       ease: "expo.out",
       scrollTrigger: { trigger: ".interest-list", start: "top 85%" },
     })
-    gsap.from(".album-item", {
-      opacity: 0,
-      y: 50,
-      duration: 0.9,
-      stagger: 0.1,
-      ease: "expo.out",
-      scrollTrigger: { trigger: ".album-grid", start: "top 80%" },
-    })
+    // 由下往上擦入
+    gsap.fromTo(
+      ".album-item",
+      { clipPath: "inset(100% 0 0 0)" },
+      { clipPath: "inset(0% 0 0 0)", duration: 1, stagger: 0.1, ease: "expo.out", scrollTrigger: { trigger: ".album-grid", start: "top 80%" } }
+    )
   }, root.value)
 })
 

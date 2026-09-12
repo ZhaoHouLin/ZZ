@@ -5,6 +5,7 @@ const ring = ref(null)
 const dot = ref(null)
 const hover = ref(false)
 const down = ref(false)
+const label = ref("") // 碰到 [data-cursor] 時圈裡顯示的字（drag / open / hold / view）
 
 let off = () => {}
 
@@ -27,6 +28,7 @@ onMounted(() => {
   }
   const onOver = (e) => {
     hover.value = !!e.target.closest("a, button, [data-hover]")
+    label.value = e.target.closest("[data-cursor]")?.dataset.cursor || ""
   }
   const onDown = () => (down.value = true)
   const onUp = () => (down.value = false)
@@ -49,8 +51,9 @@ onUnmounted(() => off())
 
 <template lang="pug">
 .cursor(aria-hidden="true")
-  .cursor-ring(ref="ring" :class="{ 'is-hover': hover, 'is-down': down }")
-  .cursor-dot(ref="dot")
+  .cursor-ring(ref="ring" :class="{ 'is-hover': hover, 'is-down': down, 'is-label': !!label }")
+    span.cursor-label {{ label }}
+  .cursor-dot(ref="dot" :class="{ 'is-hidden': !!label }")
 </template>
 
 <style lang="stylus" scoped>
@@ -69,8 +72,24 @@ onUnmounted(() => off())
 
 .cursor-ring
   size(32px)
+  flex()
   border 1px solid colorSecondary
   transition width .3s ease, height .3s ease, background-color .3s ease, border-color .3s ease
+  .cursor-label
+    font-family fontDigital
+    font-size .85rem
+    font-weight 700
+    letter-spacing .2em
+    text-transform uppercase
+    color colorPrimary
+    opacity 0
+    transition opacity .2s ease
+  &.is-label
+    size(72px)
+    background-color rgba(242,242,242,.92)
+    border-color transparent
+    .cursor-label
+      opacity 1
   &.is-hover
     size(64px)
     background-color rgba(255,255,255,.12)
@@ -81,4 +100,7 @@ onUnmounted(() => off())
 .cursor-dot
   size(4px)
   background-color colorSecondary
+  transition opacity .2s ease
+  &.is-hidden
+    opacity 0 // 有標籤時白點會壓在字上
 </style>

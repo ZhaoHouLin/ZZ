@@ -128,6 +128,13 @@ section.resume#resume(ref="root")
     padding-left 1.6rem
     .resume-period
       color colorAccent
+      animation ledFlicker .5s steps(1) 1 // LED 通電閃一下
+
+@keyframes ledFlicker
+  0%, 20%, 45%
+    opacity 0
+  10%, 30%, 100%
+    opacity 1
 
 .resume-period
   font-family fontDigital

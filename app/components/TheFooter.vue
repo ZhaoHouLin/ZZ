@@ -10,9 +10,9 @@ footer.footer
       span.footer-logo ZZ
       span.footer-sub ZhaoHou Lin · AI Application · Cloud Native · Web
     nav.footer-links
-      a(href="https://github.com/ZhaoHouLin" target="_blank" rel="noopener") GitHub
-      a(href="https://codepen.io/rodes" target="_blank" rel="noopener") CodePen
-      a(href="mailto:rodes5292@gmail.com") Mail
+      a(href="https://github.com/ZhaoHouLin" target="_blank" rel="noopener" data-magnet) GitHub
+      a(href="https://codepen.io/rodes" target="_blank" rel="noopener" data-magnet) CodePen
+      a(href="mailto:rodes5292@gmail.com" data-magnet) Mail
     .footer-copy © {{ year }} · Nuxt 4 + GSAP
 </template>
 
