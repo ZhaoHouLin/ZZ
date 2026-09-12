@@ -54,6 +54,12 @@ onMounted(async () => {
     Group,
     Object3D,
     MathUtils,
+    Points,
+    PointsMaterial,
+    BufferGeometry,
+    BufferAttribute,
+    LineSegments,
+    LineBasicMaterial,
     Color,
   } = await import("three")
   if (!canvas.value) return // 載入期間已卸載
@@ -70,6 +76,12 @@ onMounted(async () => {
     Group,
     Object3D,
     MathUtils,
+    Points,
+    PointsMaterial,
+    BufferGeometry,
+    BufferAttribute,
+    LineSegments,
+    LineBasicMaterial,
     Color,
   })
 })
@@ -100,6 +112,90 @@ function init(THREE) {
   const fill = new THREE.DirectionalLight(0xffffff, 0.5)
   fill.position.set(-6, -2, 4)
   scene.add(fill)
+
+  // 星點 + 星座線：取代舊的 canvas 2D 粒子背景，併進同一個渲染迴圈；游標靠近會把星點撥開，之後彈回原位
+  const STAR_N = mobile ? 70 : 140
+  const LINK = 5 // 世界單位，兩星距離小於這個就連線
+  const stars = Array.from({ length: STAR_N }, () => ({
+    nx: Math.random() * 2 - 1, // 視錐內的正規化座標，resize 時換算成世界座標
+    ny: Math.random() * 2 - 1,
+    z: -8 - Math.random() * 18, // 都在閃電後面
+    hx: 0, hy: 0, x: 0, y: 0, vx: 0, vy: 0,
+  }))
+  const starPos = new Float32Array(STAR_N * 3)
+  const starGeo = new THREE.BufferGeometry()
+  starGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3)) // BufferAttribute 直接用同一個陣列，不複製
+  const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 1, sizeAttenuation: false, transparent: true, opacity: 0.8 })
+  scene.add(new THREE.Points(starGeo, starMat))
+  const MAX_LINKS = STAR_N * 6
+  const linePos = new Float32Array(MAX_LINKS * 6)
+  const lineGeo = new THREE.BufferGeometry()
+  lineGeo.setAttribute("position", new THREE.BufferAttribute(linePos, 3))
+  const lineMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.18 })
+  scene.add(new THREE.LineSegments(lineGeo, lineMat))
+  const halfH = (z) => (camera.position.z - z) * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))
+  const layoutStars = () => {
+    for (const s of stars) {
+      const hh = halfH(s.z) * 1.1
+      s.hx = s.x = s.nx * hh * camera.aspect
+      s.hy = s.y = s.ny * hh
+    }
+  }
+  const mouse = { nx: 0, ny: 0, on: false }
+  const updateStars = () => {
+    for (const s of stars) {
+      if (mouse.on) {
+        const hh = halfH(s.z)
+        const dx = s.x - mouse.nx * hh * camera.aspect
+        const dy = s.y - mouse.ny * hh
+        const d2 = dx * dx + dy * dy
+        const r = hh * 0.25
+        if (d2 < r * r) {
+          const d = Math.sqrt(d2) || 1
+          s.vx += (dx / d) * 0.05
+          s.vy += (dy / d) * 0.05
+        }
+      }
+      s.vx += (s.hx - s.x) * 0.004 // 回原位的彈簧
+      s.vy += (s.hy - s.y) * 0.004
+      s.vx *= 0.94
+      s.vy *= 0.94
+      s.x += s.vx
+      s.y += s.vy
+    }
+    stars.forEach((s, i) => {
+      starPos[i * 3] = s.x
+      starPos[i * 3 + 1] = s.y
+      starPos[i * 3 + 2] = s.z
+    })
+    starGeo.attributes.position.needsUpdate = true
+    let n = 0
+    for (let i = 0; i < STAR_N && n < MAX_LINKS; i++) {
+      for (let j = i + 1; j < STAR_N && n < MAX_LINKS; j++) {
+        const a = stars[i]
+        const b = stars[j]
+        const dx = a.x - b.x
+        const dy = a.y - b.y
+        const dz = a.z - b.z
+        if (dx * dx + dy * dy + dz * dz < LINK * LINK) {
+          const o = n * 6
+          linePos[o] = a.x
+          linePos[o + 1] = a.y
+          linePos[o + 2] = a.z
+          linePos[o + 3] = b.x
+          linePos[o + 4] = b.y
+          linePos[o + 5] = b.z
+          n++
+        }
+      }
+    }
+    lineGeo.setDrawRange(0, n * 2)
+    lineGeo.attributes.position.needsUpdate = true
+  }
+  let offX = 0
+  let offY = 0
+  let wrapW = 1
+  let wrapH = 1
 
   // 目標座標：閃電置中
   const cols = BOLT[0].length
@@ -144,11 +240,11 @@ function init(THREE) {
     )
   const scatterBlast = () =>
     starts.forEach((s, i) => {
-      const k = 3 + Math.random() * 3
+      const k = 8 + Math.random() * 6 // 沿自己的方向往外噴 8～14 倍
       s.set(
-        targets[i].x * k + (Math.random() - 0.5) * 8,
-        targets[i].y * k + (Math.random() - 0.5) * 8,
-        (Math.random() - 0.5) * 30,
+        targets[i].x * k + (Math.random() - 0.5) * 24,
+        targets[i].y * k + (Math.random() - 0.5) * 24,
+        (Math.random() - 0.5) * 60,
       )
     })
   const order = gsap.utils.shuffle(targets.map((_, i) => i))
@@ -218,6 +314,12 @@ function init(THREE) {
     const dW = cols / 0.55 / 2 / tan / camera.aspect
     camera.position.z = Math.max(dH, dW)
     camera.updateProjectionMatrix()
+    const r = wrap.getBoundingClientRect()
+    offX = r.left + window.scrollX
+    offY = r.top + window.scrollY
+    wrapW = w
+    wrapH = h
+    layoutStars()
   }
   resize()
   const ro = new ResizeObserver(resize)
@@ -234,6 +336,10 @@ function init(THREE) {
   let downX = 0
   let lastX = 0
   const onMove = (e) => {
+    // 星點用 pageX 減 resize 時算好的位移，不在 mousemove 裡強制排版
+    mouse.nx = ((e.pageX - offX) / wrapW) * 2 - 1
+    mouse.ny = -(((e.pageY - offY) / wrapH) * 2 - 1)
+    mouse.on = true
     if (dragging) {
       if (holdTimer && Math.abs(e.clientX - downX) > 4) {
         clearTimeout(holdTimer)
@@ -281,6 +387,7 @@ function init(THREE) {
     cur.y += (tilt.y - cur.y) * 0.06
     group.rotation.y = time * 0.25 + spin + cur.y
     group.rotation.x = Math.sin(time * 0.6) * 0.08 + cur.x
+    updateStars()
     renderer.render(scene, camera)
   }
 
@@ -301,6 +408,10 @@ function init(THREE) {
     window.removeEventListener("pointerup", onUp)
     window.removeEventListener("pointercancel", onUp)
     geo.dispose()
+    starGeo.dispose()
+    starMat.dispose()
+    lineGeo.dispose()
+    lineMat.dispose()
     mat.dispose()
     renderer.dispose()
   }
