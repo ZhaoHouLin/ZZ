@@ -3,7 +3,6 @@ const { gsap } = useGsap()
 
 const groups = [
   {
-    idx: "02",
     title: "工作經歷",
     en: "Work",
     items: [
@@ -12,7 +11,6 @@ const groups = [
     ],
   },
   {
-    idx: "03",
     title: "學習經歷",
     en: "Education",
     items: [
@@ -49,11 +47,13 @@ onUnmounted(() => ctx?.revert())
 </script>
 
 <template lang="pug">
-section.resume(ref="root")
-  .resume-group(v-for="g in groups" :key="g.idx")
+section.resume#resume(ref="root")
+  .sec-head
+    span.sec-idx 02
+    h2 Resume
+  .resume-group(v-for="g in groups" :key="g.en")
     .resume-rail
     .resume-head
-      span.resume-idx {{ g.idx }}
       h2 {{ g.title }}
       span.resume-en {{ g.en }}
     .resume-list
@@ -70,6 +70,9 @@ section.resume(ref="root")
   max-width 60rem
   margin 0 auto
   padding 0 outlineSpace 8rem
+
+.sec-head
+  sectionHead()
 
 .resume-group
   position relative
@@ -89,10 +92,6 @@ section.resume(ref="root")
   flex(flex-start,baseline)
   gap 1rem
   margin-bottom 2rem
-  .resume-idx
-    font-family fontDigital
-    font-size 1.2rem
-    color colorAccent
   h2
     font-size 2rem
     font-weight 700

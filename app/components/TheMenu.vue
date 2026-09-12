@@ -1,24 +1,20 @@
 <script setup>
 import { gsap } from "gsap"
 
+// 一頁式後區塊跳轉交給 SideIndex，選單只放對外連結（docs/ONEPAGE-3D.md Q4 / Q14）
 const links = [
-  { to: "/", label: "About", idx: "01" },
-  { to: "/portfolio", label: "Portfolio", idx: "02" },
-  { to: "/favorite", label: "Favorite", idx: "03" },
+  { href: "https://github.com/ZhaoHouLin", label: "GitHub", idx: "01", external: true },
+  { href: "https://codepen.io/rodes", label: "CodePen", idx: "02", external: true },
+  { href: "mailto:rodes5292@gmail.com", label: "Mail", idx: "03", external: false },
 ]
 
 const open = useState("menuOpen", () => false)
-const route = useRoute()
 const overlay = ref(null)
 const items = ref([])
 const meta = ref(null)
 
 const toggle = () => (open.value = !open.value)
 const onKey = (e) => e.key === "Escape" && (open.value = false)
-
-// 等新頁面掛載完成才關選單：換頁時掛載元件、建 GSAP 與 ScrollTrigger 都在主執行緒，
-// 若同時跑 clip-path 離場動畫會被卡住掉幀
-useNuxtApp().hook("page:finish", () => (open.value = false))
 
 let tl
 onMounted(() => {
@@ -50,13 +46,12 @@ button.hamburger(type="button" :class="{ 'is-open': open }" @click="toggle" aria
 
 nav.menu(ref="overlay" :aria-hidden="!open")
   .menu-list
-    NuxtLink.menu-item(v-for="l in links" :key="l.to" :to="l.to" :class="{ 'is-active': route.path === l.to }")
+    a.menu-item(v-for="l in links" :key="l.href" :href="l.href" :target="l.external ? '_blank' : null" :rel="l.external ? 'noopener' : null" @click="open = false")
       span.menu-item-idx {{ l.idx }}
       span.menu-item-label(ref="items") {{ l.label }}
   .menu-meta(ref="meta")
-    a(href="https://github.com/ZhaoHouLin" target="_blank" rel="noopener") GitHub
-    a(href="https://codepen.io/rodes" target="_blank" rel="noopener") CodePen
-    a(href="mailto:rodes5292@gmail.com") rodes5292@gmail.com
+    span ZhaoHou Lin · Frontend Engineer
+    span Vue / Nuxt / GSAP
 </template>
 
 <style lang="stylus" scoped>
@@ -129,10 +124,10 @@ nav.menu(ref="overlay" :aria-hidden="!open")
     -webkit-background-clip text
     background-clip text
     transition background-size .5s cubic-bezier(.76,0,.24,1), color .3s ease
-  &:hover .menu-item-label, &.is-active .menu-item-label
+  &:hover .menu-item-label
     color transparent
     background-size 100% 100%
-  &.is-active .menu-item-idx
+  &:hover .menu-item-idx
     color colorAccent
 
 .menu-meta
@@ -142,8 +137,6 @@ nav.menu(ref="overlay" :aria-hidden="!open")
   font-size 1.1rem
   letter-spacing .1em
   color colorMuted
-  a:hover
-    color colorSecondary
 
 @media (max-width: breakMobile)
   .menu

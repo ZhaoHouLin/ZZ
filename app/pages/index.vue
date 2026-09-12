@@ -3,8 +3,13 @@ useSeoMeta({ title: "ZZ — ZhaoHou Lin" })
 </script>
 
 <template lang="pug">
-.page-about
+.page-home
   HeroSection
   IntroSection
   ResumeSection
+  GithubSection
+  PensSection
+  MountainSection
+  AlbumSection
+  SideIndex
 </template>

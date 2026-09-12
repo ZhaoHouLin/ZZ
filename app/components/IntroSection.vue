@@ -35,7 +35,7 @@ onUnmounted(() => ctx?.revert())
 </script>
 
 <template lang="pug">
-section.intro(ref="root")
+section.intro#about(ref="root")
   .marquee(aria-hidden="true")
     .marquee-track.is-outline
       span(v-for="(t, i) in marquee" :key="'a' + i") {{ t }}
