@@ -15,9 +15,16 @@ const groups = [
     title: "學習經歷",
     en: "Education",
     items: [
-      { period: "2025-11", org: "CKA", role: "Certified Kubernetes Administrator", desc: "" },
       { period: "2018-08", org: "Alpha Camp", role: "學期一、二", desc: "" },
       { period: "2008-09 ~ 2012-06", org: "國立臺北科技大學", role: "光電工程系 學士", desc: "" },
+    ],
+  },
+  {
+    title: "證照",
+    en: "Certification",
+    items: [
+      { period: "2025-11", org: "CKA", role: "Certified Kubernetes Administrator", desc: "" },
+      { period: "準備中", org: "iPAS AI 應用規劃師", role: "初級", desc: "" },
     ],
   },
 ]

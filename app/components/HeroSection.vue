@@ -4,6 +4,8 @@ const { gsap, ScrollTrigger } = useGsap()
 const root = ref(null)
 const clock = ref("--:--:--")
 const ext = ref(0) // 0 → 3030：以前工作的分機號碼，放在左上的 LED 面板裡當聯絡資訊
+const motion = useGyroTilt() // 陀螺儀開關，見 useGyroTilt.js
+const motionBtn = ref(false) // iOS 要按鈕授權
 let ctx
 let timer
 
@@ -15,6 +17,7 @@ const tick = () => {
 onMounted(() => {
   tick()
   timer = setInterval(tick, 1000)
+  if (motion.available) motion.needsPermission ? (motionBtn.value = true) : motion.enable()
 
   ctx = gsap.context(() => {
     // 進場：動內層元素
@@ -49,6 +52,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   clearInterval(timer)
+  motion.disable()
   ctx?.revert()
 })
 </script>
@@ -57,7 +61,7 @@ onUnmounted(() => {
 section.hero(ref="root")
   .hero-bg
     ClientOnly
-      VoxelZZ
+      VoxelZZ(:motion="motion")
   .hero-fade
   .hero-panel
     .hero-clock {{ clock }}
@@ -68,6 +72,7 @@ section.hero(ref="root")
   .hero-ring-wrap
     HeroRing
   .hero-hint hold ⚡ to blast
+  button.hero-motion(v-if="motionBtn" type="button" @click="motion.enable().then((ok) => (motionBtn = !ok))") ◎ motion
   .hero-statement
     h1.hero-motto 我命由我不由天
     p.hero-sub AI Application · Cloud Native · Web
@@ -134,9 +139,10 @@ section.hero(ref="root")
   z-index 1
   pointer-events none // 蓋滿整個 hero，不能擋住底下閃電的拖曳與按住
 
+// 放頂部中央：底部中央有 scroll 提示，圓環底下放不下
 .hero-hint
   pos(50%, auto)
-  top calc(50% + 41vh) // 文字圈半徑 30vh，字往外長約 5vh，再留一點
+  top outlineSpace + .6rem
   transform translateX(-50%)
   z-index 2
   font-family fontDigital
@@ -145,6 +151,20 @@ section.hero(ref="root")
   text-transform uppercase
   color colorMuted
   pointer-events none
+
+// iOS 陀螺儀授權按鈕，授權後消失
+.hero-motion
+  position absolute
+  top outlineSpace + 3rem
+  right outlineSpace
+  z-index 2
+  padding .4rem .7rem
+  border 1px solid colorLine
+  font-family fontDigital
+  font-size .85rem
+  letter-spacing .2em
+  text-transform uppercase
+  color colorMuted
 
 .hero-statement
   position absolute
@@ -253,8 +273,6 @@ section.hero(ref="root")
 @media (max-width: breakMobile)
   .hero-panel .hero-clock
     font-size 1.8rem
-  .hero-hint
-    top calc(50% + 30vh)
   .hero-statement
     bottom outlineSpace + 4rem
     .hero-motto

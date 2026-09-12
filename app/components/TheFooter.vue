@@ -8,7 +8,7 @@ footer.footer
   .footer-row
     .footer-brand
       span.footer-logo ZZ
-      span.footer-sub ZhaoHou Lin · Frontend Engineer
+      span.footer-sub ZhaoHou Lin · AI Application · Cloud Native · Web
     nav.footer-links
       a(href="https://github.com/ZhaoHouLin" target="_blank" rel="noopener") GitHub
       a(href="https://codepen.io/rodes" target="_blank" rel="noopener") CodePen

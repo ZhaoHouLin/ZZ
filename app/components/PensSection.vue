@@ -24,12 +24,16 @@ onMounted(() => {
   onScroll = () => (progress.value = el.scrollLeft / (el.scrollWidth - el.clientWidth || 1))
   el.addEventListener("scroll", onScroll, { passive: true })
 
-  ;[drag] = Draggable.create(el, {
-    type: "scrollLeft",
-    inertia: true,
-    edgeResistance: 0.85,
-    dragClickables: true, // 從格子上也能開始拖，沒拖動時 click 照常觸發
-  })
+  // 只有滑鼠裝置才用 Draggable；觸控走原生橫向捲動。Draggable 會攔截 touchstart，瀏覽器就不合成 click，格子會點不開
+  if (window.matchMedia("(pointer: fine)").matches) {
+    ;[drag] = Draggable.create(el, {
+      type: "scrollLeft",
+      inertia: true,
+      edgeResistance: 0.85,
+      dragClickables: true, // 從格子上也能開始拖，沒拖動時 click 照常觸發
+      allowEventDefault: true, // 觸控筆電用手指滑時不擋原生事件
+    })
+  }
 
   // hover 傾斜保留 CSS 原本的 -2px 位移；拖曳中不傾斜
   stopTilt = useTilt(el, ".pen-tile", { max: 10, extra: "translate(-2px,-2px)", enabled: () => !drag?.isDragging })
@@ -57,7 +61,7 @@ onUnmounted(() => {
 <template lang="pug">
 section.pens#css(ref="root")
   .sec-head
-    span.sec-idx 04
+    span.sec-idx 05
     h2 100 Days CSS
     span.sec-count {{ pad(pens.length) }}
   .pen-viewport(ref="viewport")
@@ -92,6 +96,7 @@ section.pens#css(ref="root")
 
 .pen-track
   display grid
+  user-select none // 滑鼠拖曳時不要選到文字
   width max-content
   grid-template-rows repeat(2, 11rem)
   grid-auto-flow column

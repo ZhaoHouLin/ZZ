@@ -139,3 +139,19 @@ Three.js 進來後的限制：
 - 自介改寫成現在的定位，跑馬燈標籤換成 AI APPLICATION / KUBERNETES / CKA / DEVOPS / LLM / RAG / VUE 3 / NUXT / GSAP；履歷把藍新拆成兩段，學習經歷加 CKA（取得年份待補）。GitHub 六個作品與 100 Days CSS 保留為早期作品。
 
 **教訓**：動識別元素之前先問來歷。從像素字、黑白這些表面特徵推設計，會做出好看但沒有意義、甚至重複的東西。
+
+---
+
+## 進度（2026-09-12）
+
+六步全部完成：1 一頁式骨架 `862d2fe`、2 作品磚改橫向拖曳 `58d6061`、3 體素閃電 `8a28ec7` → `f48e435`、4 星點併入 WebGL `e84da31`、5 CSS 3D 延伸 `19ba6fc`、6 陀螺儀（`useGyroTilt.js`，可整個拆除）。
+陀螺儀需要 HTTPS 才能取得 deviceorientation（GitHub Pages 可以；區網 IP 走 http 不行）。
+
+## 內容補強（2026-09-12）
+
+從個人背景筆記整理可公開的部分進網站：
+- 新增 **03 Lab** 區：技術路線四層（AI Application / Software / Cloud Native / Infra）、自建環境清單、CI/CD 流程、三個內部專案（無連結）、踩過的坑、正在摸的東西。後面區塊編號順延為 04 GitHub、05 CSS、06 Mountain、07 Album。
+- About 加大頭照（`public/avatar.jpg`，缺檔顯示 ZZ 占位）與四條做事方式（WHY / BUILD / ITERATE / SHIP）。
+- 履歷新增「證照」組：CKA 2025-11、iPAS AI 應用規劃師初級準備中；CKA 從學習經歷移過去。
+- 興趣補 FF14、重訓。
+- **刻意不放**：睡眠、身高體重、訓練重量等私人資訊；「公司要求 CCNA / RHCSA」這類描述。

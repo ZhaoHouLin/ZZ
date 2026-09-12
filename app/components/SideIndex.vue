@@ -5,6 +5,7 @@ const { gsap, ScrollTrigger } = useGsap()
 const sections = [
   { id: "about", label: "About" },
   { id: "resume", label: "Resume" },
+  { id: "lab", label: "Lab" },
   { id: "github", label: "GitHub" },
   { id: "css", label: "CSS" },
   { id: "mountain", label: "Mountain" },

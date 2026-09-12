@@ -29,6 +29,7 @@ onUnmounted(() => ctx?.revert())
   HeroSection
   IntroSection
   ResumeSection
+  LabSection
   GithubSection
   PensSection
   MountainSection

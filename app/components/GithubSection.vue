@@ -30,7 +30,7 @@ onUnmounted(() => {
 <template lang="pug">
 section.github#github(ref="root")
   .sec-head
-    span.sec-idx 03
+    span.sec-idx 04
     h2 GitHub
     span.sec-count {{ pad(github.length) }}
   .gh-grid

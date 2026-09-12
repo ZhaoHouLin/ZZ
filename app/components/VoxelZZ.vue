@@ -2,6 +2,9 @@
 // hero 的體素閃電（docs/ONEPAGE-3D.md 第三輪）：閃電的鋸齒正面讀起來是上下疊的 ZZ，它就是 logo
 // 護欄：Three.js 動態載入；1/PIXEL 解析度像素化渲染；離開視窗停止渲染；沒有 WebGL 或 reduced-motion 就不建場景；手機方塊減半
 const { gsap } = useGsap()
+const props = defineProps({
+  motion: { type: Object, default: null }, // useGyroTilt() 的物件；沒有就只用滑鼠
+})
 const canvas = ref(null)
 let dispose = () => {}
 
@@ -328,26 +331,33 @@ function init(THREE) {
   // 互動：滑鼠位置傾斜（只有精準指標）、拖曳旋轉（滑鼠與手指都可）、按住炸開、閒置自轉
   const tilt = { x: 0, y: 0 }
   const cur = { x: 0, y: 0 }
-  let spin = 0
+  let spin = 0 // 拖曳累積的 Y 軸角度（左右拖）
   let vel = 0
+  let spinX = 0 // 拖曳累積的 X 軸角度（上下拖，滑鼠才有；手機垂直手勢留給頁面捲動）
+  let velX = 0
   let dragging = false
   let blasted = false
   let holdTimer = 0
   let downX = 0
+  let downY = 0
   let lastX = 0
+  let lastY = 0
   const onMove = (e) => {
     // 星點用 pageX 減 resize 時算好的位移，不在 mousemove 裡強制排版
     mouse.nx = ((e.pageX - offX) / wrapW) * 2 - 1
     mouse.ny = -(((e.pageY - offY) / wrapH) * 2 - 1)
     mouse.on = true
     if (dragging) {
-      if (holdTimer && Math.abs(e.clientX - downX) > 4) {
+      if (holdTimer && Math.hypot(e.clientX - downX, e.clientY - downY) > 4) {
         clearTimeout(holdTimer)
         holdTimer = 0
       }
       vel = (e.clientX - lastX) * 0.008
+      velX = (e.clientY - lastY) * 0.008
       spin += vel
+      spinX += velX
       lastX = e.clientX
+      lastY = e.clientY
       return
     }
     if (!fine) return
@@ -357,6 +367,7 @@ function init(THREE) {
   const onDown = (e) => {
     dragging = true
     downX = lastX = e.clientX
+    downY = lastY = e.clientY
     vel = 0
     holdTimer = setTimeout(() => {
       holdTimer = 0
@@ -381,12 +392,18 @@ function init(THREE) {
   const render = (time) => {
     if (!dragging) {
       spin += vel
+      spinX += velX
       vel *= 0.95 // 放開後慣性衰減
+      velX *= 0.95
+    }
+    if (props.motion?.active) {
+      tilt.x = props.motion.tilt.x
+      tilt.y = props.motion.tilt.y
     }
     cur.x += (tilt.x - cur.x) * 0.06
     cur.y += (tilt.y - cur.y) * 0.06
     group.rotation.y = time * 0.25 + spin + cur.y
-    group.rotation.x = Math.sin(time * 0.6) * 0.08 + cur.x
+    group.rotation.x = Math.sin(time * 0.6) * 0.08 + cur.x + spinX
     updateStars()
     renderer.render(scene, camera)
   }

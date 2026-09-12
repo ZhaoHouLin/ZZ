@@ -26,9 +26,9 @@ export default defineNuxtConfig({
       htmlAttrs: { lang: "zh-Hant-TW" },
       title: "ZZ — ZhaoHou Lin",
       meta: [
-        { name: "description", content: "林炤后 ZhaoHou Lin 的個人網站：前端工程師，Vue / Nuxt / GSAP 網頁互動特效。" },
+        { name: "description", content: "林炤后 ZhaoHou Lin 的個人網站：AI 應用、Kubernetes、Vue / Nuxt 前端。" },
         { property: "og:title", content: "ZZ — ZhaoHou Lin" },
-        { property: "og:description", content: "Frontend engineer. Vue / Nuxt / GSAP." },
+        { property: "og:description", content: "AI Application · Cloud Native · Web." },
         { name: "theme-color", content: "#050505" },
       ],
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],

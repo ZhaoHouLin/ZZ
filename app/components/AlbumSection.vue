@@ -4,7 +4,7 @@ import album from "~/data/album.json"
 const { gsap } = useGsap()
 const root = ref(null)
 const broken = ref({}) // 找不到圖片時顯示占位
-const interests = ["3C 產品", "網頁程式新知", "線上遊戲", "爬山"]
+const interests = ["3C 產品", "網頁程式新知", "線上遊戲 · FF14", "爬山", "重訓"]
 let ctx
 
 onMounted(() => {
@@ -39,7 +39,7 @@ onUnmounted(() => ctx?.revert())
 <template lang="pug">
 section.album#album(ref="root")
   .sec-head
-    span.sec-idx 06
+    span.sec-idx 07
     h2 Album
     span.sec-count {{ String(album.length).padStart(3, "0") }}
   ul.interest-list
@@ -104,9 +104,8 @@ section.album#album(ref="root")
     size()
     object-fit cover
     display block
-    filter grayscale(1) contrast(1.1)
     transform scale(1.02)
-    transition filter .6s ease, transform .8s cubic-bezier(.76,0,.24,1)
+    transition transform .8s cubic-bezier(.76,0,.24,1)
   &.is-broken img
     display none
   .album-placeholder
@@ -128,7 +127,6 @@ section.album#album(ref="root")
     transition transform .5s cubic-bezier(.76,0,.24,1)
   &:hover
     img
-      filter grayscale(0) contrast(1)
       transform scale(1.08)
     figcaption
       transform translateY(0)

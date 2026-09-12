@@ -50,8 +50,8 @@ nav.menu(ref="overlay" :aria-hidden="!open")
       span.menu-item-idx {{ l.idx }}
       span.menu-item-label(ref="items") {{ l.label }}
   .menu-meta(ref="meta")
-    span ZhaoHou Lin · Frontend Engineer
-    span Vue / Nuxt / GSAP
+    span ZhaoHou Lin
+    span AI Application · Cloud Native · Web
 </template>
 
 <style lang="stylus" scoped>
@@ -64,9 +64,9 @@ nav.menu(ref="overlay" :aria-hidden="!open")
   .bar
     position absolute
     left 0
-    size(100%,2px)
+    size(100%,3px)
     background-color colorSecondary
-    border-radius 2px
+    border-radius 3px
     transition transform .5s cubic-bezier(.76,0,.24,1), opacity .3s ease
     &:nth-child(1)
       top 0

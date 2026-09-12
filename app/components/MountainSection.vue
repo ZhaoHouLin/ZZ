@@ -21,7 +21,7 @@ section.mountain#mountain(ref="root")
   ClientOnly
     RidgeLines
   .mtn-kicker
-    span.mtn-idx 05
+    span.mtn-idx 06
     span 山 / Mountain
   .couplet
     h2 走路要找難路走
