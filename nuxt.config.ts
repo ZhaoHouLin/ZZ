@@ -10,6 +10,8 @@ export default defineNuxtConfig({
   compatibilityDate: "2026-09-12",
   devtools: { enabled: false },
   css: ["~/assets/global.styl"],
+  // 元件依角色分資料夾（sections / hero / fx / ui），pathPrefix false 讓元件名稱不帶資料夾前綴
+  components: [{ path: "~/components", pathPrefix: false }],
   vite: {
     css: {
       preprocessorOptions: {
