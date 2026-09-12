@@ -16,16 +16,16 @@ const progress = ref(0)
 let triggers = []
 
 onMounted(() => {
-  triggers = sections.map((s) =>
+  // 只看各區塊的頂端過中線：往下進入就亮該區，往上退出就亮前一區（hero 沒有索引所以是空字串）。
+  // 不用 end，釘住的區塊（100 Days CSS）元素高度不含釘住距離，用 bottom 會提早熄掉
+  triggers = sections.map((s, i) =>
     ScrollTrigger.create({
       trigger: `#${s.id}`,
       start: "top center",
-      end: "bottom center",
-      onToggle: (self) => self.isActive && (active.value = s.id),
+      onEnter: () => (active.value = s.id),
+      onLeaveBack: () => (active.value = sections[i - 1]?.id ?? ""),
     })
   )
-  // 回到 hero 時沒有任何一區在中線上，清掉高亮
-  triggers.push(ScrollTrigger.create({ trigger: "#about", start: "top center", onLeaveBack: () => (active.value = "") }))
   triggers.push(ScrollTrigger.create({ start: 0, end: "max", onUpdate: (self) => (progress.value = self.progress) }))
 })
 

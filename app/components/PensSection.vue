@@ -1,14 +1,35 @@
 <script setup>
+// 100 格橫向拖曳瀏覽（docs/ONEPAGE-3D.md Q3 改版）：原生橫向捲動容器，觸控與觸控板直接可用；
+// 滑鼠用 Draggable 的 scrollLeft 模式拖曳，放開有慣性
 import pens from "~/data/css100.json"
+import { Draggable } from "gsap/Draggable"
+import { InertiaPlugin } from "gsap/InertiaPlugin"
 
 const { gsap } = useGsap()
+gsap.registerPlugin(Draggable, InertiaPlugin)
+
 const active = ref(-1)
 const root = ref(null)
+const viewport = ref(null)
+const progress = ref(0)
 const pad = (n) => String(n).padStart(3, "0")
 const shortTitle = (t) => t.replace(/\s*\(.*\)\s*$/, "")
 let ctx
+let drag
+let onScroll = () => {}
 
 onMounted(() => {
+  const el = viewport.value
+  onScroll = () => (progress.value = el.scrollLeft / (el.scrollWidth - el.clientWidth || 1))
+  el.addEventListener("scroll", onScroll, { passive: true })
+
+  ;[drag] = Draggable.create(el, {
+    type: "scrollLeft",
+    inertia: true,
+    edgeResistance: 0.85,
+    dragClickables: true, // 從格子上也能開始拖，沒拖動時 click 照常觸發
+  })
+
   ctx = gsap.context(() => {
     gsap.from(".pen-tile", {
       opacity: 0,
@@ -16,12 +37,16 @@ onMounted(() => {
       duration: 0.5,
       ease: "back.out(1.6)",
       stagger: { each: 0.012, from: "start" },
-      scrollTrigger: { trigger: ".pen-grid", start: "top 85%" },
+      scrollTrigger: { trigger: el, start: "top 85%" },
     })
   }, root.value)
 })
 
-onUnmounted(() => ctx?.revert())
+onUnmounted(() => {
+  viewport.value?.removeEventListener("scroll", onScroll)
+  drag?.kill()
+  ctx?.revert()
+})
 </script>
 
 <template lang="pug">
@@ -30,10 +55,15 @@ section.pens#css(ref="root")
     span.sec-idx 04
     h2 100 Days CSS
     span.sec-count {{ pad(pens.length) }}
-  .pen-grid
-    button.pen-tile(v-for="(p, i) in pens" :key="p.src" type="button" :class="{ 'is-active': active === i }" @click="active = i" :title="p.title")
-      span.pen-tile-num {{ pad(i + 1) }}
-      span.pen-tile-name {{ shortTitle(p.title) }}
+  .pen-viewport(ref="viewport")
+    .pen-track
+      button.pen-tile(v-for="(p, i) in pens" :key="p.src" type="button" :class="{ 'is-active': active === i }" @click="active = i" :title="p.title")
+        span.pen-tile-num {{ pad(i + 1) }}
+        span.pen-tile-name {{ shortTitle(p.title) }}
+  .pen-foot(aria-hidden="true")
+    span.pen-hint drag / scroll →
+    .pen-progress
+      .pen-progress-bar(:style="{ transform: `scaleX(${progress})` }")
 
   PenModal(:pens="pens" v-model:index="active")
 </template>
@@ -47,14 +77,46 @@ section.pens#css(ref="root")
 .sec-head
   sectionHead()
 
-.pen-grid
+.pen-viewport
+  overflow-x auto
+  overflow-y hidden
+  overscroll-behavior-x contain // 觸控板滑到底不要觸發瀏覽器的上一頁
+  scrollbar-width none
+  &::-webkit-scrollbar
+    display none
+
+.pen-track
   display grid
-  grid-template-columns repeat(auto-fill, minmax(5.5rem, 1fr))
+  width max-content
+  grid-template-rows repeat(2, 11rem)
+  grid-auto-flow column
+  grid-auto-columns 8.8rem
   gap .5rem
+  padding 4px 4px 4px 0 // 留給 hover 位移與硬陰影
+
+.pen-foot
+  flex(flex-start,center)
+  gap 1.5rem
+  margin-top 1rem
+  font-family fontDigital
+  font-size 1rem
+  letter-spacing .15em
+  color colorMuted
+  .pen-hint
+    white-space nowrap
+
+.pen-progress
+  flex 1
+  height 1px
+  background-color colorLine
+  .pen-progress-bar
+    size()
+    background-color colorAccent
+    transform-origin left
+    transform scaleX(0)
 
 .pen-tile
   position relative
-  aspect-ratio 4 / 5
   flex(center,center,column)
   gap .3rem
   padding .4rem
@@ -65,10 +127,10 @@ section.pens#css(ref="root")
   transition transform .3s ease, background-color .3s ease, color .3s ease, box-shadow .3s ease, border-color .3s ease
   .pen-tile-num
     font-family fontPixel
-    font-size 1.8rem
+    font-size 2.4rem
     line-height 1
   .pen-tile-name
-    font-size .62rem
+    font-size .75rem
     line-height 1.2
     letter-spacing .02em
     text-align center
@@ -88,8 +150,11 @@ section.pens#css(ref="root")
       color colorPrimary
 
 @media (max-width: breakMobile)
-  .pen-grid
-    grid-template-columns repeat(auto-fill, minmax(4.4rem, 1fr))
+  .pen-track
+    grid-template-rows repeat(2, 8rem)
+    grid-auto-columns 6.4rem
   .pen-tile .pen-tile-num
-    font-size 1.4rem
+    font-size 1.8rem
+  .pen-tile .pen-tile-name
+    display none
 </style>
