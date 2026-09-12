@@ -2,7 +2,7 @@
 // 原 Favorite 頁的滿版開場：山脊線 + 對聯。一頁式後改為捲到時才進場
 const { gsap } = useGsap()
 const root = ref(null)
-const photoSrc = "/mountain.jpg" // 用綁定而不是靜態 src，避免被當成 import
+const photoSrc = `${useRuntimeConfig().app.baseURL}mountain.jpg` // 綁定而非靜態 src；要帶 baseURL，GitHub Pages 部署在 /ZZ/ 底下
 let ctx
 
 onMounted(() => {

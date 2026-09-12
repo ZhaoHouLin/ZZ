@@ -13,7 +13,7 @@ const principles = [
   { k: "SHIP", v: "要的是可以直接拿去用的成果：完整程式、可執行的步驟、能複習的文件。" },
 ]
 
-const avatarSrc = "/avatar.jpg" // 用綁定而不是靜態 src：靜態路徑會被當成 import，檔案還沒放就 build 失敗
+const avatarSrc = `${useRuntimeConfig().app.baseURL}avatar.jpg` // 綁定而非靜態 src（靜態路徑會被當成 import）；要帶 baseURL，GitHub Pages 部署在 /ZZ/ 底下
 const avatarBroken = ref(false) // 檔案不存在時顯示占位
 
 const tags = ["AI APPLICATION", "KUBERNETES", "CKA", "DEVOPS", "LLM / RAG", "VUE 3", "NUXT", "GSAP"]
