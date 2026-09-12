@@ -16,8 +16,9 @@ const meta = ref(null)
 const toggle = () => (open.value = !open.value)
 const onKey = (e) => e.key === "Escape" && (open.value = false)
 
-// 換頁就關選單
-watch(() => route.path, () => (open.value = false))
+// 等新頁面掛載完成才關選單：換頁時掛載元件、建 GSAP 與 ScrollTrigger 都在主執行緒，
+// 若同時跑 clip-path 離場動畫會被卡住掉幀
+useNuxtApp().hook("page:finish", () => (open.value = false))
 
 let tl
 onMounted(() => {

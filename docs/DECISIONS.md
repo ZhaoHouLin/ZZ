@@ -116,3 +116,9 @@ Vue 3.2 + Vite 3、vue-router、Pinia（只放選單開關）、GSAP 3.11（Scro
 - `public/album/01.jpg ~ 06.jpg` 補圖。
 - 確認履歷時間。
 - Review 後 merge `nuxt4` → `main`、push，第一次 Actions 跑完到 GitHub Pages 看 `/ZZ/` 是否正常。
+
+---
+
+## 後續
+
+- 2026-09-12 一頁式 + 3D 改版的問答與決策見 [ONEPAGE-3D.md](./ONEPAGE-3D.md)。
