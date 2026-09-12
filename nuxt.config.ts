@@ -31,7 +31,13 @@ export default defineNuxtConfig({
         { property: "og:description", content: "AI Application · Cloud Native · Web." },
         { name: "theme-color", content: "#050505" },
       ],
-      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+      // 分頁圖示：體素閃電，和 hero 同一份點陣。svg 給支援的瀏覽器（sizes any 讓 Chrome 優先選它），ico 與 png 是退回，apple-touch-icon 給 iOS 加到主畫面
+      link: [
+        { rel: "icon", type: "image/svg+xml", href: "/favicon.svg", sizes: "any" },
+        { rel: "icon", type: "image/png", href: "/icon-32.png", sizes: "32x32" },
+        { rel: "alternate icon", type: "image/x-icon", href: "/favicon.ico" },
+        { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
+      ],
     },
   },
   nitro: {

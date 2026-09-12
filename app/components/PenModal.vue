@@ -86,7 +86,7 @@ Teleport(to="body")
   background-color rgba(5,5,5,.92)
 
 .pen-box
-  width min(64rem, 100%)
+  width unquote("min(64rem, 100%)") // Stylus 有自己的 min()，不 unquote 會在編譯時算成固定 64rem，手機就超出
   background-color colorPrimary
   border 1px solid colorLine
   box-shadow 0 30px 80px rgba(0,0,0,.6)
@@ -101,7 +101,10 @@ Teleport(to="body")
     font-size 1.3rem
     color colorAccent
   .pen-title
-    flex 1
+    // 不能寫 flex 1：style.styl 有同名的 flex() mixin，會被當成呼叫，輸出 display:flex 而不是 flex:1
+    flex-grow 1
+    flex-basis 0
+    min-width 0 // flex 子元素預設 min-width auto，長標題會撐開視窗超出邊界
     font-size 1.05rem
     font-weight 700
     letter-spacing .04em
@@ -124,7 +127,7 @@ Teleport(to="body")
       transform rotate(90deg)
 
 .pen-frame
-  size(100%,min(70vh, 32rem))
+  size(100%, unquote("min(70vh, 32rem)"))
   background-color #111
   iframe
     size()

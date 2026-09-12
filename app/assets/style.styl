@@ -52,3 +52,6 @@ sectionHead()
     line-height 1
     font-weight 400
     text-transform uppercase
+
+// 注意：flex() 是 mixin，元件裡不能寫 `flex 1` 這種 shorthand（會被當成呼叫），要用 flex-grow / flex-basis
+// 同理 min() / max() 也是 Stylus 內建函式，要保留給瀏覽器算的話用 unquote("min(...)")

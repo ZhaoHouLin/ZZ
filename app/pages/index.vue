@@ -19,6 +19,13 @@ onMounted(async () => {
         ease: "expo.out",
         scrollTrigger: { trigger: head, start: "top 88%" },
       })
+      // 編號像 LED 通電閃幾下才穩定
+      gsap.to(head.querySelector(".sec-idx"), {
+        keyframes: { opacity: [1, 0, 1, 0, 1, 0.3, 1], easeEach: "none" },
+        duration: 0.6,
+        delay: 0.3,
+        scrollTrigger: { trigger: head, start: "top 88%" },
+      })
     })
     gsap.utils.toArray(".sec-head h2, .lab-tier-name, .resume-main h3").forEach((el) => {
       const split = SplitText.create(el, { type: "chars", mask: "chars" })
@@ -57,6 +64,5 @@ onUnmounted(() => ctx?.revert())
   GithubSection
   PensSection
   MountainSection
-  AlbumSection
   SideIndex
 </template>

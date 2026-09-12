@@ -9,10 +9,13 @@ onUnmounted(() => stopMagnet())
 .layout
   ClientOnly
     TheCursor
+    CursorGlow
   TheNoise
   TheMenu
   main
     slot
   TheFooter
   BackToTop
+  ClientOnly
+    FragmentField
 </template>

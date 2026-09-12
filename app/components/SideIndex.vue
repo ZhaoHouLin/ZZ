@@ -9,7 +9,6 @@ const sections = [
   { id: "github", label: "GitHub" },
   { id: "css", label: "CSS" },
   { id: "mountain", label: "Mountain" },
-  { id: "album", label: "Album" },
 ]
 
 const active = ref("")
@@ -72,8 +71,9 @@ nav.side-index(aria-label="sections" :class="{ 'is-idle': !active }")
 .side-item
   position relative
   display block
+  padding .3rem .5rem // 放大點擊範圍
   font-family fontDigital
-  font-size 1rem
+  font-size 1.35rem
   letter-spacing .15em
   color colorMuted
   transition color .3s
@@ -81,8 +81,8 @@ nav.side-index(aria-label="sections" :class="{ 'is-idle': !active }")
   .side-label
     position absolute
     right 100%
-    top 0
-    margin-right .6rem
+    top .3rem
+    margin-right .4rem
     white-space nowrap
     text-transform uppercase
     opacity 0

@@ -21,7 +21,7 @@ const toTop = () => {
 </script>
 
 <template lang="pug">
-button.to-top(type="button" :class="{ 'is-show': show }" @click="toTop" aria-label="回到最上面" :tabindex="show ? 0 : -1" data-magnet)
+button.to-top(type="button" :class="{ 'is-show': show }" @click="toTop" aria-label="回到最上面" :tabindex="show ? 0 : -1")
   span.to-top-arrow ↑
   span.to-top-label top
 </template>

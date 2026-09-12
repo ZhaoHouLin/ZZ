@@ -26,7 +26,8 @@ onUnmounted(() => {
 </script>
 
 <template lang="pug">
-section.github#github(ref="root")
+section.github#github(ref="root" data-glyph="github")
+  SectionBg(idx="04" variant="hatch")
   .sec-head
     span.sec-idx 04
     h2 GitHub

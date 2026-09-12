@@ -11,46 +11,73 @@ let timer
 
 const tick = () => {
   const d = new Date()
-  clock.value = [d.getHours(), d.getMinutes(), d.getSeconds()].map((n) => String(n).padStart(2, "0")).join(":")
+  clock.value = [d.getHours(), d.getMinutes(), d.getSeconds()]
+    .map((n) => String(n).padStart(2, "0"))
+    .join(":")
 }
 
 onMounted(() => {
   tick()
   timer = setInterval(tick, 1000)
-  if (motion.available) motion.needsPermission ? (motionBtn.value = true) : motion.enable()
+  if (motion.available)
+    motion.needsPermission ? (motionBtn.value = true) : motion.enable()
 
   ctx = gsap.context(() => {
-    // 主標語拆成字：進場逐字滑出，捲動時各自飄散（不用 mask，飄散會被裁掉）
-    const motto = SplitText.create(root.value.querySelector(".hero-motto"), { type: "chars" })
+    // 主標語拆成字：進場動 chars（在遮罩裡滑出），捲動飄散動 masks（遮罩外框本身）。
+    // 兩個動畫必須動不同元素：scrub 的 to() 會把建立當下的值記成起點，若和進場的 from() 搶同一組元素與屬性，起點會記到 opacity 0，字就消失
+    const motto = SplitText.create(root.value.querySelector(".hero-motto"), {
+      type: "chars",
+      mask: "chars",
+    })
 
     // 進場：動內層元素
     gsap
       .timeline({ defaults: { ease: "expo.out", duration: 1.2 } })
-      .from(".hero-panel > *", { opacity: 0, x: -16, stagger: 0.1, duration: 0.8 })
+      .from(".hero-panel > *", {
+        opacity: 0,
+        x: -16,
+        stagger: 0.1,
+        duration: 0.8,
+      })
       .from(".ring", { opacity: 0, scale: 0.85 }, "-=0.6")
-      .from(motto.chars, { yPercent: 110, opacity: 0, stagger: 0.06, duration: 1 }, "-=0.8")
+      .from(motto.chars, { yPercent: 110, stagger: 0.06, duration: 1 }, "-=0.8")
       .from(".hero-sub", { opacity: 0, y: 16 }, "-=0.9")
       .from(".hero-info > *", { opacity: 0, y: 24, stagger: 0.08 }, "-=0.9")
       .from(".line", { scaleX: 0, scaleY: 0, duration: 1 }, "-=1")
       .from(".hero-hint, .hero-scroll", { opacity: 0 }, "-=0.5")
 
     const o = { v: 0 }
-    gsap.to(o, { v: 3030, duration: 2.4, delay: 0.8, ease: "power2.inOut", onUpdate: () => (ext.value = Math.round(o.v)) })
+    gsap.to(o, {
+      v: 3030,
+      duration: 2.4,
+      delay: 0.8,
+      ease: "power2.inOut",
+      onUpdate: () => (ext.value = Math.round(o.v)),
+    })
 
     // 捲動視差：動外層容器，避免和進場動畫搶同一個屬性
     gsap
       .timeline({
-        scrollTrigger: { trigger: root.value, start: "top top", end: "bottom top", scrub: true },
+        scrollTrigger: {
+          trigger: root.value,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
       })
       .to(".hero-panel", { yPercent: -120, opacity: 0 }, 0)
       .to(".hero-ring-wrap", { scale: 1.6, opacity: 0 }, 0)
-      .to(motto.chars, {
-        x: () => gsap.utils.random(-90, 90),
-        y: () => gsap.utils.random(60, 180),
-        rotation: () => gsap.utils.random(-35, 35),
-        opacity: 0,
-        ease: "power1.in",
-      }, 0)
+      .to(
+        motto.masks,
+        {
+          x: () => gsap.utils.random(-90, 90),
+          y: () => gsap.utils.random(60, 180),
+          rotation: () => gsap.utils.random(-35, 35),
+          opacity: 0,
+          ease: "power1.in",
+        },
+        0,
+      )
       .to(".hero-sub", { y: 40, opacity: 0 }, 0)
       .to(".hero-info", { y: 60, opacity: 0 }, 0)
       .to(".hero-bg", { scale: 0.8, opacity: 0 }, 0) // 閃電往後退並淡出
@@ -84,7 +111,7 @@ section.hero(ref="root")
   .hero-hint hold ⚡ to blast
   button.hero-motion(v-if="motionBtn" type="button" @click="motion.enable().then((ok) => (motionBtn = !ok))") ◎ motion
   .hero-statement
-    h1.hero-motto 我命由我不由天
+    h1.hero-motto ZERO ZONE
     p.hero-sub AI Application · Cloud Native · Web
   .hero-info
     .hero-name

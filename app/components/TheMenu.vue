@@ -5,7 +5,8 @@ import { gsap } from "gsap"
 const links = [
   { href: "https://github.com/ZhaoHouLin", label: "GitHub", idx: "01", external: true },
   { href: "https://codepen.io/rodes", label: "CodePen", idx: "02", external: true },
-  { href: "mailto:rodes5292@gmail.com", label: "Mail", idx: "03", external: false },
+  { href: "https://www.facebook.com/ZhaoHouLin", label: "Facebook", idx: "03", external: true },
+  { href: "mailto:rodes5292@gmail.com", label: "Mail", idx: "04", external: false },
 ]
 
 const open = useState("menuOpen", () => false)
@@ -42,7 +43,7 @@ watch(open, (v) => {
 </script>
 
 <template lang="pug">
-button.hamburger(type="button" :class="{ 'is-open': open }" @click="toggle" aria-label="menu" :aria-expanded="open" data-magnet)
+button.hamburger(type="button" :class="{ 'is-open': open }" @click="toggle" aria-label="menu" :aria-expanded="open")
   span.bar
   span.bar
   span.bar

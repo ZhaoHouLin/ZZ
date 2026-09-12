@@ -59,7 +59,8 @@ onUnmounted(() => {
 </script>
 
 <template lang="pug">
-section.pens#css(ref="root")
+section.pens#css(ref="root" data-glyph="css")
+  SectionBg(idx="05" variant="glow")
   .sec-head
     span.sec-idx 05
     h2 100 Days CSS
@@ -116,7 +117,8 @@ section.pens#css(ref="root")
     white-space nowrap
 
 .pen-progress
-  flex 1
+  flex-grow 1 // 不能寫 flex 1，會被 style.styl 的 flex() mixin 吃掉
+  flex-basis 0
   height 1px
   background-color colorLine
   .pen-progress-bar

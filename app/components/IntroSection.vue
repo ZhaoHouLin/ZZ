@@ -85,7 +85,8 @@ onUnmounted(() => {
 </script>
 
 <template lang="pug">
-section.intro#about(ref="root")
+section.intro#about(ref="root" data-glyph="about")
+  SectionBg(idx="01" variant="dots")
   .marquee(aria-hidden="true")
     .marquee-track.is-outline
       span(v-for="(t, i) in marquee" :key="'a' + i") {{ t }}

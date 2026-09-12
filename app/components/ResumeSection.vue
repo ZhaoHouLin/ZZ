@@ -56,7 +56,8 @@ onUnmounted(() => ctx?.revert())
 </script>
 
 <template lang="pug">
-section.resume#resume(ref="root")
+section.resume#resume(ref="root" data-glyph="resume")
+  SectionBg(idx="02" variant="lines")
   .sec-head
     span.sec-idx 02
     h2 Resume
@@ -82,6 +83,7 @@ section.resume#resume(ref="root")
 
 .sec-head
   sectionHead()
+  margin-left 2.5rem // 和下方內容對齊（內容留了 2.5rem 給左側的軌）
 
 .resume-group
   position relative
@@ -159,6 +161,8 @@ section.resume#resume(ref="root")
     color rgba(255,255,255,.75)
 
 @media (max-width: breakMobile)
+  .sec-head
+    margin-left 1.4rem
   .resume-group
     padding-left 1.4rem
   .resume-item

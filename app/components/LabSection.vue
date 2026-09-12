@@ -25,8 +25,8 @@ const works = [
     desc: "kubeadm 從零建叢集：Calico 網路、Ingress-NGINX、Harbor registry、GitLab Runner 串成 build → push → deploy 的流程。",
   },
   {
-    title: "Google Workspace 自動化",
-    desc: "表單送出即觸發 Apps Script，整列資料表格化成 HTML Email 通知，用在 B2B 客戶表單。",
+    title: "NAS 儲存整合進 Kubernetes",
+    desc: "用 SMB CSI 把 NAS 掛進 Pod，PV / PVC 統一管理；解掉 Pod 內看得到檔案、外面看不到的權限與掛載問題。",
   },
 ]
 
@@ -70,7 +70,8 @@ onUnmounted(() => {
 </script>
 
 <template lang="pug">
-section.lab#lab(ref="root")
+section.lab#lab(ref="root" data-glyph="lab")
+  SectionBg(idx="03" variant="grid")
   .sec-head
     span.sec-idx 03
     h2 Lab
@@ -184,6 +185,11 @@ section.lab#lab(ref="root")
     font-size 1rem
     letter-spacing .08em
     color colorSecondary
+    transition border-color .3s, color .3s, transform .3s
+    &:hover
+      border-color colorAccent
+      color colorAccent
+      transform translateY(-2px)
 
 .lab-pipeline
   list-style none

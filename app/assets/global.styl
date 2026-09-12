@@ -55,3 +55,8 @@ button
     animation-duration .01ms !important
     animation-iteration-count 1 !important
     transition-duration .01ms !important
+
+// 有錨點的區塊都是 SectionBg 的定位容器；isolation 讓背景的 z-index -1 留在區塊內
+section[id]
+  position relative
+  isolation isolate

@@ -160,3 +160,11 @@ Three.js 進來後的限制：
 
 使用者：「動畫互動特效的部分不夠多」。九題問答後採用：SplitText 逐字進場（標題、Lab 層名、履歷公司名、hero 主標語）、磁吸元件（漢堡、索引、回頂、聯絡與頁尾連結）、游標狀態字（DRAG / OPEN / HOLD / VIEW）、跑馬燈跟捲動速度加速並傾斜、數量從 000 跳上去、Lab pipeline 光點循環、履歷日期 hover LED 閃爍、卡片與相簿改 clip-path 擦入、hero 主標語隨捲動逐字飄散。
 不做：開場 preloader（內容優先）、整頁平滑捲動（會把捲動成本加回來）。
+
+## 調整（2026-09-12，續）
+
+- Album 區整個拿掉（含興趣清單與 album.json）；右側索引剩六格。舊 `/favorite` 仍轉到 `#mountain`。
+- 漢堡選單加 Facebook（GitHub / CodePen / Facebook / Mail）。
+- favicon 改為 SVG 體素閃電（`public/favicon.svg`，由 VoxelZZ 同一份點陣產生），`favicon.ico` 留作 Safari 退回。
+- Mountain 區加背景照片 `public/mountain.jpg`（根目錄 山.jpg 縮至 1440px、品質 70），上下緣漸黑、中段壓暗 55%，捲動視差只動 transform。
+- 其他互動：區塊編號進場 LED 閃爍、Lab 晶片 hover、頁尾描邊大字 ZZ hover 填色、游標點擊琥珀漣漪、HOLD 游標琥珀底、作品視窗長標題省略。

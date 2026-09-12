@@ -3,6 +3,7 @@ import { gsap } from "gsap"
 
 const ring = ref(null)
 const dot = ref(null)
+const pulse = ref(null) // 點擊時擴散的漣漪
 const hover = ref(false)
 const down = ref(false)
 const label = ref("") // 碰到 [data-cursor] 時圈裡顯示的字（drag / open / hold / view）
@@ -30,7 +31,10 @@ onMounted(() => {
     hover.value = !!e.target.closest("a, button, [data-hover]")
     label.value = e.target.closest("[data-cursor]")?.dataset.cursor || ""
   }
-  const onDown = () => (down.value = true)
+  const onDown = (e) => {
+    down.value = true
+    gsap.fromTo(pulse.value, { x: e.clientX, y: e.clientY, scale: 0.4, opacity: 0.7 }, { scale: 2.4, opacity: 0, duration: 0.5, ease: "power2.out", overwrite: true })
+  }
   const onUp = () => (down.value = false)
 
   window.addEventListener("mousemove", onMove, { passive: true })
@@ -51,9 +55,10 @@ onUnmounted(() => off())
 
 <template lang="pug">
 .cursor(aria-hidden="true")
-  .cursor-ring(ref="ring" :class="{ 'is-hover': hover, 'is-down': down, 'is-label': !!label }")
+  .cursor-ring(ref="ring" :class="{ 'is-hover': hover, 'is-down': down, 'is-label': !!label, 'is-hold': label === 'hold' }")
     span.cursor-label {{ label }}
   .cursor-dot(ref="dot" :class="{ 'is-hidden': !!label }")
+  .cursor-pulse(ref="pulse")
 </template>
 
 <style lang="stylus" scoped>
@@ -62,7 +67,7 @@ onUnmounted(() => off())
   @media (pointer: fine)
     display block
 
-.cursor-ring, .cursor-dot
+.cursor-ring, .cursor-dot, .cursor-pulse
   position fixed
   top 0
   left 0
@@ -90,12 +95,20 @@ onUnmounted(() => off())
     border-color transparent
     .cursor-label
       opacity 1
+  &.is-hold
+    background-color colorAccent // 閃電上的 HOLD 用琥珀，和閃電中段同色
   &.is-hover
     size(64px)
     background-color rgba(255,255,255,.12)
     border-color colorAccent
   &.is-down
     size(20px)
+
+.cursor-pulse
+  size(32px)
+  margin -16px 0 0 -16px // 以中心為原點
+  border 1px solid colorAccent
+  opacity 0
 
 .cursor-dot
   size(4px)
