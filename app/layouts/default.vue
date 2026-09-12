@@ -7,4 +7,5 @@
   main
     slot
   TheFooter
+  BackToTop
 </template>

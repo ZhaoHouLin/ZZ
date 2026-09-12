@@ -5,8 +5,10 @@ const { gsap } = useGsap()
 const root = ref(null)
 const pad = (n) => String(n).padStart(3, "0")
 let ctx
+let stopTilt = () => {}
 
 onMounted(() => {
+  stopTilt = useTilt(root.value, ".gh-card", { max: 6 })
   ctx = gsap.context(() => {
     gsap.from(".gh-card", {
       opacity: 0,
@@ -19,7 +21,10 @@ onMounted(() => {
   }, root.value)
 })
 
-onUnmounted(() => ctx?.revert())
+onUnmounted(() => {
+  stopTilt()
+  ctx?.revert()
+})
 </script>
 
 <template lang="pug">
@@ -58,7 +63,7 @@ section.github#github(ref="root")
   padding 1.4rem
   background-color colorPrimary
   overflow hidden
-  transition color .4s ease
+  transition color .4s ease, transform .2s ease
   &::before
     content ''
     position absolute

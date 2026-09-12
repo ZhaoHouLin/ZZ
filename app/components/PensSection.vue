@@ -17,6 +17,7 @@ const shortTitle = (t) => t.replace(/\s*\(.*\)\s*$/, "")
 let ctx
 let drag
 let onScroll = () => {}
+let stopTilt = () => {}
 
 onMounted(() => {
   const el = viewport.value
@@ -29,6 +30,9 @@ onMounted(() => {
     edgeResistance: 0.85,
     dragClickables: true, // 從格子上也能開始拖，沒拖動時 click 照常觸發
   })
+
+  // hover 傾斜保留 CSS 原本的 -2px 位移；拖曳中不傾斜
+  stopTilt = useTilt(el, ".pen-tile", { max: 10, extra: "translate(-2px,-2px)", enabled: () => !drag?.isDragging })
 
   ctx = gsap.context(() => {
     gsap.from(".pen-tile", {
@@ -43,6 +47,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  stopTilt()
   viewport.value?.removeEventListener("scroll", onScroll)
   drag?.kill()
   ctx?.revert()

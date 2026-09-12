@@ -21,13 +21,6 @@ onMounted(() => {
       ease: "none",
       scrollTrigger: { trigger: ".intro-text", start: "top 75%", end: "bottom 40%", scrub: 0.6 },
     })
-    gsap.from(".sec-head", {
-      opacity: 0,
-      x: -30,
-      duration: 1,
-      ease: "expo.out",
-      scrollTrigger: { trigger: ".sec-head", start: "top 85%" },
-    })
   }, root.value)
 })
 

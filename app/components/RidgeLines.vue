@@ -1,6 +1,7 @@
 <script setup>
 // 隨機生成的層疊山脊線，滑鼠移動有視差；在 client 端生成，避免 SSR 隨機值不一致
-import { gsap } from "gsap"
+// 用 useGsap 確保 ScrollTrigger 已註冊
+const { gsap } = useGsap()
 
 const layers = ref([])
 const root = ref(null)
@@ -26,7 +27,15 @@ onMounted(() => {
 
   nextTick(() => {
     const paths = root.value.querySelectorAll("path")
-    gsap.from(paths, { yPercent: 30, opacity: 0, duration: 1.4, stagger: 0.12, ease: "expo.out" })
+    const section = root.value.parentElement
+    // 一頁式後這區在首屏之下，進場改為捲到時觸發
+    gsap.from(paths, { yPercent: 30, opacity: 0, duration: 1.4, stagger: 0.12, ease: "expo.out", scrollTrigger: { trigger: section, start: "top 70%" } })
+    // 捲動深度視差：越近的層跟著捲動移得越多（y 與進場的 yPercent、滑鼠的 x 是不同屬性，不會互搶）
+    gsap.to(paths, {
+      y: (i) => -layers.value[i].depth * 4,
+      ease: "none",
+      scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: true },
+    })
 
     if (!window.matchMedia("(pointer: fine)").matches) return
     const movers = Array.from(paths).map((p, i) => ({
