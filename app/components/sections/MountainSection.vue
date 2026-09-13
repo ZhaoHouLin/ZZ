@@ -118,14 +118,23 @@ section.mountain#mountain(ref="root")
     font-weight 900
     letter-spacing .45em
     line-height 1
-    background-image linear-gradient(180deg, colorSecondary 0%, colorSecondary 55%, colorAccent 100%)
+    // 琥珀光帶沿著直書的字由上往下循環掃過：漸層放大成三倍高，動 background-position
+    background-image linear-gradient(180deg, colorSecondary 0%, colorSecondary 38%, colorAccent 50%, colorSecondary 62%, colorSecondary 100%)
+    background-size 100% 300%
     -webkit-background-clip text
     background-clip text
     -webkit-text-fill-color transparent
+    animation coupletShine 4.5s ease-in-out infinite
     &:nth-child(1)
       margin-top -4rem
     &:nth-child(2)
       margin-top 4rem
+
+@keyframes coupletShine
+  from
+    background-position 0 0%
+  to
+    background-position 0 100%
 
 @media (max-width: breakMobile)
   .couplet
