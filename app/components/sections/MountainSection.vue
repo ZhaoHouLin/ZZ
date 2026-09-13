@@ -132,9 +132,9 @@ section.mountain#mountain(ref="root")
 
 @keyframes coupletShine
   from
-    background-position 0 0%
-  to
     background-position 0 100%
+  to
+    background-position 0 0%
 
 @media (max-width: breakMobile)
   .couplet
