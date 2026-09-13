@@ -8,6 +8,8 @@ const styleEntry = fileURLToPath(
 
 // GitHub Pages 部署在 /ZZ/ 底下時由 NUXT_APP_BASE_URL 覆寫；圖示網址帶了 ?v= 之後 Nuxt 不會自動補前綴，要自己接
 const base = process.env.NUXT_APP_BASE_URL || "/"
+// 連結預覽（LINE / Facebook / Discord）要絕對網址，固定用線上版；沒指定 og:image 時平台會抓頁面第一張大圖（大頭照）
+const siteUrl = "https://zhaohoulin.github.io/ZZ/"
 
 export default defineNuxtConfig({
   compatibilityDate: "2026-09-12",
@@ -34,6 +36,13 @@ export default defineNuxtConfig({
         { name: "description", content: "林炤后 ZhaoHou Lin 的個人網站：AI 應用、Kubernetes、Vue / Nuxt 前端。" },
         { property: "og:title", content: "ZZ — ZhaoHou Lin" },
         { property: "og:description", content: "AI Application · Cloud Native · Web." },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: siteUrl },
+        { property: "og:image", content: `${siteUrl}og.png` },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: `${siteUrl}og.png` },
         { name: "theme-color", content: "#050505" },
       ],
       // 分頁圖示：體素閃電，和 hero 同一份點陣。svg 給支援的瀏覽器（sizes any 讓 Chrome 優先選它），ico 與 png 是退回，apple-touch-icon 給 iOS 加到主畫面。網址帶 ?v= 是為了讓瀏覽器重抓，換圖示時把數字加一
