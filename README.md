@@ -10,6 +10,8 @@
 npm install
 npm run dev        # http://localhost:3000
 npm run generate   # 產出靜態站到 .output/public（dist 是 Nuxt 產生的連結，指向同一處）
+# 本機模擬 GitHub Pages 的子路徑（Git Bash 要加 MSYS_NO_PATHCONV=1，否則 /ZZ/ 會被轉成 Windows 路徑）
+MSYS_NO_PATHCONV=1 NUXT_APP_BASE_URL=/ZZ/ npm run generate
 npm run preview
 ```
 

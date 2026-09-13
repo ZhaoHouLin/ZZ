@@ -6,6 +6,9 @@ const styleEntry = fileURLToPath(
   new URL("./app/assets/style.styl", import.meta.url)
 ).replace(/\\/g, "/")
 
+// GitHub Pages 部署在 /ZZ/ 底下時由 NUXT_APP_BASE_URL 覆寫；圖示網址帶了 ?v= 之後 Nuxt 不會自動補前綴，要自己接
+const base = process.env.NUXT_APP_BASE_URL || "/"
+
 export default defineNuxtConfig({
   compatibilityDate: "2026-09-12",
   devtools: { enabled: false },
@@ -35,10 +38,10 @@ export default defineNuxtConfig({
       ],
       // 分頁圖示：體素閃電，和 hero 同一份點陣。svg 給支援的瀏覽器（sizes any 讓 Chrome 優先選它），ico 與 png 是退回，apple-touch-icon 給 iOS 加到主畫面。網址帶 ?v= 是為了讓瀏覽器重抓，換圖示時把數字加一
       link: [
-        { rel: "icon", type: "image/svg+xml", href: "/favicon.svg?v=2", sizes: "any" },
-        { rel: "icon", type: "image/png", href: "/icon-32.png?v=2", sizes: "32x32" },
-        { rel: "alternate icon", type: "image/x-icon", href: "/favicon.ico?v=2" },
-        { rel: "apple-touch-icon", href: "/apple-touch-icon.png?v=2", sizes: "180x180" },
+        { rel: "icon", type: "image/svg+xml", href: `${base}favicon.svg?v=2`, sizes: "any" },
+        { rel: "icon", type: "image/png", href: `${base}icon-32.png?v=2`, sizes: "32x32" },
+        { rel: "alternate icon", type: "image/x-icon", href: `${base}favicon.ico?v=2` },
+        { rel: "apple-touch-icon", href: `${base}apple-touch-icon.png?v=2`, sizes: "180x180" },
       ],
     },
   },
