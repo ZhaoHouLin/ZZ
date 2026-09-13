@@ -1,1 +1,0 @@
-import{E as e,J as t,K as n,a as r}from"./CQ6SSW1J.js";import{u as i}from"./Bicr73Ak.js";import{a}from"#entry";var o={class:`redirect`},s={__name:`portfolio`,setup(s){let c=r().app.baseURL;return a({meta:[{"http-equiv":`refresh`,content:`0;url=${c}#github`}]}),n(()=>i(`/#github`,{replace:!0})),(n,r)=>(t(),e(`div`,o))}};export{s as default};
