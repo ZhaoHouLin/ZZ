@@ -1,15 +1,14 @@
 <script setup>
-// 回到最上面：捲過第一屏才出現，用 ScrollToPlugin 平滑捲回
+// 回到最上面：捲過第一屏之後一直顯示，用 ScrollToPlugin 平滑捲回
+// 每次捲動直接比較位置；用「區間進出」判斷的話，捲到最底碰到區間終點會被當成離開而消失
 const { gsap, ScrollTrigger } = useGsap()
 const show = ref(false)
 let trigger
 
 onMounted(() => {
-  trigger = ScrollTrigger.create({
-    start: () => window.innerHeight * 0.8,
-    end: "max",
-    onToggle: (self) => (show.value = self.isActive),
-  })
+  const check = () => (show.value = window.scrollY > window.innerHeight * 0.8)
+  trigger = ScrollTrigger.create({ start: 0, end: "max", onUpdate: check, onRefresh: check })
+  check()
 })
 
 onUnmounted(() => trigger?.kill())
@@ -22,8 +21,9 @@ const toTop = () => {
 
 <template lang="pug">
 button.to-top(type="button" :class="{ 'is-show': show }" @click="toTop" aria-label="回到最上面" :tabindex="show ? 0 : -1")
-  span.to-top-arrow ↑
-  span.to-top-label top
+  svg.to-top-arrow(viewBox="0 0 16 16" aria-hidden="true")
+    path(d="M8 13 V3 M3.5 7.5 L8 3 L12.5 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square")
+  span.to-top-label Top
 </template>
 
 <style lang="stylus" scoped>
@@ -34,13 +34,14 @@ button.to-top(type="button" :class="{ 'is-show': show }" @click="toTop" aria-lab
   z-index 9040
   flex(center,center,column)
   gap .2rem
-  size(3rem)
-  border 1px solid colorLine
-  font-family fontDigital
-  letter-spacing .1em
+  size(3.2rem)
+  border 1.5px solid colorSecondary
+  font-family fontDisplay
+  font-weight 900
+  letter-spacing .08em
   text-transform uppercase
-  color colorMuted
-  background-color colorPrimary
+  color colorPrimary
+  background-color colorSecondary
   opacity 0
   pointer-events none
   // 顯示隱藏只用 opacity：transform 留給磁吸用
@@ -48,16 +49,13 @@ button.to-top(type="button" :class="{ 'is-show': show }" @click="toTop" aria-lab
   &.is-show
     opacity 1
     pointer-events auto
-  &:hover
-    color colorPrimary
-    border-color colorSecondary
-    background-color colorSecondary
+  &:hover, &:focus-visible
+    color colorSecondary
+    background-color colorPrimary
   .to-top-arrow
-    font-family fontPixel
-    font-size 1.4rem
-    line-height 1
+    size(1rem)
   .to-top-label
-    font-size .7rem
+    font-size .8rem
     line-height 1
 
 @media (max-width: breakMobile)

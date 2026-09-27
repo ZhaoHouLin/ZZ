@@ -17,41 +17,70 @@ size(w=100%,h=w)
 
 outlineSpace = 1.4rem
 
+// 純黑白：只有這兩個顏色，灰階只用於次要文字與細線（docs/LOGO-REDESIGN.md Q8、Q10）
 colorPrimary = #050505
 colorSecondary = #f2f2f2
-colorAccent = #f5a623
-colorMuted = rgba(255,255,255,.45)
-colorLine = rgba(255,255,255,.16)
+colorMuted = #8c8c8c // 黑底上 5.9:1
+colorMutedOnPaper = #595959 // 白底上 6.5:1
+colorLine = #2a2a2a
+colorLineOnPaper = #c8c8c8
 
-fontPixel = 'Pixel', 'Courier New', monospace
-fontDigital = 'Digital', 'Courier New', monospace
+fontDisplay = 'Big Shoulders Display', 'Noto Sans TC', '微軟正黑體', 'Microsoft JhengHei', sans-serif // 展示字只有拉丁字母，中文要退回有粗體的正黑體，否則會掉到系統的細體
+fontMono = 'Martian Mono', ui-monospace, Consolas, monospace // 只用於編號、規格、日期
 fontBody = 'Noto Sans TC', '微軟正黑體', 'Microsoft JhengHei', system-ui, sans-serif
 
 breakMobile = 768px
 
-// 一頁式各區塊共用的標題列：編號 + 像素字標題 + 靠右的數量
+// 標籤牌：白底黑字，左側一個釘孔。全站的標記都用它（區塊編號、EXT 3030、聯絡、索引）
+labelPlate(fs=1.4rem)
+  position relative
+  display inline-flex
+  align-items center
+  gap .5em
+  padding .28em .6em .22em 1.3em
+  background-color colorSecondary
+  color colorPrimary
+  font-family fontDisplay
+  font-weight 900
+  font-size fs
+  line-height 1
+  letter-spacing .06em
+  text-transform uppercase
+  font-variant-numeric tabular-nums
+  &::before
+    content ''
+    position absolute
+    left .5em
+    top 50%
+    size(.32em)
+    margin-top -.16em
+    border-radius 50%
+    background-color colorPrimary
+
+// 區塊標題列：編號牌 + 模版粗體標題，底下一條細線
 sectionHead()
   display flex
   justify-content flex-start
-  align-items baseline
-  gap 1rem
-  margin-bottom 2rem
-  padding-bottom 1rem
+  align-items center
+  gap 1.2rem
+  margin-bottom 3rem
+  padding-bottom 1.2rem
   border-bottom 1px solid colorLine
-  .sec-idx, .sec-count
-    font-family fontDigital
-    font-size 1.2rem
   .sec-idx
-    color colorAccent
+    labelPlate(1.5rem)
+  h2
+    font-family fontDisplay
+    font-size clamp(2.6rem, 5vw, 4rem)
+    font-weight 900
+    line-height 1
+    letter-spacing .04em
+    text-transform uppercase
   .sec-count
     margin-left auto
+    font-family fontMono
+    font-size .85rem
     color colorMuted
-  h2
-    font-family fontPixel
-    font-size 2.6rem
-    line-height 1
-    font-weight 400
-    text-transform uppercase
+    font-variant-numeric tabular-nums
 
 // 注意：flex() 是 mixin，元件裡不能寫 `flex 1` 這種 shorthand（會被當成呼叫），要用 flex-grow / flex-basis
 // 同理 min() / max() 也是 Stylus 內建函式，要保留給瀏覽器算的話用 unquote("min(...)")

@@ -1,18 +1,17 @@
 <script setup>
+// 02 Resume：一張檢驗表，最左一欄是模版字的大年份（docs/LOGO-REDESIGN.md 整頁構圖 02）
 const { gsap } = useGsap()
 
 const groups = [
   {
-    title: "工作經歷",
     en: "Work",
     items: [
       { period: "2026-04 ~ 仍在職", org: "藍新資訊股份有限公司", role: "智能應用發展部", desc: "AI 應用研究與落地" },
-      { period: "2019-01 ~ 2026-03", org: "藍新資訊股份有限公司", role: "專案工程師", desc: "疾病管制署駐點電腦相關維護" },
+      { period: "2019-01 ~ 2026-03", org: "藍新資訊股份有限公司", role: "專案工程師", desc: "疾病管制署駐點電腦相關維護；2022 年中離開約三個月（文境資科）後回任" },
       { period: "2022-05 ~ 2022-08", org: "文境資科股份有限公司", role: "前端工程師", desc: "前端頁面切版、與後端 API 介接" },
     ],
   },
   {
-    title: "學習經歷",
     en: "Education",
     items: [
       { period: "2018-08", org: "Alpha Camp", role: "學期一、二", desc: "" },
@@ -20,7 +19,6 @@ const groups = [
     ],
   },
   {
-    title: "證照",
     en: "Certification",
     items: [
       { period: "2025-11", org: "CKA", role: "Certified Kubernetes Administrator", desc: "" },
@@ -28,25 +26,20 @@ const groups = [
     ],
   },
 ]
+// 年份欄：取期間開頭的四位數；沒有年份（準備中）就放橫線
+const yearOf = (p) => (/^\d{4}/.test(p) ? p.slice(0, 4) : "––––")
 
 const root = ref(null)
 let ctx
 
 onMounted(() => {
   ctx = gsap.context(() => {
-    gsap.utils.toArray(".resume-group").forEach((group) => {
-      gsap.from(group.querySelector(".resume-rail"), {
-        scaleY: 0,
-        ease: "none",
-        scrollTrigger: { trigger: group, start: "top 80%", end: "bottom 60%", scrub: true },
-      })
-      gsap.from(group.querySelectorAll(".resume-head, .resume-item"), {
-        opacity: 0,
-        y: 40,
-        duration: 0.9,
-        stagger: 0.15,
+    gsap.utils.toArray(".rs-row").forEach((row) => {
+      gsap.from(row, {
+        clipPath: "inset(0 0 100% 0)",
+        duration: 0.7,
         ease: "expo.out",
-        scrollTrigger: { trigger: group, start: "top 78%" },
+        scrollTrigger: { trigger: row, start: "top 90%" },
       })
     })
   }, root.value)
@@ -56,116 +49,97 @@ onUnmounted(() => ctx?.revert())
 </script>
 
 <template lang="pug">
-section.resume#resume(ref="root" data-glyph="resume")
-  SectionBg(idx="02" variant="lines")
+section.resume#resume(ref="root")
   .sec-head
     span.sec-idx 02
     h2 Resume
-  .resume-group(v-for="g in groups" :key="g.en")
-    .resume-rail
-    .resume-head
-      h2 {{ g.title }}
-      span.resume-en {{ g.en }}
-    .resume-list
-      article.resume-item(v-for="it in g.items" :key="it.org" data-hover)
-        .resume-period {{ it.period }}
-        .resume-main
-          h3 {{ it.org }}
-          h4 {{ it.role }}
-          p(v-if="it.desc") {{ it.desc }}
+  .rs-group(v-for="g in groups" :key="g.en")
+    h3.rs-label {{ g.en }}
+    ol.rs-table
+      li.rs-row(v-for="it in g.items" :key="it.org + it.period" data-hover)
+        span.rs-year {{ yearOf(it.period) }}
+        span.rs-org
+          strong.resume-main {{ it.org }}
+          span.rs-period {{ it.period }}
+        span.rs-role {{ it.role }}
+        span.rs-desc {{ it.desc }}
 </template>
 
 <style lang="stylus" scoped>
 .resume
-  max-width 60rem
+  max-width 78rem
   margin 0 auto
-  padding 0 outlineSpace 8rem
+  padding 6rem outlineSpace 9rem
 
 .sec-head
   sectionHead()
-  margin-left 2.5rem // 和下方內容對齊（內容留了 2.5rem 給左側的軌）
 
-.resume-group
-  position relative
-  padding-left 2.5rem
-  margin-bottom 5rem
+.rs-group
+  margin-bottom 3.5rem
 
-.resume-rail
-  position absolute
-  left 0
-  top .5rem
-  bottom 0
-  width 1px
-  background-color colorSecondary
-  transform-origin top
+.rs-label
+  labelPlate(1.15rem)
+  margin-bottom 1rem
 
-.resume-head
-  flex(flex-start,baseline)
-  gap 1rem
-  margin-bottom 2rem
-  h2
-    font-size 2rem
-    font-weight 700
-    letter-spacing .2em
-  .resume-en
-    font-family fontPixel
-    font-size 1.8rem
-    color colorMuted
-    text-transform uppercase
-
-.resume-list
-  flex(flex-start,stretch,column)
-
-.resume-item
-  display grid
-  grid-template-columns 12rem 1fr
-  gap 2rem
-  padding 1.6rem 1rem
+.rs-table
+  list-style none
   border-top 1px solid colorLine
-  transition background-color .4s ease, padding-left .4s cubic-bezier(.76,0,.24,1)
-  &:last-child
-    border-bottom 1px solid colorLine
+
+.rs-row
+  display grid
+  grid-template-columns 8rem minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1.2fr)
+  gap 1.5rem
+  align-items center
+  padding 1.1rem .8rem
+  border-bottom 1px solid colorLine
+  transition background-color .25s ease, color .25s ease
   &:hover
-    background-color rgba(255,255,255,.04)
-    padding-left 1.6rem
-    .resume-period
-      color colorAccent
-      animation ledFlicker .5s steps(1) 1 // LED 通電閃一下
+    background-color colorSecondary
+    color colorPrimary
+    .rs-period, .rs-desc
+      color colorMutedOnPaper
 
-@keyframes ledFlicker
-  0%, 20%, 45%
-    opacity 0
-  10%, 30%, 100%
-    opacity 1
+.rs-year
+  font-family fontDisplay
+  font-weight 900
+  font-size 3rem
+  line-height 1
+  font-variant-numeric tabular-nums
 
-.resume-period
-  font-family fontDigital
-  font-size 1.1rem
-  letter-spacing .05em
-  color colorMuted
-  transition color .3s
-
-.resume-main
-  h3
-    font-size 1.3rem
+.rs-org
+  display grid
+  gap .2rem
+  strong
+    font-size 1.25rem
     font-weight 900
-    letter-spacing .05em
-  h4
-    margin-top .3rem
-    font-size 1rem
-    font-weight 700
+    letter-spacing .04em
+  .rs-period
+    font-family fontMono
+    font-size .72rem
+    letter-spacing .08em
     color colorMuted
-  p
-    margin-top .8rem
-    line-height 1.7
-    color rgba(255,255,255,.75)
+    font-variant-numeric tabular-nums
+
+.rs-role
+  font-weight 700
+
+.rs-desc
+  color colorMuted
+  line-height 1.6
 
 @media (max-width: breakMobile)
-  .sec-head
-    margin-left 1.4rem
-  .resume-group
-    padding-left 1.4rem
-  .resume-item
-    grid-template-columns 1fr
-    gap .6rem
+  .resume
+    padding-block 4rem 6rem
+  .rs-row
+    grid-template-columns 5rem minmax(0, 1fr)
+    gap .3rem 1rem
+    align-items start
+    padding .9rem .4rem
+  .rs-year
+    font-size 2.2rem
+    grid-row span 3
+  .rs-role, .rs-desc
+    grid-column 2
+  .rs-desc:empty
+    display none
 </style>

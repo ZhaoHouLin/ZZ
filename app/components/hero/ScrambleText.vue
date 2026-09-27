@@ -67,6 +67,6 @@ span.scramble(v-html="text")
 
 <style lang="stylus">
 .scramble .dud
-  color colorAccent
+  color colorMutedOnPaper
   opacity .8
 </style>

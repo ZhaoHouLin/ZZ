@@ -1,215 +1,255 @@
 <script setup>
-const { gsap, ScrollTrigger } = useGsap()
+// 01 About：左邊一張工作證，右邊自介全文與四塊做事方式標語牌（docs/LOGO-REDESIGN.md 整頁構圖 01）
+const { gsap } = useGsap()
 
 const intro =
   "林炤后（ZhaoHou Lin），綽號 ZZ。2019 年起任職於藍新資訊，前七年駐點疾病管制署，負責系統維運與前端開發；2026 年 4 月轉入智能應用發展部，研究 AI 應用如何落地成企業可部署的系統。持有 CKA，自建 Kubernetes 與 GitLab CI/CD 環境，把 Nuxt 3 系統從開發一路部署到正式環境。平時研究 3C 產品、玩玩線上遊戲，偶而與朋友爬山⋯"
 const chars = Array.from(intro)
 
-// 做事的方式（整理自個人背景筆記）
+// 做事的方式：短句是標語牌上的大字，長句是說明
 const principles = [
-  { k: "WHY", v: "看到不合理的地方就問為什麼，不接受「大概是這樣」。" },
-  { k: "BUILD", v: "從概念、YAML、部署、看 log、修正，一路做到 production-like。" },
-  { k: "ITERATE", v: "邊做邊問：先做一小塊，遇到錯誤回頭補概念，再往下。" },
-  { k: "SHIP", v: "要的是可以直接拿去用的成果：完整程式、可執行的步驟、能複習的文件。" },
+  { k: "WHY", s: "問到底", v: "看到不合理的地方就問為什麼，不接受「大概是這樣」。" },
+  { k: "BUILD", s: "做到上線", v: "從概念、YAML、部署、看 log、修正，一路做到 production-like。" },
+  { k: "ITERATE", s: "邊做邊補", v: "先做一小塊，遇到錯誤回頭補概念，再往下。" },
+  { k: "SHIP", s: "給能用的", v: "完整程式、可執行的步驟、能複習的文件。" },
 ]
+const tags = ["AI Application", "Kubernetes", "CKA", "DevOps", "LLM / RAG", "Nuxt"]
 
 const avatarSrc = `${useRuntimeConfig().app.baseURL}avatar.jpg` // 綁定而非靜態 src（靜態路徑會被當成 import）；要帶 baseURL，GitHub Pages 部署在 /ZZ/ 底下
-const avatarBroken = ref(false) // 檔案不存在時顯示占位
-
-const tags = ["AI APPLICATION", "KUBERNETES", "CKA", "DEVOPS", "LLM / RAG", "VUE 3", "NUXT", "GSAP"]
-const marquee = [...tags, ...tags]
+const avatarBroken = ref(false)
 
 const root = ref(null)
 let ctx
-let stopMarquee = () => {}
-
-// 跑馬燈改用 GSAP 推：捲動越快跑越快並傾斜，停下來回正；離開視窗就暫停
-const startMarquee = () => {
-  const tracks = Array.from(root.value.querySelectorAll(".marquee-track"))
-  const loops = tracks.map((t, i) => gsap.fromTo(t, { xPercent: i ? -50 : 0 }, { xPercent: i ? 0 : -50, duration: 40, ease: "none", repeat: -1 }))
-  const skews = tracks.map((t) => gsap.quickTo(t, "skewX", { duration: 0.4, ease: "power3" }))
-  let speed = 1
-  let skew = 0
-  const st = ScrollTrigger.create({
-    onUpdate: (self) => {
-      const v = gsap.utils.clamp(-3000, 3000, self.getVelocity())
-      speed = 1 + Math.abs(v) / 400
-      skew = gsap.utils.clamp(-15, 15, v / 150)
-    },
-  })
-  const tick = () => {
-    speed += (1 - speed) * 0.08
-    skew *= 0.88
-    loops.forEach((l) => l.timeScale(speed))
-    skews.forEach((q) => q(skew))
-  }
-  const io = new IntersectionObserver(([e]) => {
-    if (e.isIntersecting) {
-      loops.forEach((l) => l.play())
-      gsap.ticker.add(tick)
-    } else {
-      loops.forEach((l) => l.pause())
-      gsap.ticker.remove(tick)
-    }
-  })
-  io.observe(root.value.querySelector(".marquee"))
-  return () => {
-    io.disconnect()
-    st.kill()
-    gsap.ticker.remove(tick)
-    loops.forEach((l) => l.kill())
-  }
-}
 
 onMounted(() => {
-  stopMarquee = startMarquee()
-  const img = root.value.querySelector(".intro-avatar img")
+  const img = root.value.querySelector(".badge-photo img")
   if (img?.complete && img.naturalWidth === 0) avatarBroken.value = true
 
   ctx = gsap.context(() => {
-    // 逐字隨捲動點亮（取代舊站 TextPlugin 打字機）
-    // 只動 opacity：color 是字串 tween，120 個 span 每個捲動幀都要重組字串
+    // 工作證像被夾上去：從上方掉下來，輕輕晃一下停住
+    gsap.from(".badge", {
+      yPercent: -18,
+      rotation: -4,
+      opacity: 0,
+      duration: 1.1,
+      ease: "back.out(1.6)",
+      scrollTrigger: { trigger: ".badge", start: "top 85%" },
+    })
+    // 逐字隨捲動點亮
     gsap.to(".intro-char", {
       opacity: 1,
       stagger: 0.02,
       ease: "none",
-      scrollTrigger: { trigger: ".intro-text", start: "top 75%", end: "bottom 40%", scrub: 0.6 },
+      scrollTrigger: { trigger: ".intro-text", start: "top 75%", end: "bottom 45%", scrub: 0.6 },
+    })
+    gsap.from(".rule", {
+      clipPath: "inset(0 100% 0 0)",
+      duration: 0.8,
+      stagger: 0.1,
+      ease: "expo.out",
+      scrollTrigger: { trigger: ".rules", start: "top 85%" },
     })
   }, root.value)
 })
 
-onUnmounted(() => {
-  stopMarquee()
-  ctx?.revert()
-})
+onUnmounted(() => ctx?.revert())
 </script>
 
 <template lang="pug">
-section.intro#about(ref="root" data-glyph="about")
-  SectionBg(idx="01" variant="dots")
-  .marquee(aria-hidden="true")
-    .marquee-track.is-outline
-      span(v-for="(t, i) in marquee" :key="'a' + i") {{ t }}
-    .marquee-track.is-reverse
-      span(v-for="(t, i) in marquee" :key="'b' + i") {{ t }}
-  .intro-body
-    .sec-head
-      span.sec-idx 01
-      h2 About
-    .intro-grid
-      figure.intro-avatar(:class="{ 'is-broken': avatarBroken }")
-        img(:src="avatarSrc" alt="ZhaoHou Lin" loading="lazy" @error="avatarBroken = true")
-        .intro-avatar-fallback ZZ
+section.intro#about(ref="root")
+  .sec-head
+    span.sec-idx 01
+    h2 About
+  .intro-grid
+    article.badge(aria-label="工作證")
+      .badge-clip(aria-hidden="true")
+      figure.badge-photo(:class="{ 'is-broken': avatarBroken }")
+        img(:src="avatarSrc" alt="林炤后" loading="lazy" @error="avatarBroken = true")
+        span.badge-fallback ZZ
+      .badge-name
+        strong 林炤后
+        span ZZ
+      p.badge-dept 智能應用發展部
+      dl.badge-fields
+        div
+          dt EXT
+          dd 3030
+        div
+          dt CKA
+          dd 2025-11
+      ul.badge-tags
+        li(v-for="t in tags" :key="t") {{ t }}
+    .intro-body
       p.intro-text
         span.intro-char(v-for="(c, i) in chars" :key="i") {{ c }}
-    ul.intro-principles
-      li(v-for="p in principles" :key="p.k")
-        span.intro-principle-k {{ p.k }}
-        span {{ p.v }}
+      ul.rules
+        li.rule(v-for="p in principles" :key="p.k")
+          span.rule-k {{ p.k }}
+          strong.rule-s {{ p.s }}
+          span.rule-v {{ p.v }}
 </template>
 
 <style lang="stylus" scoped>
 .intro
-  position relative
-  padding 4rem 0 8rem
+  max-width 78rem
+  margin 0 auto
+  padding 9rem outlineSpace 9rem
 
-.marquee
-  overflow hidden
-  border-top 1px solid colorLine
-  border-bottom 1px solid colorLine
-  padding 1rem 0
-
-.marquee-track
-  display flex
-  gap 3rem
-  width max-content
-  font-family fontPixel
-  font-size clamp(3rem, 8vw, 6rem)
-  line-height 1
-  white-space nowrap
-  will-change transform
-  span::after
-    content '·'
-    margin-left 3rem
-    color colorAccent
-  &.is-outline
-    color transparent
-    -webkit-text-stroke 1px colorSecondary
-  &.is-reverse
-    margin-top .5rem
-
-.intro-body
-  max-width 70rem
-  margin 6rem auto 0
-  padding 0 outlineSpace
-
-// 和其他區塊共用同一套標題列，比例才一致
 .sec-head
   sectionHead()
 
 .intro-grid
   display grid
-  grid-template-columns 14rem 1fr
-  gap 3rem
+  grid-template-columns 24rem 1fr
+  gap 4rem
   align-items start
 
-.intro-avatar
+// 工作證
+.badge
+  position relative
+  background-color colorSecondary
+  color colorPrimary
+  padding 2.6rem 1.8rem 1.8rem
+  display grid
+  gap 1rem
+  box-shadow 0 1.6rem 3rem -1rem rgba(0, 0, 0, .7)
+  .badge-clip
+    pos(50%, .9rem)
+    transform translateX(-50%)
+    size(4.6rem, .8rem)
+    border-radius .4rem
+    background-color colorPrimary
+
+.badge-photo
   position relative
   aspect-ratio 1
-  border 1px solid colorLine
-  background-color #0d0d0d
   overflow hidden
+  background-color #d9d9d9
   img
     size()
     object-fit cover
     display block
   &.is-broken img
     display none
-  .intro-avatar-fallback
+  .badge-fallback
     pos()
-    transform translate(-50%,-50%)
-    font-family fontPixel
-    font-size 4rem
-    color rgba(255,255,255,.12)
+    transform translate(-50%, -50%)
+    font-family fontDisplay
+    font-weight 900
+    font-size 5rem
+    color #b5b5b5
+  &:not(.is-broken) .badge-fallback
+    display none
 
-.intro-principles
+.badge-name
+  display flex
+  align-items baseline
+  gap .8rem
+  strong
+    font-size 2.2rem
+    font-weight 900
+    letter-spacing .06em
+  span
+    font-family fontDisplay
+    font-weight 900
+    font-size 1.8rem
+
+.badge-dept
+  font-weight 700
+  padding-bottom .8rem
+  border-bottom 2px solid colorPrimary
+
+.badge-fields
+  display flex
+  flex-wrap wrap // 手機上工作證較窄，EXT 與 CKA 兩欄會換行
+  gap .3rem 2rem
+  div
+    display flex
+    align-items baseline
+    gap .5rem
+  dt
+    font-family fontMono
+    font-size .72rem
+    letter-spacing .14em
+    color colorMutedOnPaper
+  dd
+    font-family fontDisplay
+    font-weight 900
+    font-size 1.9rem
+    font-variant-numeric tabular-nums
+
+.badge-tags
   list-style none
-  margin-top 3rem
-  display grid
-  grid-template-columns repeat(auto-fill, minmax(16rem, 1fr))
-  gap 1px
-  background-color colorLine
-  border 1px solid colorLine
+  display flex
+  flex-wrap wrap
+  gap .4rem
   li
-    padding 1.4rem
-    background-color colorPrimary
-    line-height 1.6
-    color rgba(255,255,255,.8)
-  .intro-principle-k
-    display block
-    margin-bottom .4rem
-    font-family fontPixel
-    font-size 1.6rem
-    line-height 1
-    color colorSecondary
+    padding .2rem .5rem
+    border 1px solid colorPrimary
+    font-family fontMono
+    font-size .66rem
+    letter-spacing .06em
+    text-transform uppercase
 
+// 自介
 .intro-text
-  font-size clamp(1.3rem, 2.4vw, 2rem)
+  font-size clamp(1.2rem, 2vw, 1.55rem)
   line-height 1.9
-  letter-spacing .08em
-  text-indent 2em
+  letter-spacing .04em
   font-weight 500
+  max-width 36em
   .intro-char
-    opacity .12
+    opacity .18
+
+// 做事方式：和履歷同一種細線表格，標籤牌是每列的第一欄（不用卡片）
+.rules
+  list-style none
+  margin-top 3.5rem
+  border-top 1px solid colorLine
+
+.rule
+  display grid
+  grid-template-columns 8.5rem 9rem minmax(0, 1fr)
+  gap 1.2rem
+  align-items center
+  padding 1rem 0
+  border-bottom 1px solid colorLine
+  .rule-k
+    labelPlate(1.05rem)
+    justify-self start
+  .rule-s
+    font-size 1.3rem
+    font-weight 900
+    letter-spacing .06em
+  .rule-v
+    color #bdbdbd
+    line-height 1.7
+
+@media (max-width: 960px)
+  // 欄寬要有下限 0，否則工作證與自介的內容會把欄撐寬、整頁出現橫向捲動
+  .intro-grid
+    grid-template-columns minmax(0, 1fr)
+    gap 3rem
+  .badge
+    max-width unquote("min(26rem, 100%)")
 
 @media (max-width: breakMobile)
   .intro
-    padding 2rem 0 5rem
-  .intro-grid
-    grid-template-columns 1fr
-    gap 1.5rem
-  .intro-avatar
-    width 10rem
-  .intro-body
-    margin-top 4rem
+    padding-block 6rem
+  .badge
+    grid-template-columns 7.5rem minmax(0, 1fr)
+    column-gap 1.2rem
+    padding 2.4rem 1.2rem 1.2rem
+    .badge-photo
+      grid-row span 4
+    .badge-tags
+      grid-column 1 / -1
+  .badge-name strong
+    font-size 1.7rem
+  .rule
+    grid-template-columns 6.5rem minmax(0, 1fr)
+    gap .3rem 1rem
+    .rule-v
+      grid-column 2
+      font-size .88rem
 </style>

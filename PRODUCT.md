@@ -30,8 +30,8 @@ AI Application × Cloud Native × Web 的交叉：不是單純的前端、也不
 
 ## Capabilities and Constraints
 
-- Nuxt 4 + GSAP + Three.js，JavaScript（不用 TypeScript），pug + stylus，一頁式靜態預渲染。
-- 效能護欄是硬性約束（README「效能護欄」）：同一時間只有一個 WebGL 迴圈、不用 mix-blend-mode / backdrop-filter / 整頁 filter、背景動態只用 transform / opacity。
+- Nuxt 4 + GSAP，JavaScript（不用 TypeScript），pug + stylus，一頁式靜態預渲染。
+- 效能護欄是硬性約束（README「效能護欄」）：不載入 WebGL、不用 mix-blend-mode / backdrop-filter / 整頁 filter、背景動態只用 transform / opacity。
 - 靜態資源路徑必須帶 baseURL；Stylus 的 `flex 1` 與 `min()` / `max()` 有坑（見 `app/assets/style.styl`）。
 - 語言：繁體中文為主，英文作為標題、標籤與點綴。沒有雙語切換的需求。
 
@@ -39,12 +39,13 @@ AI Application × Cloud Native × Web 的交叉：不是單純的前端、也不
 
 每個識別元素都有來歷，動之前先問：
 
-- **ZZ**：綽號縮寫。以**體素閃電**為 logo，閃電鋸齒正面讀作上下疊的 ZZ（點陣定義在 `app/components/hero/VoxelZZ.vue`，favicon 與 og.png 由同一份點陣產生）。
-- **3030**：以前工作的分機號碼，放在 hero 的 LED 面板。**不是** 100 Days CSS 的 100。
+- **ZZ**：綽號縮寫。logo 是兩個 Z 上下相疊、共用中橫、一筆到底，斜筆連成一道閃電（`app/components/hero/ZzMark.vue`；favicon 與 og.png 用同一條路徑）。2026-09-27 起取代舊的體素閃電，決策見 docs/LOGO-REDESIGN.md。
+- **3030**：以前工作的分機號碼，放在 hero 右上的 EXT 3030 標籤牌，也在 About 的工作證上。**不是** 100 Days CSS 的 100。
 - **我命由我不由天**：2025 年考完 CKA 後的體會。
 - **走路要找難路走，挑擔要揀重擔挑**：2019 年爬山時的體會（目前在程式碼中註解保留）。
 - **山**：個人照片 `public/mountain.jpg`，爬山是真實的興趣與體會來源。
 - 使用者喜歡的參考網站：<https://trionn.com/>。
+- **全站純黑白**：#050505 與 #f2f2f2，沒有第三個顏色（2026-09-27 決定，琥珀退場）。照片保留彩色。
 
 ## Evidence on Hand
 

@@ -66,13 +66,21 @@ Teleport(to="body")
         a.pen-link(:href="penUrl" target="_blank" rel="noopener" title="Open on CodePen")
           svg(viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round")
             path(d="M12 2 22 8.5v7L12 22 2 15.5v-7L12 2zM12 22v-6.5M22 8.5l-10 7-10-7M2 15.5l10-7 10 7M12 2v6.5")
-        button.pen-close(type="button" @click="close" aria-label="close") ×
+        button.pen-close(type="button" @click="close" aria-label="關閉")
+          svg(viewBox="0 0 16 16" aria-hidden="true")
+            path(d="M3.5 3.5 L12.5 12.5 M12.5 3.5 L3.5 12.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square")
       .pen-frame
         iframe(v-if="pen" :key="pen.src" :src="pen.src" :title="pen.title" loading="lazy" allowfullscreen allowtransparency="true" frameborder="0")
       footer.pen-foot
-        button.pen-nav(type="button" @click="step(-1)") ← prev
+        button.pen-nav(type="button" @click="step(-1)" aria-label="上一個")
+          svg(viewBox="0 0 16 16" aria-hidden="true")
+            path(d="M13 8 H3 M7.5 3.5 L3 8 L7.5 12.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square")
+          | Prev
         span.pen-count {{ pad(index + 1) }} / {{ pad(pens.length) }}
-        button.pen-nav(type="button" @click="step(1)") next →
+        button.pen-nav(type="button" @click="step(1)" aria-label="下一個")
+          | Next
+          svg(viewBox="0 0 16 16" aria-hidden="true")
+            path(d="M3 8 H13 M8.5 3.5 L13 8 L8.5 12.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square")
 </template>
 
 <style lang="stylus" scoped>
@@ -97,9 +105,9 @@ Teleport(to="body")
   padding 1rem 1.2rem
   border-bottom 1px solid colorLine
   .pen-idx
-    font-family fontDigital
+    font-family fontMono
     font-size 1.3rem
-    color colorAccent
+    color colorSecondary
   .pen-title
     // 不能寫 flex 1：style.styl 有同名的 flex() mixin，會被當成呼叫，輸出 display:flex 而不是 flex:1
     flex-grow 1
@@ -118,12 +126,15 @@ Teleport(to="body")
     &:hover
       color colorSecondary
   .pen-close
-    font-size 2rem
-    line-height 1
+    display grid
+    place-items center
+    size(2rem)
     color colorMuted
+    svg
+      size(1.1rem)
     transition color .3s, transform .3s
     &:hover
-      color colorAccent
+      color colorSecondary
       transform rotate(90deg)
 
 .pen-frame
@@ -137,11 +148,16 @@ Teleport(to="body")
   flex(space-between,center)
   padding .8rem 1.2rem
   border-top 1px solid colorLine
-  font-family fontDigital
+  font-family fontMono
   font-size 1.1rem
   letter-spacing .1em
   color colorMuted
   .pen-nav
+    display inline-flex
+    align-items center
+    gap .5rem
+    svg
+      size(1rem)
     transition color .3s
     &:hover
       color colorSecondary

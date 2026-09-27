@@ -45,12 +45,12 @@ export default defineNuxtConfig({
         { name: "twitter:image", content: `${siteUrl}og.png` },
         { name: "theme-color", content: "#050505" },
       ],
-      // 分頁圖示：體素閃電，和 hero 同一份點陣。svg 給支援的瀏覽器（sizes any 讓 Chrome 優先選它），ico 與 png 是退回，apple-touch-icon 給 iOS 加到主畫面。網址帶 ?v= 是為了讓瀏覽器重抓，換圖示時把數字加一
+      // 分頁圖示：ZZ logo（H1，一筆到底的兩個 Z），小尺寸版筆畫加粗。svg 給支援的瀏覽器（sizes any 讓 Chrome 優先選它），ico 與 png 是退回，apple-touch-icon 給 iOS 加到主畫面。網址帶 ?v= 是為了讓瀏覽器重抓，換圖示時把數字加一
       link: [
-        { rel: "icon", type: "image/svg+xml", href: `${base}favicon.svg?v=2`, sizes: "any" },
-        { rel: "icon", type: "image/png", href: `${base}icon-32.png?v=2`, sizes: "32x32" },
-        { rel: "alternate icon", type: "image/x-icon", href: `${base}favicon.ico?v=2` },
-        { rel: "apple-touch-icon", href: `${base}apple-touch-icon.png?v=2`, sizes: "180x180" },
+        { rel: "icon", type: "image/svg+xml", href: `${base}favicon.svg?v=3`, sizes: "any" },
+        { rel: "icon", type: "image/png", href: `${base}icon-32.png?v=3`, sizes: "32x32" },
+        { rel: "alternate icon", type: "image/x-icon", href: `${base}favicon.ico?v=3` },
+        { rel: "apple-touch-icon", href: `${base}apple-touch-icon.png?v=3`, sizes: "180x180" },
       ],
     },
   },

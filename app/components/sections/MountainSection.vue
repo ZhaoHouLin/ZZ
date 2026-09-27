@@ -1,5 +1,6 @@
 <script setup>
-// 原 Favorite 頁的滿版開場：山脊線 + 對聯。一頁式後改為捲到時才進場
+// 05 山：照片滿版（保留彩色），「我命由我不由天」直書，白色光帶由上往下掃過（docs/LOGO-REDESIGN.md 整頁構圖 05）
+// 舊的對聯「走路要找難路走，挑擔要揀重擔挑」是 2019 年爬山的體會，使用者目前選擇不顯示
 const { gsap } = useGsap()
 const root = ref(null)
 const photoSrc = `${useRuntimeConfig().app.baseURL}mountain.jpg` // 綁定而非靜態 src；要帶 baseURL，GitHub Pages 部署在 /ZZ/ 底下
@@ -8,36 +9,15 @@ let ctx
 onMounted(() => {
   ctx = gsap.context(() => {
     gsap
-      .timeline({
-        defaults: { ease: "expo.out" },
-        scrollTrigger: { trigger: root.value, start: "top 60%" },
-      })
-      .from(".couplet h2", {
-        yPercent: 30,
-        opacity: 0,
-        duration: 1.4,
-        stagger: 0.2,
-      })
-      .from(
-        ".mtn-kicker, .mtn-note",
-        { opacity: 0, x: -20, duration: 0.8, stagger: 0.1 },
-        "-=0.8",
-      )
+      .timeline({ defaults: { ease: "expo.out" }, scrollTrigger: { trigger: root.value, start: "top 60%" } })
+      .from(".mtn-motto", { yPercent: 20, opacity: 0, duration: 1.4 })
+      .from(".mtn-note", { yPercent: 100, opacity: 0, duration: 0.8 }, "-=0.8")
 
-    // 背景照片捲動視差：照片放大 1.2 倍，跟著捲動上移，只動 transform
+    // 照片放大 1.2 倍跟著捲動上移，只動 transform
     gsap.fromTo(
       ".mtn-photo",
       { yPercent: -8 },
-      {
-        yPercent: 8,
-        ease: "none",
-        scrollTrigger: {
-          trigger: root.value,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
-      },
+      { yPercent: 8, ease: "none", scrollTrigger: { trigger: root.value, start: "top bottom", end: "bottom top", scrub: true } }
     )
   }, root.value)
 })
@@ -47,29 +27,23 @@ onUnmounted(() => ctx?.revert())
 
 <template lang="pug">
 section.mountain#mountain(ref="root")
-  img.mtn-photo(:src="photoSrc" alt="" loading="lazy" aria-hidden="true")
-  .mtn-shade
-  ClientOnly
-    RidgeLines
-  .mtn-kicker
-    span.mtn-idx 06
-    span 山 / Mountain
-  .couplet
-    h2 我命由我不由天
-    //- h2 走路要找難路走
-    //- h2 挑擔要揀重擔挑
-  .mtn-note 2025 · 考照時的體會
+  img.mtn-photo(:src="photoSrc" alt="站在山頂岩石上眺望整片綠色山谷的林炤后" loading="lazy")
+  .mtn-shade(aria-hidden="true")
+  .mtn-head
+    span.sec-idx 05
+    h2 Mountain
+  h2.mtn-motto 我命由我不由天
+  p.mtn-note 2025 · 考照時的體會
 </template>
 
 <style lang="stylus" scoped>
 .mountain
   position relative
-  size(100%,100vh)
-  min-height 600px
+  height unquote("max(100vh, 600px)")
   overflow hidden
-  flex()
+  display grid
+  place-items center
 
-// 背景照片：放大留視差空間；上方壓暗讓對聯可讀，上下緣漸黑接回頁面底色
 .mtn-photo
   position absolute
   inset 0
@@ -78,72 +52,59 @@ section.mountain#mountain(ref="root")
   object-position center 40%
   transform scale(1.2)
   will-change transform
-  pointer-events none
 
+// 上下緣接回黑底，中段壓暗讓直書字可讀
 .mtn-shade
   position absolute
   inset 0
-  pointer-events none
-  background linear-gradient(180deg, colorPrimary 0%, rgba(5,5,5,.55) 25%, rgba(5,5,5,.55) 70%, colorPrimary 100%)
+  background linear-gradient(180deg, colorPrimary 0%, rgba(5, 5, 5, .5) 22%, rgba(5, 5, 5, .5) 75%, colorPrimary 100%)
 
-.mtn-kicker
-  position absolute
-  top 8rem
-  left outlineSpace
-  flex(flex-start,baseline)
-  gap 1rem
-  font-family fontDigital
-  font-size 1.2rem
-  letter-spacing .2em
-  color colorMuted
-  .mtn-idx
-    color colorAccent
-
-.mtn-note
-  position absolute
-  bottom outlineSpace + 2rem
-  right outlineSpace
-  font-family fontDigital
-  font-size 1rem
-  letter-spacing .2em
-  color colorMuted
-
-.couplet
-  position relative
-  flex(center,flex-start,row-reverse)
-  gap 3rem
+.mtn-head
+  pos(outlineSpace, 6rem)
+  display flex
+  align-items center
+  gap 1.2rem
+  .sec-idx
+    labelPlate(1.5rem)
   h2
-    writing-mode vertical-lr
-    font-size clamp(1.8rem, 5vh, 3.4rem)
+    font-family fontDisplay
+    font-size clamp(2.6rem, 5vw, 4rem)
     font-weight 900
-    letter-spacing .45em
     line-height 1
-    // 琥珀光帶沿著直書的字由上往下循環掃過：漸層放大成三倍高，動 background-position
-    background-image linear-gradient(180deg, colorSecondary 0%, colorSecondary 38%, colorAccent 50%, colorSecondary 62%, colorSecondary 100%)
-    background-size 100% 300%
-    -webkit-background-clip text
-    background-clip text
-    -webkit-text-fill-color transparent
-    animation coupletShine 4.5s ease-in-out infinite
-    &:nth-child(1)
-      margin-top -4rem
-    &:nth-child(2)
-      margin-top 4rem
+    letter-spacing .04em
+    text-transform uppercase
 
-@keyframes coupletShine
+// 白色光帶由上往下沿直書掃過；漸層放大三倍高，動 background-position
+.mtn-motto
+  position relative
+  writing-mode vertical-rl
+  font-size clamp(2.4rem, 7vh, 4.6rem)
+  font-weight 900
+  letter-spacing .4em
+  line-height 1
+  background-image linear-gradient(180deg, #bdbdbd 0%, #bdbdbd 38%, #ffffff 50%, #bdbdbd 62%, #bdbdbd 100%)
+  background-size 100% 300%
+  -webkit-background-clip text
+  background-clip text
+  -webkit-text-fill-color transparent
+  animation mottoShine 4.5s ease-in-out infinite
+
+@keyframes mottoShine
   from
     background-position 0 100%
   to
     background-position 0 0%
 
+.mtn-note
+  labelPlate(1.2rem)
+  position absolute
+  right outlineSpace
+  bottom 5rem
+
 @media (max-width: breakMobile)
-  .couplet
-    gap 1.5rem
-    h2
-      &:nth-child(1)
-        margin-top -3rem
-      &:nth-child(2)
-        margin-top 3rem
-  .mtn-kicker
-    top 6rem
+  .mtn-head
+    top 4rem
+  .mtn-note
+    font-size 1rem
+    bottom 3rem
 </style>

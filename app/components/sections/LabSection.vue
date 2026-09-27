@@ -1,8 +1,7 @@
 <script setup>
-// Lab：技術路線、自建環境、內部專案、踩過的坑、正在摸的東西（內容整理自個人背景筆記，只放可公開的部分）
+// 03 Lab：大字清單（docs/LOGO-REDESIGN.md L3）。四層技術用巨大的模版字疊成四行，滑過某一層時其他層變暗；
+// CI/CD 是一條橫貫的長線加六個節點，節點依序亮起循環
 const { gsap } = useGsap()
-const root = ref(null)
-let ctx
 
 const tiers = [
   { name: "AI Application", items: ["LLM / RAG", "Prompt Engineering", "Speech AI", "Human-in-the-loop"] },
@@ -10,55 +9,42 @@ const tiers = [
   { name: "Cloud Native", items: ["Kubernetes (CKA)", "Docker / containerd", "GitLab CI / CD", "Ingress / TLS"] },
   { name: "Infra", items: ["Linux (Ubuntu)", "Network", "AD / LDAP", "NAS / SMB"] },
 ]
-
-const lab = ["Ubuntu", "kubeadm", "containerd", "Calico", "Ingress-NGINX", "Harbor", "GitLab + Runner", "Gitea + Drone", "SMB CSI", "PV / PVC", "NodePort", "TLS"]
-
+const selfHosted = ["Ubuntu", "kubeadm", "containerd", "Calico", "Ingress-NGINX", "Harbor", "GitLab + Runner", "Gitea + Drone", "SMB CSI", "PV / PVC", "NodePort", "TLS"]
 const pipeline = ["GitLab", "Runner", "Build Image", "Registry", "Kubernetes", "Deploy"]
-
 const works = [
-  {
-    title: "企業內部 Nuxt 3 系統",
-    desc: "AD / LDAP 登入、JWT Cookie session、檔案上傳下載落到 NAS（SMB CSI），部署於自建 Kubernetes，Ingress HTTPS。",
-  },
-  {
-    title: "自建 Kubernetes 平台",
-    desc: "kubeadm 從零建叢集：Calico 網路、Ingress-NGINX、Harbor registry、GitLab Runner 串成 build → push → deploy 的流程。",
-  },
-  {
-    title: "NAS 儲存整合進 Kubernetes",
-    desc: "用 SMB CSI 把 NAS 掛進 Pod，PV / PVC 統一管理；解掉 Pod 內看得到檔案、外面看不到的權限與掛載問題。",
-  },
+  { title: "企業內部 Nuxt 3 系統", desc: "AD / LDAP 登入、JWT Cookie session、檔案上傳下載落到 NAS（SMB CSI），部署於自建 Kubernetes，Ingress HTTPS。" },
+  { title: "自建 Kubernetes 平台", desc: "kubeadm 從零建叢集：Calico 網路、Ingress-NGINX、Harbor registry、GitLab Runner 串成 build → push → deploy 的流程。" },
+  { title: "NAS 儲存整合進 Kubernetes", desc: "用 SMB CSI 把 NAS 掛進 Pod，PV / PVC 統一管理；解掉 Pod 內看得到檔案、外面看不到的權限與掛載問題。" },
 ]
-
 const logs = [
   "LDAP 登入失敗與 DNS timeout：Pod 內 DNS 解析與 AD 連線逐層排查",
   "SMB CSI mount：Pod 裡看得到檔案、外面看不到",
   "containerd 連 HTTP registry 被當成 HTTPS client 拒絕",
   "Ingress TLS 與 registry 憑證鏈",
 ]
-
 const exploring = ["會議系統：語音辨識 + LLM 摘要", "ComfyUI / 本地模型", "AI Coding Assistant", "iPAS AI 應用規劃師（準備中）"]
 
+const hovered = ref(-1)
+const step = ref(-1) // CI/CD 目前亮的節點
+const root = ref(null)
+let ctx
 let io
 
 onMounted(() => {
   ctx = gsap.context(() => {
-    // pipeline 的光點：編號依序亮起再暗下，循環；離開視窗暫停
-    const signal = gsap
-      .timeline({ repeat: -1, repeatDelay: 0.8, paused: true })
-      .to(".lab-pipe-idx", { color: "#f5a623", duration: 0.2, stagger: { each: 0.28, repeat: 1, yoyo: true } })
-    io = new IntersectionObserver(([e]) => (e.isIntersecting ? signal.play() : signal.pause()))
-    io.observe(root.value.querySelector(".lab-pipeline"))
+    // 節點依序亮起，走完一輪停一下再來；離開視窗暫停
+    const loop = gsap.timeline({ repeat: -1, repeatDelay: 1.2, paused: true })
+    pipeline.forEach((_, i) => loop.call(() => (step.value = i), null, i * 0.45))
+    loop.call(() => (step.value = -1), null, pipeline.length * 0.45 + 0.4)
+    io = new IntersectionObserver(([e]) => (e.isIntersecting ? loop.play() : loop.pause()))
+    io.observe(root.value.querySelector(".lab-line"))
 
-    gsap.utils.toArray(".lab-block").forEach((block) => {
-      gsap.from(block.children, {
-        opacity: 0,
-        y: 24,
-        duration: 0.8,
-        stagger: 0.06,
-        ease: "expo.out",
-        scrollTrigger: { trigger: block, start: "top 85%" },
-      })
+    gsap.from(".lab-line-rule", {
+      scaleX: 0,
+      transformOrigin: "left",
+      duration: 1.2,
+      ease: "expo.out",
+      scrollTrigger: { trigger: ".lab-line", start: "top 85%" },
     })
   }, root.value)
 })
@@ -70,186 +56,213 @@ onUnmounted(() => {
 </script>
 
 <template lang="pug">
-section.lab#lab(ref="root" data-glyph="lab")
-  SectionBg(idx="03" variant="grid")
+section.lab#lab(ref="root")
   .sec-head
     span.sec-idx 03
     h2 Lab
+  ol.tiers(@mouseleave="hovered = -1")
+    li.tier(
+      v-for="(t, i) in tiers"
+      :key="t.name"
+      :class="{ 'is-dim': hovered >= 0 && hovered !== i }"
+      @mouseenter="hovered = i"
+    )
+      h3.lab-tier-name {{ t.name }}
+      p.tier-items {{ t.items.join(" · ") }}
+  p.lab-self
+    span.lab-label 自建環境
+    | {{ selfHosted.join(" · ") }}
 
-  .lab-block.lab-stack
-    .lab-label stack
-    .lab-tier(v-for="(t, i) in tiers" :key="t.name")
-      .lab-tier-name {{ t.name }}
-      ul.lab-tier-items
-        li(v-for="it in t.items" :key="it") {{ it }}
-      span.lab-tier-arrow(v-if="i < tiers.length - 1" aria-hidden="true") →
+  .lab-line
+    h3.lab-sub CI / CD
+    .lab-line-track
+      .lab-line-rule(aria-hidden="true")
+      ol.lab-nodes
+        li(v-for="(p, i) in pipeline" :key="p" :class="{ 'is-on': step === i }")
+          span.node-dot(aria-hidden="true")
+          span.node-no {{ String(i + 1).padStart(2, "0") }}
+          span.node-name {{ p }}
 
-  .lab-cols
-    .lab-block.lab-env
-      .lab-label self-hosted
-      ul.lab-chips
-        li(v-for="c in lab" :key="c") {{ c }}
-    .lab-block.lab-pipe
-      .lab-label pipeline
-      ol.lab-pipeline
-        li(v-for="(p, i) in pipeline" :key="p")
-          span.lab-pipe-idx {{ String(i + 1).padStart(2, "0") }}
-          span {{ p }}
-
-  .lab-block.lab-works
-    .lab-label in-house
-    article.lab-work(v-for="w in works" :key="w.title" data-hover)
-      h3 {{ w.title }}
+  h3.lab-sub.lab-works-title 內部專案
+  ol.lab-works
+    li(v-for="w in works" :key="w.title")
+      h4 {{ w.title }}
       p {{ w.desc }}
 
-  .lab-cols
-    .lab-block.lab-logs
-      .lab-label debug log
-      ul.lab-list
+  .lab-notes
+    div
+      h3.lab-sub 踩過的坑
+      ul
         li(v-for="l in logs" :key="l") {{ l }}
-    .lab-block.lab-next
-      .lab-label exploring
-      ul.lab-list
+    div
+      h3.lab-sub 進行中
+      ul
         li(v-for="e in exploring" :key="e") {{ e }}
 </template>
 
 <style lang="stylus" scoped>
 .lab
-  max-width 70rem
+  max-width 78rem
   margin 0 auto
-  padding 0 outlineSpace 8rem
+  padding 6rem outlineSpace 9rem
 
 .sec-head
   sectionHead()
 
-.lab-block
-  margin-bottom 3rem
+.lab-sub
+  font-family fontDisplay
+  font-weight 900
+  font-size 1.6rem
+  letter-spacing .04em
+  text-transform uppercase
 
 .lab-label
-  margin-bottom 1rem
-  font-family fontDigital
-  font-size 1rem
-  letter-spacing .3em
+  font-family fontMono
+  font-size .75rem
+  letter-spacing .18em
   text-transform uppercase
-  color colorAccent
+  color colorMuted
 
-// 技術路線：四層由左到右
-.lab-stack
-  display grid
-  grid-template-columns repeat(4, 1fr)
-  gap 1px
-  background-color colorLine
-  border 1px solid colorLine
-  .lab-label
-    grid-column 1 / -1
-    padding 1rem 1.4rem 0
-    margin 0
-    background-color colorPrimary
-  .lab-tier
-    position relative
-    padding 1.2rem 1.4rem 1.6rem
-    background-color colorPrimary
-  .lab-tier-name
-    font-family fontPixel
-    font-size 1.8rem
-    line-height 1
-    margin-bottom .8rem
-  .lab-tier-items
-    list-style none
-    font-size .95rem
-    line-height 1.8
-    color colorMuted
-  .lab-tier-arrow
-    position absolute
-    right -.5rem
-    top 1.2rem
-    z-index 1
-    font-family fontPixel
-    font-size 1.6rem
-    color colorAccent
-
-.lab-cols
-  display grid
-  grid-template-columns 1fr 1fr
-  gap 3rem
-
-.lab-chips
+// 四層大字
+.tiers
   list-style none
+  display grid
+  gap .4rem
+.tier
   display flex
+  align-items baseline
   flex-wrap wrap
-  gap .5rem
-  li
-    padding .35rem .7rem
-    border 1px solid colorLine
-    font-family fontDigital
-    font-size 1rem
-    letter-spacing .08em
-    color colorSecondary
-    transition border-color .3s, color .3s, transform .3s
-    &:hover
-      border-color colorAccent
-      color colorAccent
-      transform translateY(-2px)
+  gap .2rem 1.6rem
+  padding-block .3rem
+  transition opacity .35s ease
+  &.is-dim
+    opacity .22
+.lab-tier-name
+  font-family fontDisplay
+  font-weight 900
+  font-size clamp(3rem, 8vw, 6rem)
+  line-height .95
+  letter-spacing .02em
+  text-transform uppercase
+.tier-items
+  color #cfcfcf
+  font-size 1rem
 
-.lab-pipeline
+.lab-self
+  margin-top 1.8rem
+  color colorMuted
+  line-height 1.9
+  .lab-label
+    margin-right 1rem
+
+// CI/CD 長線
+.lab-line
+  margin-top 5.5rem
+.lab-line-track
+  position relative
+  margin-top 1.6rem
+.lab-line-rule
+  pos(0, 1.1rem)
+  size(100%, 2px)
+  background-color colorSecondary
+.lab-nodes
   list-style none
-  flex(flex-start,stretch,column)
+  position relative
+  display grid
+  grid-template-columns repeat(6, minmax(0, 1fr))
   li
-    flex(flex-start,baseline)
-    gap 1rem
-    padding .6rem 0
-    border-top 1px solid colorLine
-    font-weight 700
-    letter-spacing .05em
-    &:last-child
-      border-bottom 1px solid colorLine
-  .lab-pipe-idx
-    font-family fontDigital
-    font-size 1rem
+    display grid
+    gap .5rem
+    justify-items start
+  .node-dot
+    size(.9rem)
+    margin-top .65rem
+    background-color colorPrimary
+    border 2px solid colorSecondary
+    transition background-color .2s ease
+  .node-no
+    font-family fontMono
+    font-size .7rem
     color colorMuted
-
-.lab-work
-  padding 1.4rem 1rem
-  border-top 1px solid colorLine
-  transition background-color .4s ease, padding-left .4s cubic-bezier(.76,0,.24,1)
-  &:last-child
-    border-bottom 1px solid colorLine
-  &:hover
-    background-color rgba(255,255,255,.04)
-    padding-left 1.6rem
-  h3
-    font-size 1.2rem
+  .node-name
+    font-family fontDisplay
     font-weight 900
-    letter-spacing .05em
-  p
-    margin-top .5rem
-    line-height 1.7
-    color rgba(255,255,255,.75)
+    font-size 1.5rem
+    letter-spacing .03em
+    transition opacity .2s ease
+    opacity .55
+  .is-on
+    .node-dot
+      background-color colorSecondary
+    .node-name
+      opacity 1
 
-.lab-list
+// 三個內部專案
+.lab-works-title
+  margin-top 5.5rem
+.lab-works
   list-style none
+  margin-top 1.2rem
+  display grid
+  grid-template-columns repeat(3, minmax(0, 1fr))
+  gap 2.5rem
+  border-top 1px solid colorLine
+  padding-top 2rem
   li
+    display grid
+    gap .6rem
+    align-content start
+  h4
+    font-size 1.3rem
+    font-weight 900
+    letter-spacing .04em
+  p
+    color #bdbdbd
+    line-height 1.75
+
+.lab-notes
+  margin-top 4rem
+  display grid
+  grid-template-columns repeat(2, minmax(0, 1fr))
+  gap 2.5rem
+  ul
+    list-style none
+    margin-top 1rem
+    display grid
+    gap .6rem
+  li
+    padding-left 1.4rem
     position relative
-    padding .5rem 0 .5rem 1.4rem
-    line-height 1.6
-    color rgba(255,255,255,.8)
+    line-height 1.7
+    color #cfcfcf
     &::before
-      content '>'
-      position absolute
-      left 0
-      font-family fontPixel
-      color colorAccent
+      content ''
+      pos(0, .72em)
+      size(.6rem, 2px)
+      background-color colorSecondary
 
 @media (max-width: breakMobile)
-  .lab-stack
+  .lab
+    padding-block 4rem 6rem
+  .tier
+    display grid
+  .lab-tier-name
+    font-size clamp(2.2rem, 11vw, 3rem)
+  .tier-items
+    font-size .85rem
+  // 手機上長線改直的，節點由上而下
+  .lab-line-rule
+    pos(.44rem, 0)
+    size(2px, 100%)
+  .lab-nodes
     grid-template-columns 1fr
-    .lab-tier-arrow
-      right auto
-      top auto
-      left 1.4rem
-      bottom -.9rem
-      transform rotate(90deg)
-  .lab-cols
+    gap 1.1rem
+    li
+      grid-template-columns 1rem 2.2rem 1fr
+      align-items center
+    .node-dot
+      margin-top 0
+  .lab-works, .lab-notes
     grid-template-columns 1fr
-    gap 0
+    gap 2rem
 </style>

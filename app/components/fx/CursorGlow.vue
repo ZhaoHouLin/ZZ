@@ -38,7 +38,7 @@ onUnmounted(() => off())
   size(44rem)
   margin -22rem 0 0 -22rem
   border-radius 50%
-  background radial-gradient(circle, rgba(245,166,35,.09), rgba(245,166,35,0) 60%)
+  background radial-gradient(circle, rgba(255,255,255,.07), rgba(255,255,255,0) 60%)
   pointer-events none
   opacity 0
   transition opacity .8s ease

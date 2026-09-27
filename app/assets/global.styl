@@ -1,14 +1,17 @@
 // nuxt.config 的 additionalData 只注入 SFC 的 <style>，css 陣列裡的檔案要自己 import
 @import './style.styl'
 
+// 展示字與等寬字自架（Google Fonts 的 latin 子集，可變字重）；中文內文用系統的正黑體
 @font-face
-  font-family 'Pixel'
-  src url('./fonts/Advanced_Pixel-7.woff') format('woff')
+  font-family 'Big Shoulders Display'
+  src url('./fonts/BigShouldersDisplay.woff2') format('woff2')
+  font-weight 100 900
   font-display swap
 
 @font-face
-  font-family 'Digital'
-  src url('./fonts/Digital-7.woff') format('woff')
+  font-family 'Martian Mono'
+  src url('./fonts/MartianMono.woff2') format('woff2')
+  font-weight 100 800
   font-display swap
 
 *
@@ -23,6 +26,7 @@ html
   font-size 16px
   -webkit-font-smoothing antialiased
   -webkit-overflow-scrolling touch
+  scrollbar-color colorMuted colorPrimary
 
 body
   min-height 100vh
@@ -42,8 +46,12 @@ button
   border 0
 
 ::selection
-  background-color colorAccent
+  background-color colorSecondary
   color colorPrimary
+
+:focus-visible
+  outline 2px solid colorSecondary
+  outline-offset 3px
 
 // 只有精準指標（滑鼠）才隱藏系統游標，交給 TheCursor
 @media (pointer: fine)
@@ -56,7 +64,5 @@ button
     animation-iteration-count 1 !important
     transition-duration .01ms !important
 
-// 有錨點的區塊都是 SectionBg 的定位容器；isolation 讓背景的 z-index -1 留在區塊內
 section[id]
   position relative
-  isolation isolate

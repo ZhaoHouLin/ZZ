@@ -1,333 +1,344 @@
 <script setup>
+// Hero（docs/LOGO-REDESIGN.md K3 裁 A）：白紙、巨大 ZZ 左端出框、EXT 3030 標籤牌、ZERO ZONE、底部斜紋帶（全站唯一一次）
+// Signature interaction：按住畫面為閃電充電。ZZ 先變淡，筆畫從頭慢慢描下去、越接近底部抖得越厲害；
+// 描到底才劈下並讓整個 hero 反白一下。中途放開就洩掉，筆畫恢復原狀、不閃
+const CHARGE = 1.6 // 充滿所需秒數
 const { gsap, SplitText } = useGsap()
 
 const root = ref(null)
-const clock = ref("--:--:--")
-const ext = ref(0) // 0 → 3030：以前工作的分機號碼，放在左上的 LED 面板裡當聯絡資訊
-const motion = useGyroTilt() // 陀螺儀開關，見 useGyroTilt.js
-const motionBtn = ref(false) // iOS 要按鈕授權
+const mark = ref(null)
+const ext = ref(0) // 0 → 3030：以前工作的分機號碼
+const charge = ref(-1) // -1 = 沒在按；0～100 = 充電百分比
+const struck = ref(false) // 剛劈下，提示文字換一句
 let ctx
-let timer
+let len = 0
+let strike
+let off = () => {}
+let flow // 斜紋帶的無限流動（平常慢，按住時跟著充電加速）
+let spark // 電光點：每隔幾秒沿著 ZZ 的筆畫跑一趟
+let io
+const BASE_SPEED = 1 // 滑鼠停在斜紋帶上時的速度（timeScale，1 = 每秒移動一個條紋週期）；平常靜止
+let bandHover = false
+const idleSpeed = () => (bandHover ? BASE_SPEED : 0)
 
-const tick = () => {
-  const d = new Date()
-  clock.value = [d.getHours(), d.getMinutes(), d.getSeconds()]
-    .map((n) => String(n).padStart(2, "0"))
-    .join(":")
+const reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
+// 描線：從頭到尾加速劈下，最後一格觸發閃光
+const draw = (duration = 0.75) => {
+  const p = mark.value.path
+  strike?.kill()
+  strike = gsap
+    .timeline()
+    .set(p, { strokeDasharray: len, strokeDashoffset: len, opacity: 1 })
+    .to(p, { strokeDashoffset: 0, duration, ease: "power4.in" })
+    .to(root.value, { "--flash": 1, duration: 0.04 })
+    .to(root.value, { "--flash": 0, duration: 0.35, ease: "power2.out" })
+}
+// 按住：筆畫從頭充到底，抖動隨進度加大；充滿就劈下
+const hold = () => {
+  const p = mark.value.path
+  const svg = mark.value.$el
+  strike?.kill()
+  struck.value = false
+  spark?.pause(0)
+  gsap.set(".zz-beams", { opacity: 0 })
+  const st = { v: 0 }
+  const fromSpeed = flow ? flow.timeScale() : 0 // 從按下當下的流速往上加，不從頭開始
+  strike = gsap
+    .timeline()
+    .set(p, { strokeDasharray: len, strokeDashoffset: len, opacity: 1 })
+    .to(st, {
+      v: 1,
+      duration: CHARGE,
+      ease: "power1.in",
+      onUpdate: () => {
+        charge.value = Math.round(st.v * 100)
+        flow?.timeScale(fromSpeed + st.v * 6) // 電越充越滿，條紋流得越快
+        gsap.set(p, { strokeDashoffset: len * (1 - st.v) })
+        const j = st.v * st.v * 7 // 越接近充滿抖得越厲害
+        gsap.set(svg, { x: gsap.utils.random(-j, j), y: gsap.utils.random(-j, j) })
+      },
+      onComplete: () => {
+        charge.value = -1
+        struck.value = true
+        gsap.timeline()
+          .to(root.value, { "--flash": 1, duration: 0.04 })
+          .to(root.value, { "--flash": 0, duration: 0.45, ease: "power2.out" })
+        gsap.fromTo(svg, { x: 14, y: -8 }, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" })
+        // 劈下：條紋猛衝一下再慢慢回到平常速度，電光點稍後恢復
+        if (flow) gsap.fromTo(flow, { timeScale: 14 }, { timeScale: idleSpeed(), duration: 1.6, ease: "power3.out" })
+        gsap.delayedCall(2, () => spark?.restart(true))
+      },
+    })
+}
+// 放開：還沒充滿就洩掉，筆畫往回收，再完整淡回來；已經劈下就不動
+const release = () => {
+  if (charge.value < 0) return
+  const p = mark.value.path
+  strike?.kill()
+  charge.value = -1
+  gsap.to(mark.value.$el, { x: 0, y: 0, duration: 0.2 })
+  if (flow) gsap.to(flow, { timeScale: idleSpeed(), duration: 0.8, ease: "power2.out" }) // 洩掉：條紋慢慢回到平常狀態
+  gsap.delayedCall(1.2, () => spark?.restart(true))
+  strike = gsap
+    .timeline()
+    .to(p, { strokeDashoffset: len, duration: 0.3, ease: "power2.in" })
+    .set(p, { strokeDasharray: "none", opacity: 0 })
+    .to(p, { opacity: 1, duration: 0.35 })
 }
 
 onMounted(() => {
-  tick()
-  timer = setInterval(tick, 1000)
-  if (motion.available)
-    motion.needsPermission ? (motionBtn.value = true) : motion.enable()
+  const p = mark.value.path
+  len = p.getTotalLength()
 
   ctx = gsap.context(() => {
-    // 主標語拆成字：進場動 chars（在遮罩裡滑出），捲動飄散動 masks（遮罩外框本身）。
-    // 兩個動畫必須動不同元素：scrub 的 to() 會把建立當下的值記成起點，若和進場的 from() 搶同一組元素與屬性，起點會記到 opacity 0，字就消失
-    const motto = SplitText.create(root.value.querySelector(".hero-motto"), {
-      type: "chars",
-      mask: "chars",
-    })
-    motto.chars.forEach((c) => c.textContent.trim() === "Z" && c.classList.add("is-z")) // Z 用琥珀色
+    const motto = SplitText.create(root.value.querySelector(".hero-motto"), { type: "chars", mask: "chars" })
 
-    // 進場：動內層元素
+    // 進場：閃電先劈下，其他元素隨後落定
+    if (!reduced()) draw(1.1)
     gsap
-      .timeline({ defaults: { ease: "expo.out", duration: 1.2 } })
-      .from(".hero-panel > *", {
-        opacity: 0,
-        x: -16,
-        stagger: 0.1,
-        duration: 0.8,
-      })
-      .from(".ring", { opacity: 0, scale: 0.85 }, "-=0.6")
-      .from(motto.chars, { yPercent: 110, stagger: 0.06, duration: 1 }, "-=0.8")
-      .from(".hero-sub", { opacity: 0, y: 16 }, "-=0.9")
-      .from(".hero-info > *", { opacity: 0, y: 24, stagger: 0.08 }, "-=0.9")
-      .from(".line", { scaleX: 0, scaleY: 0, duration: 1 }, "-=1")
-      .from(".hero-hint, .hero-scroll", { opacity: 0 }, "-=0.5")
+      .timeline({ defaults: { ease: "expo.out", duration: 1 }, delay: 0.9 })
+      .from(".hero-ext", { yPercent: -120, opacity: 0, duration: 0.6 })
+      .from(motto.chars, { yPercent: 110, stagger: 0.05 }, "-=0.3")
+      .from(".hero-name, .hero-sub", { opacity: 0, y: 16, stagger: 0.08 }, "-=0.7")
+      .from(".hero-band", { scaleX: 0, transformOrigin: "left", duration: 0.9 }, "-=0.9")
+      .from(".hero-hint", { opacity: 0 }, "-=0.4")
 
-    const o = { v: 0 }
-    gsap.to(o, {
-      v: 3030,
-      duration: 2.4,
-      delay: 0.8,
-      ease: "power2.inOut",
-      onUpdate: () => (ext.value = Math.round(o.v)),
-    })
+    gsap.to({ v: 0 }, { v: 3030, duration: 2.2, delay: 1.1, ease: "power2.inOut", onUpdate() { ext.value = Math.round(this.targets()[0].v) } })
 
-    // 捲動視差：動外層容器，避免和進場動畫搶同一個屬性
+    // 捲動：主標語逐字飄散（動遮罩外框，不和進場的 chars 搶屬性），閃電往上退
     gsap
-      .timeline({
-        scrollTrigger: {
-          trigger: root.value,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
+      .timeline({ scrollTrigger: { trigger: root.value, start: "top top", end: "bottom top", scrub: true } })
+      .to(motto.masks, { x: () => gsap.utils.random(-80, 80), y: () => gsap.utils.random(60, 160), rotation: () => gsap.utils.random(-30, 30), opacity: 0, ease: "power1.in" }, 0)
+      .to(".hero-mark-wrap", { yPercent: -18, ease: "none" }, 0)
+      .to(".hero-meta", { y: 60, opacity: 0 }, 0)
+
+    if (!reduced()) {
+      // 斜紋帶：比畫面寬一個週期的條紋層往右平移一個週期再接回，無縫循環；只動 transform
+      const period = () => parseFloat(getComputedStyle(document.documentElement).fontSize) * 3.677 // 和 CSS 的 --stripe-period 一致
+      flow = gsap.fromTo(".hero-band-flow", { x: 0 }, { x: period, duration: 1, ease: "none", repeat: -1 })
+      flow.timeScale(0) // 平常靜止，滑鼠移到條紋上才流
+      const band = root.value.querySelector(".hero-band")
+      const setHover = (v) => () => {
+        bandHover = v
+        if (charge.value < 0) gsap.to(flow, { timeScale: idleSpeed(), duration: v ? 0.6 : 0.9, ease: "power2.out" })
+      }
+      band.addEventListener("mouseenter", setHover(true))
+      band.addEventListener("mouseleave", setHover(false))
+      // 電流光束：直接畫在 ZZ 的筆畫路徑上，只亮移動中的一小段，所以會完全貼著筆畫、在轉角跟著彎過去。
+      // 各層前端對齊在同一點，由長到短、由淡到亮；越跑越快、光束也越拉越長。
+      // 做法是 stroke-dasharray 只留一段、stroke-dashoffset 決定這段落在路徑的哪裡
+      const n = mark.value.beams.length - 1
+      const layers = mark.value.beams.map((el, i) => ({ el, base: 1.5 + (n - i) * 0.55, grow: 2 + (n - i) * 1.6 }))
+      const pos = { p: 0 }
+      const paint = () => {
+        const head = pos.p * len
+        for (const { el, base, grow } of layers) {
+          const L = base + grow * pos.p
+          el.style.strokeDasharray = `${L} ${len + L}`
+          el.style.strokeDashoffset = `${L - head}`
+        }
+      }
+      spark = gsap
+        .timeline({ repeat: -1, repeatDelay: 3.2, delay: 3 })
+        .set(".zz-beams", { opacity: 1 })
+        .fromTo(pos, { p: 0 }, { p: 1, duration: 1.1, ease: "power2.in", onUpdate: paint, immediateRender: false }, 0)
+        .to(".zz-beams", { opacity: 0, duration: 0.18 }, 1.1)
+      // hero 不在畫面上就暫停這兩個循環
+      io = new IntersectionObserver(([e]) => {
+        if (e.isIntersecting) { flow.resume(); if (charge.value < 0) spark.resume() }
+        else { flow.pause(); spark.pause() }
       })
-      .to(".hero-panel", { yPercent: -120, opacity: 0 }, 0)
-      .to(".hero-ring-wrap", { scale: 1.6, opacity: 0 }, 0)
-      .to(
-        motto.masks,
-        {
-          x: () => gsap.utils.random(-90, 90),
-          y: () => gsap.utils.random(60, 180),
-          rotation: () => gsap.utils.random(-35, 35),
-          opacity: 0,
-          ease: "power1.in",
-        },
-        0,
-      )
-      .to(".hero-sub", { y: 40, opacity: 0 }, 0)
-      .to(".hero-info", { y: 60, opacity: 0 }, 0)
-      .to(".hero-bg", { scale: 0.8, opacity: 0 }, 0) // 閃電往後退並淡出
+      io.observe(root.value)
+    }
 
     // 預渲染的 HTML 先用 CSS 藏住，等 from() 寫好起始狀態再顯示，避免靜態畫面閃一下又重播進場
     gsap.set(root.value, { visibility: "visible" })
   }, root.value)
+
+  // 按住：連結與按鈕上不觸發
+  const onDown = (e) => {
+    if (e.button > 0 || e.target.closest("a, button")) return
+    if (reduced()) return
+    hold()
+  }
+  const noMenu = (e) => charge.value >= 0 && e.preventDefault() // 手機長按不要跳出選單
+  root.value.addEventListener("pointerdown", onDown)
+  root.value.addEventListener("contextmenu", noMenu)
+  window.addEventListener("pointerup", release)
+  window.addEventListener("pointercancel", release) // 手指一滑變成捲動時也算放開
+  off = () => {
+    root.value?.removeEventListener("pointerdown", onDown)
+    root.value?.removeEventListener("contextmenu", noMenu)
+    window.removeEventListener("pointerup", release)
+    window.removeEventListener("pointercancel", release)
+  }
 })
 
 onUnmounted(() => {
-  clearInterval(timer)
-  motion.disable()
+  io?.disconnect()
+  off()
+  strike?.kill()
   ctx?.revert()
 })
 </script>
 
 <template lang="pug">
-section.hero(ref="root")
-  .hero-bg(data-cursor="hold")
-    ClientOnly
-      VoxelZZ(:motion="motion")
-  .hero-fade
-  .hero-panel
-    .hero-clock {{ clock }}
-    .hero-ext
-      span.hero-ext-label ext
-      | {{ String(ext).padStart(4, "0") }}
-    .hero-city taipei · tw
-  .hero-ring-wrap
-    HeroRing
-  .hero-hint hold ⚡ to blast
-  button.hero-motion(v-if="motionBtn" type="button" @click="motion.enable().then((ok) => (motionBtn = !ok))") ◎ motion
-  .hero-statement
+section.hero#top(ref="root" data-cursor="hold" data-paper)
+  .hero-mark-wrap
+    ZzMark.hero-mark(ref="mark" ghost beam)
+  .hero-ext
+    span.hero-ext-label ext
+    span.hero-ext-num {{ String(ext).padStart(4, "0") }}
+  .hero-meta
     h1.hero-motto ZERO ZONE
-    p.hero-sub AI Application · Cloud Native · Web
-  .hero-info
-    .hero-name
+    p.hero-name
       ScrambleText(:words="['ZhaoHou Lin', 'Raiden', '林炤后']")
-    a.hero-mail(href="mailto:rodes5292@gmail.com" data-magnet) rodes5292@gmail.com
-    a.hero-phone(href="tel:+886906822708" data-magnet) +886 906-822-708
-  .line.line-top
-  .line.line-left
-  .line.line-right
-  .hero-scroll
-    span scroll
-    .hero-scroll-bar
+    p.hero-sub AI Application / Cloud Native / Web
+  p.hero-hint(aria-live="polite")
+    template(v-if="charge >= 0") 充電中 {{ String(charge).padStart(3, "0") }}%
+    template(v-else-if="struck") 劈下了。再按住一次
+    template(v-else) 按住畫面，為閃電充電
+  .hero-band(aria-hidden="true")
+    .hero-band-flow
 </template>
 
 <style lang="stylus" scoped>
+// 版面依構圖稿（1600×900）換算：ZZ 的 100 單位方框是 1.22 倍視窗高，筆畫左緣出框約 13% 視窗高，上緣約在 6.6%
+heroH = unquote("max(100vh, 640px)")
+
 .hero
+  --flash 0
   position relative
-  size(100%,100vh)
-  min-height 640px
+  height heroH
   overflow hidden
+  background-color colorSecondary
+  color colorPrimary
   visibility hidden // onMounted 建好進場動畫後才顯示
+  user-select none
+  // 閃電描完的一瞬間整個 hero 反白
+  &::after
+    content ''
+    position absolute
+    inset 0
+    z-index 5
+    background-color colorPrimary
+    opacity calc(var(--flash) * .9)
+    pointer-events none
 
-.hero-bg
+.hero-mark-wrap
   position absolute
-  inset 0
-
-// 用靜態漸層蓋在畫布上做邊緣淡出，取代 mask-image：mask 會讓每一幀都多一次全螢幕離屏合成
-.hero-fade
-  position absolute
-  inset 0
+  left -40.8vh
+  top -20.8vh
+  size(122vh)
+  will-change transform
   pointer-events none
-  background radial-gradient(ellipse at center, transparent 40%, colorPrimary 80%)
+.hero-mark
+  size()
+  color colorPrimary
 
-// 左上 LED 面板：時鐘、分機、城市
-.hero-panel
+.hero-ext
+  labelPlate(1.6rem) // mixin 會設 position relative，定位要寫在它後面
   position absolute
   top outlineSpace
-  left outlineSpace
-  z-index 2
-  flex(flex-start,flex-start,column)
-  gap .3rem
-  font-family fontDigital
-  letter-spacing .2em
-  text-transform uppercase
-  pointer-events none
-  .hero-clock
-    font-size 2.6rem
-    line-height 1
-  .hero-ext
-    font-size 1.4rem
-    color colorMuted
-    .hero-ext-label
-      margin-right .6rem
-      color colorAccent
-  .hero-city
-    font-size .9rem
-    color colorMuted
-
-.hero-ring-wrap
-  position absolute
-  inset 0
-  z-index 1
-  pointer-events none // 蓋滿整個 hero，不能擋住底下閃電的拖曳與按住
-
-// 放頂部中央：底部中央有 scroll 提示，圓環底下放不下
-.hero-hint
-  pos(50%, auto)
-  top outlineSpace + .6rem
-  transform translateX(-50%)
-  z-index 2
-  font-family fontDigital
-  font-size .85rem
-  letter-spacing .3em
-  text-transform uppercase
-  color colorMuted
-  pointer-events none
-
-// iOS 陀螺儀授權按鈕，授權後消失
-.hero-motion
-  position absolute
-  top outlineSpace + 3rem
-  right outlineSpace
-  z-index 2
-  padding .4rem .7rem
-  border 1px solid colorLine
-  font-family fontDigital
-  font-size .85rem
-  letter-spacing .2em
-  text-transform uppercase
-  color colorMuted
-
-.hero-statement
-  position absolute
-  left outlineSpace
-  bottom outlineSpace
-  z-index 2
-  pointer-events none
-  .hero-motto
-    font-size clamp(2.2rem, 5vw, 4.4rem)
-    font-weight 900
-    line-height 1.1
-    letter-spacing .12em
-    :deep(.is-z) // SplitText 產生的字沒有 scoped 屬性，要用 deep
-      color colorAccent
-  .hero-sub
-    margin-top .6rem
-    font-family fontDigital
-    font-size 1rem
-    letter-spacing .3em
-    text-transform uppercase
-    color colorMuted
-
-// 要鋪滿 hero 並自帶定位：捲動時 GSAP 會給它 transform，有 transform 的元素會變成子元素的定位基準，
-// 若它高度是 0，右下的名字與聯絡資訊會跑到頂端被切掉
-.hero-info
-  position absolute
-  inset 0
-  z-index 2
-  pointer-events none
-  .hero-name, .hero-phone, .hero-mail
-    position absolute
-    pointer-events auto
-  .hero-name
-    right outlineSpace
-    bottom outlineSpace
-    font-size 2rem
-    font-weight 700
-    letter-spacing .05em
-    width 16rem
-    text-align right
-  .hero-mail, .hero-phone
-    bottom outlineSpace + 4rem // 直書往上長，太高會碰到右側索引
-    writing-mode vertical-lr
-    transform rotate(180deg)
-    font-family fontPixel
-    font-size 2rem
-    color colorMuted
-    transition color .3s
-    &:hover
-      color colorSecondary
-  .hero-mail
-    right outlineSpace
-  .hero-phone
-    right outlineSpace + 2.8rem
-
-.line
-  position absolute
-  z-index 2
-  background-color colorSecondary
-  opacity .6
-  &.line-top
-    top outlineSpace + .5rem
-    left outlineSpace + 11rem
-    size(15rem,1px)
-    transform-origin left
-  &.line-left
-    top outlineSpace + 8rem
-    left outlineSpace
-    size(1px,12rem)
-    transform-origin top
-  &.line-right
-    bottom outlineSpace + 20rem
-    right outlineSpace
-    size(15rem,1px)
-    transform-origin right
-
-.hero-scroll
-  pos(50%, auto)
-  bottom outlineSpace
-  transform translateX(-50%)
-  z-index 2
-  flex(center,center,column)
-  gap .5rem
-  font-family fontDigital
-  font-size .9rem
-  letter-spacing .3em
-  text-transform uppercase
-  color colorMuted
-  .hero-scroll-bar
-    size(1px,3rem)
+  right calc(1.4rem + 4rem) // 讓開漢堡
+  background-color colorPrimary
+  color colorSecondary
+  &::before
     background-color colorSecondary
-    transform-origin top
-    animation scrollHint 1.8s cubic-bezier(.76,0,.24,1) infinite
+  .hero-ext-label
+    font-family fontMono
+    font-size .6em
+    font-weight 400
+    letter-spacing .2em
+  .hero-ext-num
+    min-width 4ch
 
-@keyframes scrollHint
-  0%
-    transform scaleY(0)
-    transform-origin top
-  50%
-    transform scaleY(1)
-    transform-origin top
-  51%
-    transform-origin bottom
-  100%
-    transform scaleY(0)
-    transform-origin bottom
+.hero-meta
+  position absolute
+  right calc(1.4rem + 4rem)
+  bottom calc(4.5rem + 12vh)
+  text-align right
+  display grid
+  gap .6rem
+  justify-items end
+
+.hero-motto
+  font-family fontDisplay
+  font-weight 900
+  font-size clamp(3.2rem, 11vh, 6rem)
+  line-height .9
+  letter-spacing .04em
+  white-space nowrap
+
+.hero-name
+  font-size clamp(1.2rem, 3vh, 1.8rem)
+  font-weight 900
+  letter-spacing .04em
+  min-height 1.2em
+
+.hero-sub
+  font-family fontDisplay
+  font-weight 800
+  font-size 1.15rem
+  letter-spacing .12em
+  text-transform uppercase
+  color colorMutedOnPaper
+
+.hero-hint
+  position absolute
+  left outlineSpace
+  bottom calc(4.5rem + 1.2rem)
+  font-family fontMono
+  font-size .75rem
+  letter-spacing .16em
+  color colorMutedOnPaper
+
+// 斜紋帶：全站唯一一次。條紋層比畫面寬一個水平週期（45 度條紋的垂直週期 2.6rem × √2），往右平移一個週期剛好接回原位
+.hero
+  --stripe-period 3.677rem
+.hero-band
+  position absolute
+  left 0
+  right 0
+  bottom 0
+  height 4.5rem
+  overflow hidden
+.hero-band-flow
+  position absolute
+  top 0
+  bottom 0
+  left calc(var(--stripe-period) * -1)
+  right 0
+  background-image repeating-linear-gradient(-45deg, colorPrimary 0 1.3rem, colorSecondary 1.3rem 2.6rem)
+  will-change transform
 
 @media (max-width: breakMobile)
-  .hero-panel .hero-clock
-    font-size 1.8rem
-  .hero-statement
-    bottom outlineSpace + 4rem
-    .hero-motto
-      font-size 2rem
-    .hero-sub
-      font-size .8rem
-  .hero-info
-    .hero-name
-      width 8rem
-      font-size 1rem
-    .hero-mail, .hero-phone
-      font-size 1.5rem
-      bottom outlineSpace + 12rem
-  .line.line-top, .line.line-right
-    display none
-  .hero-scroll
-    display none
+  .hero-mark-wrap
+    left -38.5vw
+    top 7vh
+    size(133vw)
+  .hero-ext
+    font-size 1.2rem
+    left outlineSpace
+    right auto
+    background-color colorPrimary
+    color colorSecondary
+    &::before
+      background-color colorSecondary
+  .hero-meta
+    left outlineSpace
+    right outlineSpace
+    bottom calc(3.2rem + 5.5rem)
+    text-align left
+    justify-items start
+  .hero-motto
+    font-size clamp(2.8rem, 14vw, 4rem)
+  .hero-sub
+    font-size .66rem
+  .hero-hint
+    bottom calc(3.2rem + .8rem)
+    font-size .66rem
+  .hero-band
+    height 3.2rem
 </style>

@@ -7,6 +7,7 @@ const pulse = ref(null) // 點擊時擴散的漣漪
 const hover = ref(false)
 const down = ref(false)
 const label = ref("") // 碰到 [data-cursor] 時圈裡顯示的字（drag / open / hold / view）
+const onPaper = ref(false) // 游標在白紙區塊（[data-paper]）上時換黑色
 
 let off = () => {}
 
@@ -16,20 +17,34 @@ onMounted(() => {
 
   gsap.set([ring.value, dot.value], { xPercent: -50, yPercent: -50, x: -100, y: -100 })
 
-  const ringX = gsap.quickTo(ring.value, "x", { duration: 0.35, ease: "power3" })
-  const ringY = gsap.quickTo(ring.value, "y", { duration: 0.35, ease: "power3" })
-  const dotX = gsap.quickTo(dot.value, "x", { duration: 0.08 })
-  const dotY = gsap.quickTo(dot.value, "y", { duration: 0.08 })
+  // 圓圈每幀朝滑鼠靠近固定比例（依幀間隔換算，不受更新率影響），速度連續。
+  // 原本每個 mousemove 都重起一段先快後慢的 tween，事件一秒 60～120 次又不平均，速度一直被重設，看起來一頓一頓
+  const setRingX = gsap.quickSetter(ring.value, "x", "px")
+  const setRingY = gsap.quickSetter(ring.value, "y", "px")
+  const setDotX = gsap.quickSetter(dot.value, "x", "px")
+  const setDotY = gsap.quickSetter(dot.value, "y", "px")
+  const mouse = { x: -100, y: -100 }
+  const pos = { x: -100, y: -100 }
+  const FOLLOW = 0.2 // 每 1/60 秒靠近剩餘距離的比例；越大越跟手
+  const follow = (time, dt) => {
+    const k = 1 - Math.pow(1 - FOLLOW, dt / (1000 / 60))
+    pos.x += (mouse.x - pos.x) * k
+    pos.y += (mouse.y - pos.y) * k
+    setRingX(pos.x)
+    setRingY(pos.y)
+  }
+  gsap.ticker.add(follow)
 
   const onMove = (e) => {
-    ringX(e.clientX)
-    ringY(e.clientY)
-    dotX(e.clientX)
-    dotY(e.clientY)
+    mouse.x = e.clientX
+    mouse.y = e.clientY
+    setDotX(e.clientX) // 中心點直接貼著滑鼠，不延遲
+    setDotY(e.clientY)
   }
   const onOver = (e) => {
     hover.value = !!e.target.closest("a, button, [data-hover]")
     label.value = e.target.closest("[data-cursor]")?.dataset.cursor || ""
+    onPaper.value = !!e.target.closest("[data-paper]")
   }
   const onDown = (e) => {
     down.value = true
@@ -43,6 +58,7 @@ onMounted(() => {
   window.addEventListener("mouseup", onUp)
 
   off = () => {
+    gsap.ticker.remove(follow)
     window.removeEventListener("mousemove", onMove)
     window.removeEventListener("mouseover", onOver)
     window.removeEventListener("mousedown", onDown)
@@ -54,18 +70,24 @@ onUnmounted(() => off())
 </script>
 
 <template lang="pug">
-.cursor(aria-hidden="true")
-  .cursor-ring(ref="ring" :class="{ 'is-hover': hover, 'is-down': down, 'is-label': !!label, 'is-hold': label === 'hold' }")
+.cursor(aria-hidden="true" :class="{ 'on-paper': onPaper }")
+  .cursor-ring(ref="ring" :class="{ 'is-hover': hover, 'is-down': down, 'is-label': !!label }")
     span.cursor-label {{ label }}
   .cursor-dot(ref="dot" :class="{ 'is-hidden': !!label }")
   .cursor-pulse(ref="pulse")
 </template>
 
 <style lang="stylus" scoped>
+// 黑底區塊用白色游標；白紙區塊（[data-paper]）換黑色
 .cursor
+  --fg colorSecondary
+  --bg colorPrimary
   display none
   @media (pointer: fine)
     display block
+  &.on-paper
+    --fg colorPrimary
+    --bg colorSecondary
 
 .cursor-ring, .cursor-dot, .cursor-pulse
   position fixed
@@ -78,42 +100,41 @@ onUnmounted(() => off())
 .cursor-ring
   size(32px)
   flex()
-  border 1px solid colorSecondary
+  border 1.5px solid var(--fg)
   transition width .3s ease, height .3s ease, background-color .3s ease, border-color .3s ease
   .cursor-label
-    font-family fontDigital
-    font-size .85rem
-    font-weight 700
-    letter-spacing .2em
+    font-family fontDisplay
+    font-size 1rem
+    font-weight 900
+    letter-spacing .14em
     text-transform uppercase
-    color colorPrimary
+    color var(--bg)
     opacity 0
     transition opacity .2s ease
   &.is-label
     size(72px)
-    background-color rgba(242,242,242,.92)
+    background-color var(--fg)
     border-color transparent
     .cursor-label
       opacity 1
-  &.is-hold
-    background-color colorAccent // 閃電上的 HOLD 用琥珀，和閃電中段同色
   &.is-hover
     size(64px)
-    background-color rgba(255,255,255,.12)
-    border-color colorAccent
   &.is-down
     size(20px)
+  // 有字的時候（例如按住 hero 的 HOLD）按下只稍微縮，不然字會擠在一起
+  &.is-label.is-down
+    size(60px)
 
 .cursor-pulse
   size(32px)
   margin -16px 0 0 -16px // 以中心為原點
-  border 1px solid colorAccent
+  border 1.5px solid var(--fg)
   opacity 0
 
 .cursor-dot
-  size(4px)
-  background-color colorSecondary
+  size(8px)
+  background-color var(--fg)
   transition opacity .2s ease
   &.is-hidden
-    opacity 0 // 有標籤時白點會壓在字上
+    opacity 0 // 有標籤時點會壓在字上
 </style>

@@ -200,4 +200,15 @@
 
 手機版關鍵畫面（390 寬）：Hero、About、Lab、早期作品，放在構圖頁最上方。
 
-（待使用者確認手機版）
+使用者：開始實作。
+
+## 實作與審查（2026-09-27）
+
+- 方向約定寫入 `.impeccable/surfaces/app-pages-index-vue.md`（seed bf6b636b，code-led，本機無圖像生成）。
+- 重寫 Hero、About、Resume、Lab（L3）、Works（W2，合併 GitHub 與 100 Days CSS）、Mountain、Contact（頁尾）、選單、索引、回頂、游標；新增 ZzMark。
+- 移除 VoxelZZ、HeroRing、FragmentField、SectionBg、RidgeLines、useGyroTilt、useTilt、glyphs.js、Three.js 依賴、像素與 LED 字型；自架 Big Shoulders Display 與 Martian Mono。
+- favicon、apple-touch-icon、og.png 改用 H1；所有出貨圖片補上來源標記。
+- 截圖檢查修掉手機橫向捲動（About 格線欄寬沒有下限）。設計偵測器 0 項。
+- **收尾審查**（獨立代理）：第一輪 fix 八項（聯絡區 ZZ 牆、做事方式改細線表格、小標、散文不用等寬字、視窗圖示、履歷中斷標示、聯絡區對齊、手機按鈕遮擋）；第二輪 fix 三項（手機 ZZ 牆尺寸、版權列重疊、中文小標層級）並抓到漢堡白紙狀態卡住的 bug；第三項以展示字型的中文備援改為 Noto Sans TC 解決。
+- **動到已核准構圖的一處**：About 做事方式從 2×2 方框改為細線表格（審查指出違反「拒絕卡片網格」），內容不變，已告知使用者。
+- 仍待使用者：藍新回任月份（拆成兩段顯示用）。

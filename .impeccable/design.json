@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-27T00:00:00Z",
+  "title": "Design System: ZZ",
+  "extensions": {
+    "colorMeta": {
+      "ink": { "role": "primary", "displayName": "Transformer Black", "canonical": "#050505", "tonalRamp": ["#050505", "#111111", "#2a2a2a", "#444444", "#595959", "#8c8c8c", "#c8c8c8", "#f2f2f2"] },
+      "paper": { "role": "neutral", "displayName": "Label Paper", "canonical": "#f2f2f2", "tonalRamp": ["#050505", "#2a2a2a", "#595959", "#8c8c8c", "#b0b0b0", "#d0d0d0", "#e6e6e6", "#f2f2f2"] },
+      "muted-on-ink": { "role": "neutral", "displayName": "Conduit Grey", "canonical": "#8c8c8c", "tonalRamp": ["#262626", "#3d3d3d", "#555555", "#6e6e6e", "#8c8c8c", "#a8a8a8", "#c4c4c4", "#e0e0e0"] },
+      "muted-on-paper": { "role": "neutral", "displayName": "Pencil Grey", "canonical": "#595959", "tonalRamp": ["#1a1a1a", "#2e2e2e", "#434343", "#595959", "#737373", "#8f8f8f", "#adadad", "#cccccc"] },
+      "rule-on-ink": { "role": "neutral", "displayName": "Wire Rule", "canonical": "#2a2a2a", "tonalRamp": ["#0d0d0d", "#1a1a1a", "#2a2a2a", "#3b3b3b", "#4d4d4d", "#666666", "#808080", "#999999"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "首屏 ZERO ZONE 與 Lab 四層技術名；大寫模版粗體。" },
+      "headline": { "displayName": "Headline", "purpose": "區塊標題，永遠和編號標籤牌同列。" },
+      "title": { "displayName": "Title", "purpose": "區塊內小標，大寫。" },
+      "body": { "displayName": "Body", "purpose": "表格說明與清單；中文強調用 900 正黑體。" },
+      "body-lead": { "displayName": "Body Lead", "purpose": "自介段落，最寬 36em。" },
+      "label": { "displayName": "Label", "purpose": "只透過標籤牌出現。" },
+      "mono": { "displayName": "Mono", "purpose": "編號、規格、日期、短提示；不用於句子與標題。" }
+    },
+    "shadows": [
+      { "name": "hung-badge", "value": "0 1.6rem 3rem -1rem rgba(0,0,0,.7)", "purpose": "只給 About 的工作證。" },
+      { "name": "modal-drop", "value": "0 30px 80px rgba(0,0,0,.6)", "purpose": "只給 CodePen 視窗；遮罩為 rgba(5,5,5,.92)，不模糊背景。" }
+    ],
+    "motion": [
+      { "name": "strike-intro", "value": "stroke-dashoffset 1.1s power4.in", "purpose": "進場時 ZZ 從頭描到尾。" },
+      { "name": "strike-hold", "value": "stroke-dashoffset 0.7s power4.in", "purpose": "按住首屏時重描。" },
+      { "name": "strike-flash", "value": "overlay opacity 0 -> .9 in 0.04s, back in 0.35s power2.out", "purpose": "描完瞬間首屏閃黑。" },
+      { "name": "entrance", "value": "expo.out 1s", "purpose": "區塊元素進場落定。" },
+      { "name": "invert", "value": "background-color, color .25s ease", "purpose": "表格列、索引、百日格的黑白反轉。" },
+      { "name": "menu-bar", "value": "cubic-bezier(.76, 0, .24, 1) .5s", "purpose": "漢堡轉 X。" },
+      { "name": "scroll-to", "value": "power3.inOut 1s", "purpose": "索引與回頂的平滑捲動。" },
+      { "name": "grain", "value": "transform steps(6) 1s infinite", "purpose": "全頁膠捲顆粒，opacity .07。" }
+    ],
+    "breakpoints": [
+      { "name": "stack", "value": "960px" },
+      { "name": "mobile", "value": "768px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Label Plate",
+      "kind": "custom",
+      "refersTo": "label-plate",
+      "description": "全站唯一的標記：白底黑字、左側一個釘孔。",
+      "html": "<span class=\"ds-plate\">01</span> <span class=\"ds-plate ds-plate-ink\"><span class=\"ds-plate-mono\">ext</span>3030</span> <span class=\"ds-plate ds-plate-outline\">Archive 2020–2022</span>",
+      "css": ".ds-plate { position: relative; display: inline-flex; align-items: center; gap: .5em; padding: .28em .6em .22em 1.3em; background: #f2f2f2; color: #050505; font-family: 'Big Shoulders Display', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; font-weight: 900; font-size: 1.4rem; line-height: 1; letter-spacing: .06em; text-transform: uppercase; font-variant-numeric: tabular-nums; } .ds-plate::before { content: ''; position: absolute; left: .5em; top: 50%; width: .32em; height: .32em; margin-top: -.16em; border-radius: 50%; background: #050505; } .ds-plate-ink { background: #050505; color: #f2f2f2; } .ds-plate-ink::before { background: #f2f2f2; } .ds-plate-outline { background: transparent; color: #f2f2f2; outline: 1px solid #f2f2f2; font-size: 1rem; } .ds-plate-outline::before { background: #f2f2f2; } .ds-plate-mono { font-family: 'Martian Mono', ui-monospace, monospace; font-size: .6em; font-weight: 400; letter-spacing: .2em; }"
+    },
+    {
+      "name": "Section Head",
+      "kind": "custom",
+      "refersTo": "label-plate",
+      "description": "每個區塊的開頭：編號牌 + 大寫標題 + 等寬計數，底部細線。",
+      "html": "<div class=\"ds-head\"><span class=\"ds-head-idx\">02</span><h2 class=\"ds-head-title\">Resume</h2><span class=\"ds-head-count\">07</span></div>",
+      "css": ".ds-head { display: flex; align-items: center; gap: 1.2rem; padding-bottom: 1.2rem; border-bottom: 1px solid #2a2a2a; background: #050505; color: #f2f2f2; } .ds-head-idx { position: relative; display: inline-flex; padding: .28em .6em .22em 1.3em; background: #f2f2f2; color: #050505; font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 1.5rem; line-height: 1; letter-spacing: .06em; } .ds-head-idx::before { content: ''; position: absolute; left: .5em; top: 50%; width: .32em; height: .32em; margin-top: -.16em; border-radius: 50%; background: #050505; } .ds-head-title { margin: 0; font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: clamp(2.6rem, 5vw, 4rem); line-height: 1; letter-spacing: .04em; text-transform: uppercase; } .ds-head-count { margin-left: auto; font-family: 'Martian Mono', ui-monospace, monospace; font-size: .85rem; color: #8c8c8c; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Ruled Table Row",
+      "kind": "card",
+      "refersTo": "table-row",
+      "description": "細線表格取代卡片；hover 整列黑白反轉。",
+      "html": "<ul class=\"ds-table\"><li class=\"ds-row\" tabindex=\"0\"><span class=\"ds-row-year\">YYYY</span><span><strong>Organization</strong><span class=\"ds-row-meta\">YYYY.MM – YYYY.MM</span></span><span class=\"ds-row-desc\">Role</span></li></ul>",
+      "css": ".ds-table { list-style: none; margin: 0; padding: 0; border-top: 1px solid #2a2a2a; background: #050505; color: #f2f2f2; font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; } .ds-row { display: grid; grid-template-columns: 8rem 1fr 1fr; gap: 1.5rem; align-items: center; padding: 1.1rem .8rem; border-bottom: 1px solid #2a2a2a; transition: background-color .25s ease, color .25s ease; } .ds-row strong { display: block; font-size: 1.25rem; font-weight: 900; letter-spacing: .04em; } .ds-row-year { font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 3rem; line-height: 1; font-variant-numeric: tabular-nums; } .ds-row-meta { font-family: 'Martian Mono', ui-monospace, monospace; font-size: .72rem; letter-spacing: .08em; color: #8c8c8c; } .ds-row-desc { color: #8c8c8c; } .ds-row:hover, .ds-row:focus-visible { background: #f2f2f2; color: #050505; outline: none; } .ds-row:hover .ds-row-meta, .ds-row:hover .ds-row-desc, .ds-row:focus-visible .ds-row-meta, .ds-row:focus-visible .ds-row-desc { color: #595959; }"
+    },
+    {
+      "name": "Side Index",
+      "kind": "nav",
+      "refersTo": "index-num",
+      "description": "右側 00–06 區塊索引；目前區塊填滿反轉。",
+      "html": "<nav class=\"ds-index\"><button class=\"ds-index-num\">00</button><button class=\"ds-index-num is-active\">01</button><button class=\"ds-index-num\">02</button></nav>",
+      "css": ".ds-index { display: flex; flex-direction: column; align-items: flex-end; gap: .45rem; padding: 1rem; background: #050505; } .ds-index-num { min-width: 2.8rem; padding: .3rem .4rem .25rem; border: 1.5px solid #f2f2f2; background: transparent; color: #f2f2f2; font-family: 'Martian Mono', ui-monospace, monospace; font-size: .8rem; font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; cursor: pointer; transition: background-color .25s ease, color .25s ease; } .ds-index-num.is-active, .ds-index-num:hover { background: #f2f2f2; color: #050505; } .ds-index-num:focus-visible { outline: 2px solid #f2f2f2; outline-offset: 3px; }"
+    },
+    {
+      "name": "Day Cell",
+      "kind": "button",
+      "refersTo": "index-num",
+      "description": "100 Days CSS 的 10×10 方格；選中反轉。",
+      "html": "<div class=\"ds-days\"><button class=\"ds-day\">01</button><button class=\"ds-day is-active\">02</button><button class=\"ds-day\">03</button></div>",
+      "css": ".ds-days { display: grid; grid-template-columns: repeat(3, 3rem); gap: .3rem; padding: 1rem; background: #050505; } .ds-day { aspect-ratio: 1; display: grid; place-items: center; border: 1px solid #2a2a2a; background: transparent; color: #f2f2f2; font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; font-size: 1rem; font-variant-numeric: tabular-nums; cursor: pointer; transition: background-color .2s ease, color .2s ease, border-color .2s ease; } .ds-day:hover, .ds-day.is-active { background: #f2f2f2; border-color: #f2f2f2; color: #050505; } .ds-day:focus-visible { outline: 2px solid #f2f2f2; outline-offset: 3px; }"
+    },
+    {
+      "name": "Back to Top",
+      "kind": "button",
+      "refersTo": "back-to-top",
+      "description": "白色方塊、方頭箭頭 + TOP。",
+      "html": "<button class=\"ds-top\" aria-label=\"回到最上面\"><svg viewBox=\"0 0 16 16\" width=\"16\" height=\"16\" aria-hidden=\"true\"><path d=\"M8 13 V3 M3.5 7.5 L8 3 L12.5 7.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"square\"/></svg><span>Top</span></button>",
+      "css": ".ds-top { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .2rem; width: 3.2rem; height: 3.2rem; border: 1.5px solid #f2f2f2; background: #f2f2f2; color: #050505; font-family: 'Big Shoulders Display', sans-serif; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: color .3s, background-color .3s; } .ds-top:hover { background: #050505; color: #f2f2f2; } .ds-top:focus-visible { outline: 2px solid #f2f2f2; outline-offset: 3px; }"
+    },
+    {
+      "name": "Hazard Band",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "45 度黑白斜紋帶；全站只在首屏底部出現一次。",
+      "html": "<div class=\"ds-band\" aria-hidden=\"true\"></div>",
+      "css": ".ds-band { height: 4.5rem; background-image: repeating-linear-gradient(-45deg, #050505 0 1.3rem, #f2f2f2 1.3rem 2.6rem); }"
+    },
+    {
+      "name": "ZZ Mark",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "兩個 Z 相疊共用中橫、一筆到底的閃電 logo；方頭方角。",
+      "html": "<div class=\"ds-mark\"><svg viewBox=\"0 0 100 100\" aria-hidden=\"true\"><path d=\"M27 27 H73 L32 50 H68 L27 73 H73\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"9\" stroke-linecap=\"square\" stroke-linejoin=\"miter\"/></svg></div>",
+      "css": ".ds-mark { width: 10rem; height: 10rem; background: #f2f2f2; color: #050505; } .ds-mark svg { display: block; width: 100%; height: 100%; overflow: visible; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Switchboard Label（配電箱上的標籤）",
+    "overview": "一個人的識別像貼在配電箱上的標籤與牆上噴的大字：直白、不裝飾、一眼讀完。整站只有兩種底，純黑 (ink) 與白紙 (paper)，所有標記都是同一種白底黑字、左側一個釘孔的標籤牌；標題是模版粗體大字，資料排在細線表格裡。沒有卡片、沒有漸層光暈做主角、沒有第三個顏色。\n\n密度是「牆面」而不是「儀表板」：大字大留白，細節收進等寬字的編號與日期。首屏是全站唯一的白紙區，巨大的 ZZ 閃電筆畫左端出框，底部一條 45 度斜紋帶；其餘區塊都在黑底上，Mountain 區是唯一的滿版照片。\n\n已確認拒絕的方向：黑底霓虹、像素復古、卡片網格這類個人網站預設；以及先前的琥珀色強調色（已全數移除）。",
+    "keyCharacteristics": [
+      "兩種底色、零強調色；灰只用於次要文字與細線。",
+      "標籤牌 (labelPlate) 是全站唯一的標記語法。",
+      "模版粗體大寫展示字，等寬字只給數字、規格、日期。",
+      "細線表格取代卡片；hover 以黑白反轉回應。",
+      "按住首屏，閃電從頭劈到尾再閃白，是唯一的招牌互動。"
+    ],
+    "rules": [
+      { "name": "The Two Grounds Rule", "body": "介面只有 ink 與 paper 兩種底色，沒有第三個色相。唯一的例外是 Mountain 區的彩色照片，它是內容，不是介面色。", "section": "colors" },
+      { "name": "The Grey Is Secondary Rule", "body": "灰只能出現在次要文字與細線上，不能當底色、不能當標題色、不能拿來做強調。", "section": "colors" },
+      { "name": "The Mono Is For Numbers Rule", "body": "Martian Mono 只用於編號、規格、日期與短提示；句子與標題不用等寬字。", "section": "typography" },
+      { "name": "The Latin Display Rule", "body": "展示字只負責拉丁字母；中文大字直接用正黑體 900，不另找中文展示字體，也不讓它掉到系統細體。", "section": "typography" },
+      { "name": "The Flat Wall Rule", "body": "新元件預設沒有陰影；要分層就換底色或加細線。", "section": "elevation" },
+      { "name": "The Paper Context Rule", "body": "游標、漢堡、索引在白紙上改成黑色，靠 `[data-paper]` 與捲動位置切換 CSS 變數，不用混色模式。", "section": "elevation" }
+    ],
+    "dos": [
+      "Do 所有標記都用標籤牌：白底黑字、左側一個釘孔、展示字 900 大寫。",
+      "Do 新區塊用區塊標題列開頭，編號延續 00–06 的等寬兩位數。",
+      "Do 資料用細線表格排，hover 以整列黑白反轉回應。",
+      "Do 次要文字在黑底用 Conduit Grey、在白紙用 Pencil Grey；細線用 Wire Rule。",
+      "Do 背景與捲動動畫只動 transform 與 opacity；捲動驅動的動畫動外層容器，不和進場動畫搶同一個屬性。",
+      "Do 新增白紙區塊時加上 `[data-paper]`，讓游標、漢堡、索引自動換成黑色。"
+    ],
+    "donts": [
+      "Don't 加入第三個顏色或任何強調色（琥珀已經移除）。",
+      "Don't 做卡片網格；需要分組就用細線表格或標籤牌欄首。",
+      "Don't 做黑底霓虹、發光文字或像素復古的效果。",
+      "Don't 再放第二條斜紋帶；它全站只出現在首屏底部一次。",
+      "Don't 使用 WebGL、`mix-blend-mode`、`backdrop-filter` 或整頁 `filter`。",
+      "Don't 給標籤牌、表格列或按鈕加圓角；圓只屬於釘孔、螺絲與游標。",
+      "Don't 把等寬字用在句子或標題上。"
+    ]
+  }
+}
