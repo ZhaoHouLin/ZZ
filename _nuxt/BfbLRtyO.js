@@ -1,0 +1,1 @@
+import{E as e,J as t,K as n,a as r}from"./CtLmRSfN.js";import{u as i}from"./BmXyHcWk.js";import{i as a}from"#entry";var o={class:`redirect`},s={__name:`portfolio`,setup(s){let c=r().app.baseURL;return a({meta:[{"http-equiv":`refresh`,content:`0;url=${c}#works`}]}),n(()=>i(`/#works`,{replace:!0})),(n,r)=>(t(),e(`div`,o))}};export{s as default};
