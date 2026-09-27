@@ -33,5 +33,5 @@ svg.zz-mark(viewBox="0 0 100 100" aria-hidden="true" focusable="false")
 .zz-beams
   opacity 0
 .zz-beam
-  stroke #ffffff
+  stroke colorSecondary
 </style>

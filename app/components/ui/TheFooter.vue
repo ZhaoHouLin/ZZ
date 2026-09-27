@@ -39,21 +39,7 @@ footer.contact#contact
   margin-inline auto
 
 .contact-head
-  margin-bottom 3rem
-  display flex
-  align-items center
-  gap 1.2rem
-  padding-bottom 1.2rem
-  border-bottom 1px solid colorLine
-  .sec-idx
-    labelPlate(1.5rem)
-  h2
-    font-family fontDisplay
-    font-size clamp(2.6rem, 5vw, 4rem)
-    font-weight 900
-    line-height 1
-    letter-spacing .04em
-    text-transform uppercase
+  sectionHead()
 
 .contact-grid
   display grid

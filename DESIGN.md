@@ -5,39 +5,40 @@ colors:
   ink: "#050505"
   paper: "#f2f2f2"
   muted-on-ink: "#8c8c8c"
+  soft-on-ink: "#c4c4c4"
   muted-on-paper: "#595959"
   rule-on-ink: "#2a2a2a"
 typography:
   display:
-    fontFamily: "'Big Shoulders Display', 'Noto Sans TC', '微軟正黑體', 'Microsoft JhengHei', sans-serif"
+    fontFamily: "'Big Shoulders Display', 'Noto Sans TC Subset', '微軟正黑體', 'Microsoft JhengHei', sans-serif"
     fontSize: "clamp(3.2rem, 11vh, 6rem)"
     fontWeight: 900
     lineHeight: 0.9
     letterSpacing: "0.04em"
   headline:
-    fontFamily: "'Big Shoulders Display', 'Noto Sans TC', '微軟正黑體', 'Microsoft JhengHei', sans-serif"
+    fontFamily: "'Big Shoulders Display', 'Noto Sans TC Subset', '微軟正黑體', 'Microsoft JhengHei', sans-serif"
     fontSize: "clamp(2.6rem, 5vw, 4rem)"
     fontWeight: 900
     lineHeight: 1
     letterSpacing: "0.04em"
   title:
-    fontFamily: "'Big Shoulders Display', 'Noto Sans TC', '微軟正黑體', 'Microsoft JhengHei', sans-serif"
+    fontFamily: "'Big Shoulders Display', 'Noto Sans TC Subset', '微軟正黑體', 'Microsoft JhengHei', sans-serif"
     fontSize: "1.6rem"
     fontWeight: 900
     letterSpacing: "0.04em"
   body:
-    fontFamily: "'Noto Sans TC', '微軟正黑體', 'Microsoft JhengHei', system-ui, sans-serif"
+    fontFamily: "'Noto Sans TC Subset', '微軟正黑體', 'Microsoft JhengHei', system-ui, sans-serif"
     fontSize: "16px"
     fontWeight: 400
     lineHeight: 1.7
   body-lead:
-    fontFamily: "'Noto Sans TC', '微軟正黑體', 'Microsoft JhengHei', system-ui, sans-serif"
+    fontFamily: "'Noto Sans TC Subset', '微軟正黑體', 'Microsoft JhengHei', system-ui, sans-serif"
     fontSize: "clamp(1.2rem, 2vw, 1.55rem)"
     fontWeight: 500
     lineHeight: 1.9
     letterSpacing: "0.04em"
   label:
-    fontFamily: "'Big Shoulders Display', 'Noto Sans TC', '微軟正黑體', 'Microsoft JhengHei', sans-serif"
+    fontFamily: "'Big Shoulders Display', 'Noto Sans TC Subset', '微軟正黑體', 'Microsoft JhengHei', sans-serif"
     fontSize: "1.4rem"
     fontWeight: 900
     lineHeight: 1
@@ -122,18 +123,19 @@ components:
 ### Neutral
 - **Label Paper**（paper）：首屏底色、黑底上的正文、標籤牌底、hover 反轉後的底、選取反白、focus 外框。
 - **Conduit Grey**（muted-on-ink）：黑底上的次要文字（日期、說明、區塊計數、捲軸），對黑約 5.9:1。
+- **Cable Grey**（soft-on-ink）：黑底上比正文淡一階的長段文字（清單、說明段落、Lab 技能列、百日格數字），對黑約 11:1。
 - **Pencil Grey**（muted-on-paper）：白紙與反轉列上的次要文字，對白約 6.5:1。
 - **Wire Rule**（rule-on-ink）：黑底上的 1px 細線：區塊標題底線、表格列線、面板外框、手機進度軌。
 
 ### Named Rules
 **The Two Grounds Rule.** 介面只有 ink 與 paper 兩種底色，沒有第三個色相。唯一的例外是 Mountain 區的彩色照片，它是內容，不是介面色。
 
-**The Grey Is Secondary Rule.** 灰只能出現在次要文字與細線上，不能當底色、不能當標題色、不能拿來做強調。
+**The Grey Is Secondary Rule.** 灰只能出現在次要文字與細線上，不能當底色、不能當標題色、不能拿來做強調。所有灰都來自色票（muted、soft、rule），不寫死色碼。
 
 ## Typography
 
-**Display Font:** Big Shoulders Display 800/900（自架 woff2，僅拉丁字母；中文退回 Noto Sans TC、微軟正黑體的粗體）
-**Body Font:** Noto Sans TC（退回微軟正黑體、system-ui）
+**Display Font:** Big Shoulders Display 800/900（自架 woff2，僅拉丁字母；中文退回自架的 Noto Sans TC 子集）
+**Body Font:** Noto Sans TC 子集（自架可變字重 100～900，只含網站用到的字，約 97KB；由 scripts/subset-font.mjs 產生，改中文內容後要重跑；退回微軟正黑體、system-ui）
 **Label/Mono Font:** Martian Mono（自架 woff2）
 
 **Character:** 窄而高的模版粗體像噴漆與鋼印，把每個英文字變成招牌；正黑體內文穩穩承接中文；等寬字像設備銘牌上的序號，只在需要對齊數字時出現。

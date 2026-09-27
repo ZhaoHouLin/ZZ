@@ -124,7 +124,7 @@ section.intro#about(ref="root")
   position relative
   aspect-ratio 1
   overflow hidden
-  background-color #d9d9d9
+  background-color colorLineOnPaper
   img
     size()
     object-fit cover
@@ -137,7 +137,7 @@ section.intro#about(ref="root")
     font-family fontDisplay
     font-weight 900
     font-size 5rem
-    color #b5b5b5
+    color colorMutedOnPaper
   &:not(.is-broken) .badge-fallback
     display none
 
@@ -222,7 +222,7 @@ section.intro#about(ref="root")
     font-weight 900
     letter-spacing .06em
   .rule-v
-    color #bdbdbd
+    color colorSoft
     line-height 1.7
 
 @media (max-width: 960px)

@@ -20,14 +20,15 @@ outlineSpace = 1.4rem
 // 純黑白：只有這兩個顏色，灰階只用於次要文字與細線（docs/LOGO-REDESIGN.md Q8、Q10）
 colorPrimary = #050505
 colorSecondary = #f2f2f2
-colorMuted = #8c8c8c // 黑底上 5.9:1
+colorMuted = #8c8c8c // 黑底上 5.9:1，標籤、日期、說明
+colorSoft = #c4c4c4 // 黑底上 11:1，比內文淡一階的長段文字（清單、說明段落）
 colorMutedOnPaper = #595959 // 白底上 6.5:1
 colorLine = #2a2a2a
 colorLineOnPaper = #c8c8c8
 
-fontDisplay = 'Big Shoulders Display', 'Noto Sans TC', '微軟正黑體', 'Microsoft JhengHei', sans-serif // 展示字只有拉丁字母，中文要退回有粗體的正黑體，否則會掉到系統的細體
+fontDisplay = 'Big Shoulders Display', 'Noto Sans TC Subset', '微軟正黑體', 'Microsoft JhengHei', sans-serif // 展示字只有拉丁字母，中文退回自架的 Noto Sans TC（有 900 字重）
 fontMono = 'Martian Mono', ui-monospace, Consolas, monospace // 只用於編號、規格、日期
-fontBody = 'Noto Sans TC', '微軟正黑體', 'Microsoft JhengHei', system-ui, sans-serif
+fontBody = 'Noto Sans TC Subset', '微軟正黑體', 'Microsoft JhengHei', system-ui, sans-serif
 
 breakMobile = 768px
 
@@ -57,15 +58,12 @@ labelPlate(fs=1.4rem)
     border-radius 50%
     background-color colorPrimary
 
-// 區塊標題列：編號牌 + 模版粗體標題，底下一條細線
-sectionHead()
+// 區塊標題：編號牌 + 模版粗體標題（山景區疊在照片上時只用這一層）
+sectionTitle()
   display flex
   justify-content flex-start
   align-items center
   gap 1.2rem
-  margin-bottom 3rem
-  padding-bottom 1.2rem
-  border-bottom 1px solid colorLine
   .sec-idx
     labelPlate(1.5rem)
   h2
@@ -75,6 +73,13 @@ sectionHead()
     line-height 1
     letter-spacing .04em
     text-transform uppercase
+
+// 區塊標題列：標題加上底下一條細線與間距
+sectionHead()
+  sectionTitle()
+  margin-bottom 3rem
+  padding-bottom 1.2rem
+  border-bottom 1px solid colorLine
   .sec-count
     margin-left auto
     font-family fontMono

@@ -49,8 +49,26 @@ watch(
   }
 )
 
+// 100 Days CSS 的作品幾乎都是固定 400×400 的畫框，視窗比它窄時 CodePen 內嵌會出現橫向捲動。
+// 視窗寬度不到 FIT_WIDTH 時，讓 iframe 用 FIT_WIDTH 排版，再整個等比例縮小塞進視窗
+const FIT_WIDTH = 460
+const frame = ref(null)
+const fit = ref({ scale: 1, w: "100%", h: "100%" })
+let ro
+watch(frame, (el) => {
+  ro?.disconnect()
+  if (!el) return
+  ro = new ResizeObserver(([e]) => {
+    const { width, height } = e.contentRect
+    const k = Math.min(1, width / FIT_WIDTH)
+    fit.value = k < 1 ? { scale: k, w: `${FIT_WIDTH}px`, h: `${height / k}px` } : { scale: 1, w: "100%", h: "100%" }
+  })
+  ro.observe(el)
+})
+
 onMounted(() => window.addEventListener("keydown", onKey))
 onUnmounted(() => {
+  ro?.disconnect()
   window.removeEventListener("keydown", onKey)
   document.body.style.overflow = ""
 })
@@ -69,8 +87,8 @@ Teleport(to="body")
         button.pen-close(type="button" @click="close" aria-label="關閉")
           svg(viewBox="0 0 16 16" aria-hidden="true")
             path(d="M3.5 3.5 L12.5 12.5 M12.5 3.5 L3.5 12.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square")
-      .pen-frame
-        iframe(v-if="pen" :key="pen.src" :src="pen.src" :title="pen.title" loading="lazy" allowfullscreen allowtransparency="true" frameborder="0")
+      .pen-frame(ref="frame")
+        iframe(v-if="pen" :key="pen.src" :src="pen.src" :title="pen.title" :style="{ width: fit.w, height: fit.h, transform: fit.scale < 1 ? `scale(${fit.scale})` : null }" loading="lazy" allowfullscreen allowtransparency="true" frameborder="0")
       footer.pen-foot
         button.pen-nav(type="button" @click="step(-1)" aria-label="上一個")
           svg(viewBox="0 0 16 16" aria-hidden="true")
@@ -139,10 +157,11 @@ Teleport(to="body")
 
 .pen-frame
   size(100%, unquote("min(70vh, 32rem)"))
-  background-color #111
+  overflow hidden
+  background-color colorPrimary
   iframe
-    size()
     display block
+    transform-origin 0 0 // 縮小時從左上角縮，才會剛好填滿框
 
 .pen-foot
   flex(space-between,center)

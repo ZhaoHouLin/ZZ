@@ -146,12 +146,12 @@ section.works#works(ref="root")
   aspect-ratio 1
   display grid
   place-items center
-  border 1px solid #3a3a3a
+  border 1px solid colorLine
   font-family fontDisplay
   font-weight 900
   font-size clamp(.72rem, 1.1vw, 1rem)
   font-variant-numeric tabular-nums
-  color #cfcfcf
+  color colorSoft
   transition background-color .2s ease, color .2s ease, border-color .2s ease
   &:hover, &:focus-visible, &.is-active
     background-color colorSecondary

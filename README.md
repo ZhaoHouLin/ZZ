@@ -13,6 +13,8 @@ npm run generate   # 產出靜態站到 .output/public（dist 是 Nuxt 產生的
 # 本機模擬 GitHub Pages 的子路徑（Git Bash 要加 MSYS_NO_PATHCONV=1，否則 /ZZ/ 會被轉成 Windows 路徑）
 MSYS_NO_PATHCONV=1 NUXT_APP_BASE_URL=/ZZ/ npm run generate
 npm run preview
+# 新增或修改中文內容後，重新產生自架的中文字型子集（只含網站用到的字）
+node scripts/subset-font.mjs
 ```
 
 ## 結構
@@ -21,7 +23,7 @@ npm run preview
 app/
   assets/style.styl        # 只放 stylus 變數與 mixin（自動注入每個元件）：黑白兩色、字型、labelPlate() 標籤牌、sectionHead()；注意 flex() / min() / max() 的坑，見檔內註解
   assets/global.styl       # 全站樣式、自架字型
-  assets/fonts/            # Big Shoulders Display、Martian Mono（自架）
+  assets/fonts/            # Big Shoulders Display、Martian Mono、Noto Sans TC 子集（自架；中文子集由 scripts/subset-font.mjs 產生）
   components/
     sections/              # 一頁式的區塊，依順序：Hero(00) / Intro(01 About) / Resume(02) / Lab(03) / Works(04 早期作品) / Mountain(05)
     hero/                  # ZzMark（ZZ logo，一筆到底的兩個 Z）、ScrambleText（名字亂碼切換）

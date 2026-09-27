@@ -145,7 +145,7 @@ section.lab#lab(ref="root")
   letter-spacing .02em
   text-transform uppercase
 .tier-items
-  color #cfcfcf
+  color colorSoft
   font-size 1rem
 
 .lab-self
@@ -217,7 +217,7 @@ section.lab#lab(ref="root")
     font-weight 900
     letter-spacing .04em
   p
-    color #bdbdbd
+    color colorSoft
     line-height 1.75
 
 .lab-notes
@@ -234,7 +234,7 @@ section.lab#lab(ref="root")
     padding-left 1.4rem
     position relative
     line-height 1.7
-    color #cfcfcf
+    color colorSoft
     &::before
       content ''
       pos(0, .72em)

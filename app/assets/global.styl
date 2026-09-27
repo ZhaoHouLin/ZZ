@@ -8,6 +8,14 @@
   font-weight 100 900
   font-display swap
 
+// 中文自架：Noto Sans TC 可變字重，只含網站實際用到的字（清單見 fonts/NotoSansTC-subset.txt）。
+// 新增或修改中文內容後要重新產生子集，否則新字會退回系統字型；步驟見 README
+@font-face
+  font-family 'Noto Sans TC Subset'
+  src url('./fonts/NotoSansTC-subset.woff2') format('woff2')
+  font-weight 100 900
+  font-display swap
+
 @font-face
   font-family 'Martian Mono'
   src url('./fonts/MartianMono.woff2') format('woff2')

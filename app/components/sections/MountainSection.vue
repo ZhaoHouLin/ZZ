@@ -61,18 +61,7 @@ section.mountain#mountain(ref="root")
 
 .mtn-head
   pos(outlineSpace, 6rem)
-  display flex
-  align-items center
-  gap 1.2rem
-  .sec-idx
-    labelPlate(1.5rem)
-  h2
-    font-family fontDisplay
-    font-size clamp(2.6rem, 5vw, 4rem)
-    font-weight 900
-    line-height 1
-    letter-spacing .04em
-    text-transform uppercase
+  sectionTitle()
 
 // 白色光帶由上往下沿直書掃過；漸層放大三倍高，動 background-position
 .mtn-motto
@@ -82,7 +71,7 @@ section.mountain#mountain(ref="root")
   font-weight 900
   letter-spacing .4em
   line-height 1
-  background-image linear-gradient(180deg, #bdbdbd 0%, #bdbdbd 38%, #ffffff 50%, #bdbdbd 62%, #bdbdbd 100%)
+  background-image linear-gradient(180deg, colorSoft 0%, colorSoft 38%, colorSecondary 50%, colorSoft 62%, colorSoft 100%)
   background-size 100% 300%
   -webkit-background-clip text
   background-clip text

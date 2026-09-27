@@ -25,4 +25,4 @@ FINISH：unreviewed and undocumented is unfinished; this build ends with the fin
 按住 hero，閃電從頭劈到尾。
 
 ## Unresolved
-藍新任職拆兩段的回任月份（待使用者提供）。
+無（藍新回任月份 2022-08 已提供，履歷已拆成兩段）。
