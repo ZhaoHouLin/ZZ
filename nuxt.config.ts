@@ -8,8 +8,8 @@ const styleEntry = fileURLToPath(
 
 // GitHub Pages 部署在 /ZZ/ 底下時由 NUXT_APP_BASE_URL 覆寫；圖示網址帶了 ?v= 之後 Nuxt 不會自動補前綴，要自己接
 const base = process.env.NUXT_APP_BASE_URL || "/"
-// 連結預覽（LINE / Facebook / Discord）要絕對網址，固定用線上版；沒指定 og:image 時平台會抓頁面第一張大圖（大頭照）
-const siteUrl = "https://zhaohoulin.github.io/ZZ/"
+// 連結預覽（LINE / Facebook / Discord）要絕對網址，固定用正式網域 zerozone.dev（Cloudflare）；GitHub Pages 那一版也指向這裡；沒指定 og:image 時平台會抓頁面第一張大圖（大頭照）
+const siteUrl = "https://zerozone.dev/"
 
 export default defineNuxtConfig({
   compatibilityDate: "2026-09-12",
