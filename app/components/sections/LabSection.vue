@@ -22,7 +22,7 @@ const logs = [
   "containerd 連 HTTP registry 被當成 HTTPS client 拒絕",
   "Ingress TLS 與 registry 憑證鏈",
 ]
-const exploring = ["會議系統：語音辨識 + LLM 摘要", "ComfyUI / 本地模型", "AI Coding Assistant", "iPAS AI 應用規劃師（準備中）"]
+const exploring = ["會議系統：語音辨識 + LLM 摘要", "ComfyUI / 本地模型", "AI Coding Assistant"]
 
 const hovered = ref(-1)
 const step = ref(-1) // CI/CD 目前亮的節點
