@@ -22,8 +22,8 @@ const groups = [
   {
     en: "Certification",
     items: [
-      { period: "2025-11", org: "CKA", role: "Certified Kubernetes Administrator", desc: "" },
       { period: "2026-11", org: "iPAS AI 應用規劃師", role: "初級", desc: "" },
+      { period: "2025-11", org: "CKA", role: "Certified Kubernetes Administrator", desc: "" },
     ],
   },
 ]
