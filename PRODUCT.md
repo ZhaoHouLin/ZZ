@@ -20,7 +20,7 @@ web
 
 ## Positioning
 
-AI Application × Cloud Native × Web 的交叉：不是單純的前端、也不是單純的 DevOps，而是能把 AI 從概念做到企業可部署系統的實作者。持有 CKA，自建過 Kubernetes 與 GitLab CI/CD，把 Nuxt 系統從開發部署到正式環境。
+AI Application × Cloud Native × Web 的交叉：不是單純的前端、也不是單純的 DevOps，而是能把 AI 從概念做到企業可部署系統的實作者。持有 CKA 與 iPAS AI 應用規劃師（數據分析・中級），自建過 Kubernetes 與 GitLab CI/CD，把 Nuxt 系統從開發部署到正式環境。
 
 ## Operating Context
 
@@ -50,7 +50,7 @@ AI Application × Cloud Native × Web 的交叉：不是單純的前端、也不
 ## Evidence on Hand
 
 - 履歷：藍新資訊專案工程師（2019-01 ~ 2022-04、2022-08 ~ 2026-03，疾管署駐點）、文境資科前端工程師（2022-05 ~ 2022-08）、藍新智能應用發展部（2026-04 ~）、北科大光電、Alpha Camp。
-- 證照：CKA（2025-11）；iPAS AI 應用規劃師初級合格（成績公布日 2026-11-20）。
+- 證照：CKA（2025-11）；iPAS AI 應用規劃師初級合格（成績公布日 2026-11-20）；iPAS AI 應用規劃師（數據分析）中級合格（成績公布日 2026-11-24）。
 - 作品：GitHub 六個專案（`app/data/github.json`）、100 Days CSS 的 100 個 CodePen（`app/data/css100.json`），**皆為早期作品，保留並標明時期**。
 - Lab 區的內部專案（企業 Nuxt 3 系統、自建 Kubernetes 平台、NAS 整合）沒有公開連結，只能描述。
 - 大頭照 `public/avatar.jpg`。

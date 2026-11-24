@@ -22,6 +22,7 @@ const groups = [
   {
     en: "Certification",
     items: [
+      { period: "2026-11", org: "iPAS AI 應用規劃師", role: "中級（數據分析）", desc: "" },
       { period: "2026-11", org: "iPAS AI 應用規劃師", role: "初級", desc: "" },
       { period: "2025-11", org: "CKA", role: "Certified Kubernetes Administrator", desc: "" },
     ],
@@ -57,7 +58,7 @@ section.resume#resume(ref="root")
   .rs-group(v-for="g in groups" :key="g.en")
     h3.rs-label {{ g.en }}
     ol.rs-table
-      li.rs-row(v-for="it in g.items" :key="it.org + it.period" data-hover)
+      li.rs-row(v-for="it in g.items" :key="it.org + it.period + it.role" data-hover)
         span.rs-year {{ yearOf(it.period) }}
         span.rs-org
           strong.resume-main {{ it.org }}
