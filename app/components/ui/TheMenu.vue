@@ -1,12 +1,13 @@
 <script setup>
-// 漢堡選單：打開是一張黑色配電箱面板，四塊大標籤牌放對外連結（區塊跳轉交給 SideIndex）
+// 漢堡選單：打開是一張黑色配電箱面板，五塊大標籤牌放對外連結（區塊跳轉交給 SideIndex）
 const { gsap, ScrollTrigger } = useGsap()
 
 const links = [
-  { href: "https://github.com/ZhaoHouLin", label: "GitHub", idx: "01", external: true },
-  { href: "https://codepen.io/rodes", label: "CodePen", idx: "02", external: true },
-  { href: "https://www.facebook.com/ZhaoHouLin", label: "Facebook", idx: "03", external: true },
-  { href: "mailto:rodes5292@gmail.com", label: "Mail", idx: "04", external: false },
+  { href: "https://guides.zerozone.dev", label: "Guides", idx: "01", external: true }, // 零域教學站（任務卡 234）
+  { href: "https://github.com/ZhaoHouLin", label: "GitHub", idx: "02", external: true },
+  { href: "https://codepen.io/rodes", label: "CodePen", idx: "03", external: true },
+  { href: "https://www.facebook.com/ZhaoHouLin", label: "Facebook", idx: "04", external: true },
+  { href: "mailto:rodes5292@gmail.com", label: "Mail", idx: "05", external: false },
 ]
 
 const open = useState("menuOpen", () => false)
@@ -157,6 +158,8 @@ nav.menu(ref="overlay" :aria-hidden="!open")
     min-width 2ch
   .menu-item-label
     labelPlate(clamp(2.6rem, 8vw, 5.5rem))
+    // 五塊牌子時也要塞得進 768px 高的筆電視窗：字級再受視窗高度限制（unquote 讓 stylus 不去算 min()）
+    font-size unquote("clamp(2.6rem, min(8vw, 8.5vh), 5.5rem)")
     transition background-color .25s ease, color .25s ease, outline-color .25s ease
     outline 2px solid transparent
   &:hover, &:focus-visible

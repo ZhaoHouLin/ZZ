@@ -1,0 +1,9 @@
+# 舊教學網址永久轉到教學站 guides.zerozone.dev（任務卡 234）
+# Cloudflare Workers 靜態資源的 _redirects：由上往下第一條符合的生效；就算同路徑有檔案，轉址也優先
+# 文件：https://developers.cloudflare.com/workers/static-assets/redirects/（2026-11-25 查詢）
+/guides/cloudflare/* https://guides.zerozone.dev/cloudflare/:splat 301
+/guides/cloudflare https://guides.zerozone.dev/cloudflare/ 301
+/guides/monitoring/* https://guides.zerozone.dev/monitoring/:splat 301
+/guides/monitoring https://guides.zerozone.dev/monitoring/ 301
+/guides/* https://guides.zerozone.dev/:splat 301
+/guides https://guides.zerozone.dev/ 301
